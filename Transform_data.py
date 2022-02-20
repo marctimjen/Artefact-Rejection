@@ -29,8 +29,8 @@ def make_file_list(edf_list: str, rec_list: str, data_dir: str) -> list:
 def read_and_export_files(file_list: list, montage: dict, save_loc: str):
     global nr
     for direct in file_list:
-        edf_dir = file_list[0]
-        rec_dir = file_list[1]
+        edf_dir = direct[0]
+        rec_dir = direct[1]
 
         data = mne.io.read_raw_edf(edf_dir, preload=True) # read edf file
         data = data.filter(0.1, 100) # use filter on data
@@ -55,11 +55,11 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         for i in sorted_index: # using the montage information we make the new
             col_names = montage.get(i) # data-frame using only the channels
                                        # that has been labeled
-            if col_names[0] == "EKG" & first: # special case for montage 2
+            if (col_names[0] == "EKG") & first: # special case for montage 2
                 df_new = df[col_names[1]]
                 df_new = df_new.rename(col_names[0])
                 first = False
-            elif col_names[0] == "EKG": # special case for montage 2
+            elif (col_names[0] == "EKG"): # special case for montage 2
                 list1 = df[col_names[1]]
                 list1 = list1.rename(col_names[0])
                 df_new = pd.concat([df_new, diff], axis=1, join='inner')
@@ -161,13 +161,13 @@ montage3 = {
 19: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]
 }
 
-dir1_edf_list = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0/lists/edf_01_tcp_ar.list"
-dir2_edf_list = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0/lists/edf_02_tcp_ar.list"
-dir3_edf_list = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0/lists/edf_03_tcp_ar.list"
+dir1_edf_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/edf_01_tcp_ar.list"
+dir2_edf_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/edf_02_tcp_le.list"
+dir3_edf_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/edf_03_tcp_ar_a.list"
 
-dir1_rec_list = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0/lists/rec_01_tcp_ar.list"
-dir2_rec_list = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0/lists/rec_02_tcp_ar.list"
-dir3_rec_list = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0/lists/rec_03_tcp_ar.list"
+dir1_rec_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_01_tcp_ar.list"
+dir2_rec_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_02_tcp_le.list"
+dir3_rec_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_03_tcp_ar_a.list"
 
 
 if __name__ == "__main__":
@@ -175,13 +175,14 @@ if __name__ == "__main__":
     dir_edf_list = [dir1_edf_list, dir2_edf_list, dir3_edf_list]
     dir_rec_list = [dir1_rec_list, dir2_rec_list, dir3_rec_list]
 
-    data_dir = "C:/Users/Bruger/Documents/Uni/6. Semester/BP/data/v2.1.0"
-    nr = 0
+    data_dir = "C:/Users/Marc/Desktop/data/v2.1.0"
+    nr = 1
 
     for i in range(0, 3):
-        montage = montage_list[i]
         dir_edf = dir_edf_list[i]
         dir_rec = dir_rec_list[i]
 
         file_list = make_file_list(dir_edf, dir_rec, data_dir)
-        print(file_list)
+
+        montage = montage_list[i] # find the correct montage
+        read_and_export_files(file_list, montage, "C:/Users/Marc/Desktop/model_data")
