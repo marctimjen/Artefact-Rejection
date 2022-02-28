@@ -1,13 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from torch.optim import SGD, Adam
-from torch.utils.data import DataLoader, random_split
-import numpy as np
-import time
 
-
-# create network:
 
 class Double_Convolution(nn.Module): # Blue arrow
     """
@@ -120,7 +114,7 @@ class OutConv(nn.Module): # light-blue arrow
         return self.soft(x)
 
 
-class GTA_Unet(nn.Module):
+class Unet(nn.Module):
     """
     This class is the network. So it combines the subparts listed above.
     """
@@ -130,7 +124,7 @@ class GTA_Unet(nn.Module):
             n_channels (int): The amount of channels of the input.
             n_classes (int): The amount of channels the output tensor gets.
         """
-        super(GTA_Unet, self).__init__()
+        super(Unet, self).__init__()
 
         self.n_channels = n_channels
         self.n_classes = n_classes
@@ -158,60 +152,3 @@ class GTA_Unet(nn.Module):
         x = self.up4(x, x1)
         output = self.outc(x)
         return output
-
-
-
-
-input_path = "C:/Users/Marc/Desktop/model_data/model_input (309).pt"
-target_path = "C:/Users/Marc/Desktop/model_data/model_target (309).pt"
-
-inp = torch.load(input_path) # load the input data
-tar = torch.load(target_path) # load the target data
-
-ind1 = inp[0][60*5*250:60*10*250].reshape(1, 1, 75000).type(torch.float)
-target1 = tar[0][60*5*250:60*10*250].reshape(1, 1, 75000).type(torch.float)
-
-ind2 = inp[0][60*10*250:60*15*250].reshape(1, 1, 75000).type(torch.float)
-target2 = tar[0][60*10*250:60*15*250].reshape(1, 1, 75000).type(torch.float)
-
-ind3 = inp[0][60*15*250:60*20*250].reshape(1, 1, 75000).type(torch.float)
-target3 = tar[0][60*15*250:60*20*250].reshape(1, 1, 75000).type(torch.float)
-
-input_list = [(ind1, target1), (ind2, target2), (ind3, target3)]
-
-print(ind1.shape)
-
-m = nn.Conv1d(1, 3, 3, stride=1)
-output = m(ind1)
-print(output.shape)
-
-b = nn.BatchNorm1d(3)
-output = b(output)
-print(output.shape)
-
-pool = nn.MaxPool1d(2)
-output = pool(output)
-print(output.shape)
-
-up = nn.Upsample(scale_factor=2, mode='nearest')
-output = up(output)
-print(output.shape)
-
-lossFunc = nn.MSELoss()
-model = GTA_Unet(n_channels = 1, n_classes = 2)
-
-optimizer = SGD(model.parameters(), lr=0.001, momentum=0.9)
-
-train_loss = []
-
-for ind, tar in input_list:
-
-    y_pred = model(ind)
-    print(y_pred)
-    model.zero_grad()
-    loss = lossFunc(y_pred, tar)
-    loss.backward()
-    optimizer.step()
-    train_loss.append(loss.item())
-
-print(train_loss)
