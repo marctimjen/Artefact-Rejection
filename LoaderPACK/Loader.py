@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import math
 
-class load_whole_data(Dataset):
+class load_whole_data(Dataset): # Dataset
     """
     This dataloader loads the tensor input and target in whole
     """
@@ -61,7 +61,10 @@ class load_shuffle_5_min(Dataset):
 
         self.gen = iter(self.create_data(self.length))
 
-
+        # Data kommer fra samme person. Træne hurtigt/træne godt.
+        # Modellen kan gøres værre, da den samme person kan trække modellen i den forkerte vej
+        # tage et min(length, parameter = fx. 70)
+        # Databider i store målinger vil blive set mere sjælent.
 
     def create_data(self, nr_of_cuts):
         cut_point = np.random.randint(low = 250*60, high = self.size[1] - 250*60,

@@ -33,6 +33,15 @@ file_loader = torch.utils.data.DataLoader(load_file,
 
 
 lossFunc = nn.MSELoss()
+
+# https://pytorch.org/docs/stable/generated/torch.quantile.html
+
+
+# https://pytorch.org/docs/stable/generated/torch.nn.BCELoss.html#torch.nn.BCELoss
+# bineær loss function - hvor man kan vægte klasserne.
+
+
+
 model = Unet(n_channels = 1, n_classes = 2).to(device)
 optimizer = SGD(model.parameters(), lr=0.1, momentum=0.9)
 train_loss = []
@@ -68,3 +77,6 @@ for file in file_loader:
 
 
 print(train_loss)
+
+
+# Med RNN - først træne med random derefter kører sequentielt ved træning af RNN'en.

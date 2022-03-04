@@ -111,7 +111,7 @@ class OutConv(nn.Module): # light-blue arrow
 
     def forward(self, x):
         x = self.conv(x)
-        return self.soft(x)
+        return self.soft(x) # Måske buge sigmoid activation.
 
 
 class Unet(nn.Module):
