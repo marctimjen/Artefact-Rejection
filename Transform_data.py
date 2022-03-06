@@ -59,15 +59,18 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         for i in sorted_index: # using the montage information we make the new
             col_names = montage.get(i) # data-frame using only the channels
                                        # that has been labeled
-            if (col_names[0] == "EKG") & first: # special case for montage 2
-                df_new = df[col_names[1]]
-                df_new = df_new.rename(col_names[0])
-                first = False
-            elif (col_names[0] == "EKG"): # special case for montage 2
-                list1 = df[col_names[1]]
-                list1 = list1.rename(col_names[0])
-                df_new = pd.concat([df_new, diff], axis=1, join='inner')
-            elif first:
+
+            if (col_names[0] == "EKG"): # & first # special case that is removed
+                continue
+        #        df_new = df[col_names[1]]
+        #        df_new = df_new.rename(col_names[0])
+        #        first = False
+        #    elif (col_names[0] == "EKG"): # special case for montage 2
+        #        list1 = df[col_names[1]]
+        #        list1 = list1.rename(col_names[0])
+        #        df_new = pd.concat([df_new, diff], axis=1, join='inner')
+
+            if first:
                 list1 = df[col_names[1]] # get the first series
                 list2 = df[col_names[2]] # get the second series
                 df_new = list1 - list2
