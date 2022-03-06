@@ -33,6 +33,10 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         rec_dir = direct[1]
 
         data = mne.io.read_raw_edf(edf_dir, preload=True) # read edf file
+
+        if data.__len__() < 82500: # if the file has less than 5,5 mins of
+            continue               # recorded data then it's discarded
+
         data = data.filter(0.1, 100) # use filter on data
         data = data.notch_filter(60) # use filter on data
 
@@ -87,6 +91,12 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         ind = torch.tensor(df_new.values.T) # data-frame to tensor
         torch.save(ind, save_loc + f'/model_input ({nr}).pt') # save input
         torch.save(tar, save_loc + f'/model_target ({nr}).pt') # save target
+
+
+        with open(save_loc + "/data_encoding.csv", "a", newline='') as f:
+            write = csv.writer(f) # save information that link the nr of the
+                                  # .pt files with the .edf files.
+            write.writerow([edf_dir, rec_dir, nr])
 
         nr += 1
 
@@ -178,6 +188,10 @@ if __name__ == "__main__":
     data_dir = "C:/Users/Marc/Desktop/data/v2.1.0"
     nr = 1
 
+    save_loc = "C:/Users/Marc/Desktop/model_data" # location to save files
+    f = open(save_loc + "/data_encoding.csv", 'w')
+    f.close() # file for the encoding
+
     for i in range(0, 3):
         dir_edf = dir_edf_list[i]
         dir_rec = dir_rec_list[i]
@@ -185,4 +199,4 @@ if __name__ == "__main__":
         file_list = make_file_list(dir_edf, dir_rec, data_dir)
 
         montage = montage_list[i] # find the correct montage
-        read_and_export_files(file_list, montage, "C:/Users/Marc/Desktop/model_data")
+        read_and_export_files(file_list, montage, save_loc)
