@@ -107,11 +107,52 @@ class OutConv(nn.Module): # light-blue arrow
         """
         super(OutConv, self).__init__()
         self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=1)
-        self.soft = nn.Softmax(dim=1)
+        #self.soft = nn.Softmax(dim=1)
+        self.sig = nn.Sigmoid()
 
     def forward(self, x):
         x = self.conv(x)
-        return self.soft(x) # Måske buge sigmoid activation.
+        return self.sig(x) # Using sigmoid instead of softmax
+
+
+#class Unet(nn.Module):
+#    """
+#    This class is the network. So it combines the subparts listed above.
+#    """
+#    def __init__(self, n_channels, n_classes):
+#        """
+#        Args:
+#            n_channels (int): The amount of channels of the input.
+#            n_classes (int): The amount of channels the output tensor gets.
+#        """
+#        super(Unet, self).__init__()
+#
+#        self.n_channels = n_channels
+#        self.n_classes = n_classes
+#
+#        self.inc = Double_Convolution(n_channels, 64)
+#        self.down1 = Down_Scale(64, 128)
+#        self.down2 = Down_Scale(128, 256)
+#        self.down3 = Down_Scale(256, 512)
+#        self.down4 = Down_Scale(512, 1024)
+#        self.up1 = Up_Scale(1024, 512)
+#        self.up2 = Up_Scale(512, 256)
+#        self.up3 = Up_Scale(256, 128)
+#        self.up4 = Up_Scale(128, 64, up_conv = True)
+#        self.outc = OutConv(64, n_classes)
+#
+#    def forward(self, x):
+#        x1 = self.inc(x)
+#        x2 = self.down1(x1)
+#        x3 = self.down2(x2)
+#        x4 = self.down3(x3)
+#        x5 = self.down4(x4)
+#        x = self.up1(x5, x4)
+#        x = self.up2(x, x3)
+#        x = self.up3(x, x2)
+#        x = self.up4(x, x1)
+#        output = self.outc(x)
+#        return output
 
 
 class Unet(nn.Module):
@@ -129,26 +170,22 @@ class Unet(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
 
-        self.inc = Double_Convolution(n_channels, 64)
-        self.down1 = Down_Scale(64, 128)
-        self.down2 = Down_Scale(128, 256)
-        self.down3 = Down_Scale(256, 512)
-        self.down4 = Down_Scale(512, 1024)
-        self.up1 = Up_Scale(1024, 512)
-        self.up2 = Up_Scale(512, 256)
-        self.up3 = Up_Scale(256, 128)
-        self.up4 = Up_Scale(128, 64, up_conv = True)
-        self.outc = OutConv(64, n_classes)
+        self.inc = Double_Convolution(n_channels, 10)
+        self.down1 = Down_Scale(10, 20)
+        self.down2 = Down_Scale(20, 40)
+        self.down3 = Down_Scale(40, 80)
+        self.up1 = Up_Scale(80, 40)
+        self.up2 = Up_Scale(40, 20)
+        self.up3 = Up_Scale(20, 10, up_conv = True)
+        self.outc = OutConv(10, n_classes)
 
     def forward(self, x):
         x1 = self.inc(x)
         x2 = self.down1(x1)
         x3 = self.down2(x2)
         x4 = self.down3(x3)
-        x5 = self.down4(x4)
-        x = self.up1(x5, x4)
-        x = self.up2(x, x3)
-        x = self.up3(x, x2)
-        x = self.up4(x, x1)
+        x = self.up1(x4, x3)
+        x = self.up2(x, x2)
+        x = self.up3(x, x1)
         output = self.outc(x)
         return output

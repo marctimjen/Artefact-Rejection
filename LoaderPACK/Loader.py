@@ -1,5 +1,6 @@
 from torch.utils.data import Dataset, DataLoader
 import torch
+import torch.nn.functional as F
 import numpy as np
 import math
 
@@ -78,8 +79,8 @@ class load_shuffle_5_min(Dataset):
 
         for i in range(nr_of_cuts):
             chan = int(i//cuts_pr_chan) # the given channel
-            inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*250]
-            tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*250]
+            inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*250].view(1, 60*5*250)
+            tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*250].view(1, 60*5*250)
             yield (inp, tar, chan)
 
     def __len__(self):
@@ -134,7 +135,6 @@ class load_5_min_intervals(Dataset):
         for chan in range(self.size[1]):
             for cut_point in range(30*250, self.size[1], 250*5*60):
                 inp = self.ls[0][0][chan][cut_point:cut_point+60*5*250]
-
                 tar = self.ls[1][0][chan][cut_point:cut_point+60*5*250]
                 yield (inp, tar, chan, cut_point)
 
