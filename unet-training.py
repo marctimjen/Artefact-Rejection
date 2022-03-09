@@ -43,6 +43,22 @@ lossFunc = nn.BCELoss()
 # bineær loss function - hvor man kan vægte klasserne.
 
 
+# Strukturer træningen, så man får en figur man kan vise.
+# Tænk over hvordan man træner: Forøg data/gør modellen større/mindre.
+# Gør ting struktureret for at vise, at man kan anvende de metoder man har gjort.
+# Start småt og byg større.
+# False negative og False positives.
+# Kig på data - hvor laver modellen fejl?
+
+# https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html
+
+
+# Cross entropy:
+# https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss
+
+
+
+# mobaXterm - til ssh
 
 model = Unet(n_channels = 1, n_classes = 1).to(device)
 optimizer = SGD(model.parameters(), lr=0.1, momentum=0.9)
