@@ -29,8 +29,8 @@ np.random.seed(42)
 
 
 val_set, train_set = torch.utils.data.random_split(
-                            np.random.randint(low = 1, high = 284, size = 35),
-                            [5, 30],
+                            np.random.randint(low = 1, high = 284, size = 200),
+                            [20, 180],
                             generator=torch.Generator().manual_seed(42))
 
 
@@ -112,7 +112,7 @@ lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1, 10]).to(device), reduct
 
 batch_size = 10
 
-nEpoch = 10
+nEpoch = 40
 
 for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
@@ -161,13 +161,13 @@ for iEpoch in range(nEpoch):
 
 
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
-plt.plot(avg_train_loss)
-plt.show()
-
-plt.plot(avg_valid_loss)
-plt.show()
+#plt.plot(avg_train_loss)
+#plt.show()
+#
+#plt.plot(avg_valid_loss)
+#plt.show()
 
 
 # Med RNN - først træne med random derefter kører sequentielt ved træning af RNN'en.
