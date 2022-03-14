@@ -21,8 +21,8 @@ print(device)
 # load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
 #                             ind = [i for i in range(1, 310 + 1)])
 
-load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-                            ind = [i for i in range(1, 10 + 1)])
+load_file = load_whole_data(path = "C:/Users/Bruger/Desktop/model_data",
+                            ind = [i for i in range(1, 2 + 1)])
 
 
 file_loader = torch.utils.data.DataLoader(load_file,
@@ -33,7 +33,9 @@ file_loader = torch.utils.data.DataLoader(load_file,
 
 
 #lossFunc = nn.MSELoss()
-lossFunc = nn.BCELoss()
+#lossFunc = nn.BCELoss()
+
+lossFunc = nn.CrossEntropyLoss()
 
 
 # https://pytorch.org/docs/stable/generated/torch.quantile.html
@@ -60,11 +62,11 @@ lossFunc = nn.BCELoss()
 
 # mobaXterm - til ssh
 
-model = Unet(n_channels = 1, n_classes = 1).to(device)
+model = Unet(n_channels = 1, n_classes = 2).to(device)
 optimizer = SGD(model.parameters(), lr=0.1, momentum=0.9)
 train_loss = []
 
-batch_size = 2
+batch_size = 1
 
 i = 0
 nepoch = 2
@@ -88,7 +90,7 @@ for _ in range(nepoch):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
-            loss = lossFunc(y_pred, tar)
+            loss = lossFunc(y_pred[0].T, tar[0][0])
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())
