@@ -88,7 +88,7 @@ val_file_loader = torch.utils.data.DataLoader(val_load_file,
 # mobaXterm - til ssh
 token = os.getenv('Neptune_api')
 run = neptune.init(
-    project="Deep-Learning-test/Artefact-Rejection",
+    project="marctimjen/Artefact-Rejection",
     api_token=token,
 )
 
