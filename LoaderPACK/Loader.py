@@ -83,6 +83,9 @@ class load_shuffle_5_min(Dataset):
             tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*250].view(1, 60*5*250)
             #inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*250]
             #tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*250]
+
+
+            tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*250)
             yield (inp, tar, chan)
 
     def __len__(self):
@@ -91,7 +94,7 @@ class load_shuffle_5_min(Dataset):
     def __getitem__(self, idx):
         inp, tar, chan = next(self.gen)
         inp = inp.to(self.device)
-        tar = tar.to(self.device).type(torch.LongTensor)
+        tar = tar.to(self.device)
         return inp, tar, chan
 
 

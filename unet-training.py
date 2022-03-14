@@ -1,3 +1,5 @@
+import neptune.new as neptune
+import os
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
@@ -21,21 +23,42 @@ print(device)
 # load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
 #                             ind = [i for i in range(1, 310 + 1)])
 
-load_file = load_whole_data(path = "C:/Users/Bruger/Desktop/model_data",
-                            ind = [i for i in range(1, 2 + 1)])
+
+# Set up the datasets
+np.random.seed(42)
 
 
-file_loader = torch.utils.data.DataLoader(load_file,
-                                          batch_size=1,
-                                          shuffle=True,
-                                          num_workers=0)
+val_set, train_set = torch.utils.data.random_split(
+                            np.random.randint(low = 1, high = 284, size = 35),
+                            [5, 30],
+                            generator=torch.Generator().manual_seed(42))
+
+
+train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+                                  ind = train_set)
+
+
+train_file_loader = torch.utils.data.DataLoader(train_load_file,
+                                                batch_size=1,
+                                                shuffle=True,
+                                                num_workers=0)
+
+
+val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+                                ind = val_set)
+
+
+val_file_loader = torch.utils.data.DataLoader(val_load_file,
+                                              batch_size=1,
+                                              shuffle=True,
+                                              num_workers=0)
 
 
 
 #lossFunc = nn.MSELoss()
 #lossFunc = nn.BCELoss()
 
-lossFunc = nn.CrossEntropyLoss()
+
 
 
 # https://pytorch.org/docs/stable/generated/torch.quantile.html
@@ -61,22 +84,37 @@ lossFunc = nn.CrossEntropyLoss()
 
 
 # mobaXterm - til ssh
+token = os.getenv('Neptune_api')
+run = neptune.init(
+    project="Deep-Learning-test/Artefact-Rejection",
+    api_token=token,
+)
+
+
+params = {"optimizer":"SGD", "optimizer_momentum": 0.9,
+          "optimizer_learning_rate": 0.1, "loss_function":"CrossEntropyLoss",
+          "loss_function_weights":[1, 10], "loss_function_reduction":"mean",
+          "model":"Unet"}
+
+run[f"network/parameters"] = params
+
+
+valid_loss, train_loss = [], []
+valid_acc, train_acc = [], []
+
+avg_train_loss, avg_valid_loss = [], []
 
 model = Unet(n_channels = 1, n_classes = 2).to(device)
 optimizer = SGD(model.parameters(), lr=0.1, momentum=0.9)
-train_loss = []
+lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1, 10]).to(device), reduction="mean")
 
-batch_size = 1
+batch_size = 10
 
-i = 0
-nepoch = 2
+nEpoch = 10
 
-
-for _ in range(nepoch):
-    for file in file_loader:
-
-        print(i)
-        i += 1
+for iEpoch in range(nEpoch):
+    print(f"Training epoch {iEpoch}")
+    for file in train_file_loader:
 
         # the second loader is for loading the random timed 5-mins intervals
         load_series = load_shuffle_5_min(file, device)
@@ -90,19 +128,45 @@ for _ in range(nepoch):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
-            loss = lossFunc(y_pred[0].T, tar[0][0])
+            loss = lossFunc(y_pred, tar)
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())
 
+        avg_train_loss.append(w := (np.mean(np.array(train_loss))))
+        run[f"network/train_loss_pr_file"].log(w)
+        train_loss = []
+
+
+    for file in val_file_loader:
+        load_series = load_shuffle_5_min(file, device)
+
+        series_loader = torch.utils.data.DataLoader(load_series,
+                                                    batch_size=batch_size,
+                                                    shuffle=True,
+                                                    num_workers=0)
+
+        for series in series_loader:
+            ind, tar, chan = series
+            y_pred = model(ind)
+            loss = lossFunc(y_pred, tar)
+            valid_loss.append(loss.item())
+
+        avg_valid_loss.append(w := (np.mean(np.array(valid_loss))))
+        run[f"network/validation_loss_pr_file"].log(w)
+        valid_loss = []
 
 
 
 
 import matplotlib.pyplot as plt
 
-plt.plot(train_loss)
+plt.plot(avg_train_loss)
+plt.show()
+
+plt.plot(avg_valid_loss)
 plt.show()
 
 
 # Med RNN - først træne med random derefter kører sequentielt ved træning af RNN'en.
+run.stop()
