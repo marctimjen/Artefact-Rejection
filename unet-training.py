@@ -34,11 +34,11 @@ val_set, train_set = torch.utils.data.random_split(
                             generator=torch.Generator().manual_seed(42))
 
 
-train_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                  ind = train_set)
-
-#train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+#train_load_file = load_whole_data(path = "/home/tyson/model_data",
 #                                  ind = train_set)
+
+train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+                                  ind = train_set)
 
 
 train_file_loader = torch.utils.data.DataLoader(train_load_file,
@@ -47,11 +47,11 @@ train_file_loader = torch.utils.data.DataLoader(train_load_file,
                                                 num_workers=0)
 
 
-val_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                ind = val_set)
-
-#val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+#val_load_file = load_whole_data(path = "/home/tyson/model_data",
 #                                ind = val_set)
+
+val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+                                ind = val_set)
 
 val_file_loader = torch.utils.data.DataLoader(val_load_file,
                                               batch_size=1,
@@ -119,6 +119,8 @@ batch_size = 10
 
 nEpoch = 40
 
+
+
 for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
     for file in train_file_loader:
@@ -135,7 +137,9 @@ for iEpoch in range(nEpoch):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
-            loss = lossFunc(y_pred, tar)
+            print(y_pred.transpose(1, 2).reshape(-1, 2))
+            print(tar.view(-1).shape)
+            loss = lossFunc(y_pred.transpose(1, 2).reshape(-1, 2).type(torch.cuda.FloatTensor), tar.view(-1).type(torch.cuda.BoolTensor))
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())

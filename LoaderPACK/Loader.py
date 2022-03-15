@@ -85,7 +85,7 @@ class load_shuffle_5_min(Dataset):
             #tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*250]
 
 
-            tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*250)
+            #tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*250)
             yield (inp, tar, chan)
 
     def __len__(self):
