@@ -15,6 +15,13 @@ from LoaderPACK.Loader import load_whole_data, load_shuffle_5_min
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
 
+if device == "cpu":
+    fl = torch.FloatTensor
+    it = torch.LongTensor
+else:
+    fl = torch.cuda.FloatTensor
+    it = torch.cuda.LongTensor
+
 
 # Set up the dataloaders:
 
@@ -113,7 +120,7 @@ avg_train_loss, avg_valid_loss = [], []
 
 model = Unet(n_channels = 1, n_classes = 2).to(device)
 optimizer = SGD(model.parameters(), lr=0.1, momentum=0.9)
-lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1, 10]).to(device), reduction="mean")
+lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 10.]).to(device), reduction = "mean")
 
 batch_size = 10
 
@@ -137,16 +144,16 @@ for iEpoch in range(nEpoch):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
-            print(y_pred.transpose(1, 2).reshape(-1, 2))
-            print(tar.view(-1).shape)
-            loss = lossFunc(y_pred.transpose(1, 2).reshape(-1, 2).type(torch.cuda.FloatTensor), tar.view(-1).type(torch.cuda.BoolTensor))
+            y_pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            target = tar.view(-1).type(it)
+            loss = lossFunc(y_pred, target)
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())
 
-        avg_train_loss.append(w := (np.mean(np.array(train_loss))))
-        run[f"network/train_loss_pr_file"].log(w)
-        train_loss = []
+    avg_train_loss.append(w := (np.mean(np.array(train_loss))))
+    run[f"network/train_loss_pr_file"].log(w)
+    train_loss = []
 
 
     for file in val_file_loader:
@@ -163,9 +170,9 @@ for iEpoch in range(nEpoch):
             loss = lossFunc(y_pred, tar)
             valid_loss.append(loss.item())
 
-        avg_valid_loss.append(w := (np.mean(np.array(valid_loss))))
-        run[f"network/validation_loss_pr_file"].log(w)
-        valid_loss = []
+    avg_valid_loss.append(w := (np.mean(np.array(valid_loss))))
+    run[f"network/validation_loss_pr_file"].log(w)
+    valid_loss = []
 
 
 
