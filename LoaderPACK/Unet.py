@@ -107,12 +107,12 @@ class OutConv(nn.Module): # light-blue arrow
         """
         super(OutConv, self).__init__()
         self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=1)
-        #self.soft = nn.Softmax(dim=1)
-        self.sig = nn.Sigmoid()
+        self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
+        #self.sig = nn.Sigmoid()
 
     def forward(self, x):
         x = self.conv(x)
-        return self.sig(x) # Using sigmoid instead of softmax
+        return self.soft(x)
 
 
 #class Unet(nn.Module):
