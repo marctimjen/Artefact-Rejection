@@ -167,7 +167,9 @@ for iEpoch in range(nEpoch):
         for series in series_loader:
             ind, tar, chan = series
             y_pred = model(ind)
-            loss = lossFunc(y_pred, tar)
+            y_pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            target = tar.view(-1).type(it)
+            loss = lossFunc(y_pred, target)
             valid_loss.append(loss.item())
 
     avg_valid_loss.append(w := (np.mean(np.array(valid_loss))))
