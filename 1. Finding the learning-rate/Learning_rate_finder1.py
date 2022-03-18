@@ -46,11 +46,11 @@ val_set, train_set = torch.utils.data.random_split(
                             generator=torch.Generator().manual_seed(42))
 
 
-train_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                  ind = train_set)
-
-#train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+#train_load_file = load_whole_data(path = "/home/tyson/model_data",
 #                                  ind = train_set)
+
+train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+                                  ind = train_set)
 
 
 train_file_loader = torch.utils.data.DataLoader(train_load_file,
@@ -59,11 +59,11 @@ train_file_loader = torch.utils.data.DataLoader(train_load_file,
                                                 num_workers=0)
 
 
-val_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                ind = val_set)
-
-#val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+#val_load_file = load_whole_data(path = "/home/tyson/model_data",
 #                                ind = val_set)
+
+val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+                                ind = val_set)
 
 val_file_loader = torch.utils.data.DataLoader(val_load_file,
                                               batch_size=1,
@@ -154,6 +154,4 @@ for iEpoch in range(nEpoch):
 
 
 
-
-# Med RNN - først træne med random derefter kører sequentielt ved træning af RNN'en.
 run.stop()

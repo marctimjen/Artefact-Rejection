@@ -1,0 +1,49 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SDMAFDQ"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "unet-training.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\unet-training.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.387187957763672, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 4.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "optimizer"], "value": "SGD"}, "version": 17}
+{"obj": {"type": "AssignFloat", "path": ["network", "parameters", "optimizer_momentum"], "value": 0.9}, "version": 18}
+{"obj": {"type": "AssignFloat", "path": ["network", "parameters", "optimizer_learning_rate"], "value": 0.1}, "version": 19}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 20}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "loss_function_weights"], "value": "[1, 10]"}, "version": 21}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 22}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "model"], "value": "Unet"}, "version": 23}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 7.4, "step": null, "ts": 1647589131.1231935}]}, "version": 24}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 7.2079620361328125, "step": null, "ts": 1647589131.1231935}]}, "version": 25}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.051025390625, "step": null, "ts": 1647589131.1231935}]}, "version": 26}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1647589131.1882524}]}, "version": 27}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1647589131.1892533}]}, "version": 28}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 16.9, "step": null, "ts": 1647589141.1434355}]}, "version": 29}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 9.129196166992188, "step": null, "ts": 1647589141.1434355}]}, "version": 30}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 68.0, "step": null, "ts": 1647589141.1434355}]}, "version": 31}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 2.141998291015625, "step": null, "ts": 1647589141.1434355}]}, "version": 32}
+{"obj": {"type": "LogFloats", "path": ["network", "train_loss_pr_file"], "values": [{"value": 0.5965535014532926, "step": null, "ts": 1647589149.0185647}]}, "version": 33}
+{"obj": {"type": "LogFloats", "path": ["network", "train_acc_pr_file"], "values": [{"value": 0.20790085196495056, "step": null, "ts": 1647589149.0185647}]}, "version": 34}
+{"obj": {"type": "LogStrings", "path": ["network", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[ 2946512.,  7699111.],\n        [ 5310302., 47119072.]])", "step": null, "ts": 1647589149.0195658}]}, "version": 35}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 19.4, "step": null, "ts": 1647589151.146704}]}, "version": 36}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 8.936500549316406, "step": null, "ts": 1647589151.146704}]}, "version": 37}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 96.0, "step": null, "ts": 1647589151.146704}]}, "version": 38}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 3.530670166015625, "step": null, "ts": 1647589151.146704}]}, "version": 39}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "traceback"], "values": [{"value": "An uncaught exception occurred while run was active on worker DESKTOP-SDMAFDQ.", "step": null, "ts": 1647589151.4765053}, {"value": "Marking run as failed", "step": null, "ts": 1647589151.4765053}, {"value": "Traceback:", "step": null, "ts": 1647589151.4765053}, {"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\unet-training.py\", line 190, in <module>\n    valid_loss.append(loss.item())\n", "step": null, "ts": 1647589151.4765053}, {"value": "", "step": null, "ts": 1647589151.4765053}]}, "version": 40}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": true}, "version": 41}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1647589151.4775064}]}, "version": 42}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\unet-training.py\", line 190, in <module>\n", "step": null, "ts": 1647589151.4785075}]}, "version": 43}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1647589151.4785075}]}, "version": 44}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "valid_loss.append(loss.item())", "step": null, "ts": 1647589151.4785075}]}, "version": 45}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647589151.4785075}]}, "version": 46}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "KeyboardInterrupt", "step": null, "ts": 1647589151.4785075}]}, "version": 47}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1647589151.4795082}]}, "version": 48}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647589151.4795082}]}, "version": 49}

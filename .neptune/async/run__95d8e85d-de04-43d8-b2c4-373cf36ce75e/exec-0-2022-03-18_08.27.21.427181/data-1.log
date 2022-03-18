@@ -1,0 +1,48 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SDMAFDQ"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "unet-training.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\unet-training.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.387187957763672, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 4.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "optimizer"], "value": "SGD"}, "version": 17}
+{"obj": {"type": "AssignFloat", "path": ["network", "parameters", "optimizer_momentum"], "value": 0.9}, "version": 18}
+{"obj": {"type": "AssignFloat", "path": ["network", "parameters", "optimizer_learning_rate"], "value": 0.1}, "version": 19}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 20}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "loss_function_weights"], "value": "[1, 10]"}, "version": 21}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 22}
+{"obj": {"type": "AssignString", "path": ["network", "parameters", "model"], "value": "Unet"}, "version": 23}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 8.1, "step": null, "ts": 1647588441.7525368}]}, "version": 24}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 6.8518829345703125, "step": null, "ts": 1647588441.7525368}]}, "version": 25}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.051025390625, "step": null, "ts": 1647588441.7525368}]}, "version": 26}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1647588441.8185968}]}, "version": 27}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1647588441.8185968}]}, "version": 28}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 16.4, "step": null, "ts": 1647588451.770682}]}, "version": 29}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 8.737167358398438, "step": null, "ts": 1647588451.770682}]}, "version": 30}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 98.0, "step": null, "ts": 1647588451.770682}]}, "version": 31}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 2.141998291015625, "step": null, "ts": 1647588451.770682}]}, "version": 32}
+{"obj": {"type": "LogFloats", "path": ["network", "train_loss_pr_file"], "values": [{"value": 0.614518480019623, "step": null, "ts": 1647588459.9107916}]}, "version": 33}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "traceback"], "values": [{"value": "An uncaught exception occurred while run was active on worker DESKTOP-SDMAFDQ.", "step": null, "ts": 1647588459.9248052}, {"value": "Marking run as failed", "step": null, "ts": 1647588459.9248052}, {"value": "Traceback:", "step": null, "ts": 1647588459.9248052}, {"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\unet-training.py\", line 168, in <module>\n    run[f\"network/train_acc_pr_file\"].log(np.mean(np.array(train_acc)))\n", "step": null, "ts": 1647588459.9248052}, {"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\site-packages\\torch\\_tensor.py\", line 678, in __array__\n    return self.numpy()\n", "step": null, "ts": 1647588459.9248052}, {"value": "can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.", "step": null, "ts": 1647588459.9248052}]}, "version": 34}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": true}, "version": 35}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1647588459.9258058}]}, "version": 36}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\unet-training.py\", line 168, in <module>\n", "step": null, "ts": 1647588459.9258058}]}, "version": 37}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1647588459.9268064}]}, "version": 38}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "run[f\"network/train_acc_pr_file\"].log(np.mean(np.array(train_acc)))", "step": null, "ts": 1647588459.9268064}]}, "version": 39}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647588459.9268064}]}, "version": 40}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\site-packages\\torch\\_tensor.py\", line 678, in __array__\n", "step": null, "ts": 1647588459.9268064}]}, "version": 41}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1647588459.9278076}]}, "version": 42}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "return self.numpy()", "step": null, "ts": 1647588459.9278076}]}, "version": 43}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647588459.9278076}]}, "version": 44}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "TypeError", "step": null, "ts": 1647588459.9278076}]}, "version": 45}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": ": ", "step": null, "ts": 1647588459.9288082}]}, "version": 46}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.", "step": null, "ts": 1647588459.9288082}]}, "version": 47}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647588459.9288082}]}, "version": 48}

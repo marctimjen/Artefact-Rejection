@@ -36,8 +36,8 @@ np.random.seed(42)
 
 
 val_set, train_set = torch.utils.data.random_split(
-                            np.random.randint(low = 1, high = 284, size = 200),
-                            [20, 180],
+                            np.random.randint(low = 1, high = 284, size = 20),
+                            [5, 15],
                             generator=torch.Generator().manual_seed(42))
 
 
@@ -113,8 +113,10 @@ params = {"optimizer":"SGD", "optimizer_momentum": 0.9,
 run[f"network/parameters"] = params
 
 
+
+
 valid_loss, train_loss = [], []
-valid_acc, train_acc = [], []
+valid_acc, train_acc = torch.tensor([]).to(device), torch.tensor([]).to(device)
 
 avg_train_loss, avg_valid_loss = [], []
 
@@ -130,6 +132,10 @@ nEpoch = 40
 
 for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
+
+    t_mat = torch.zeros(2, 2)
+    total_pos, total_neg = torch.tensor(0), torch.tensor(0)
+
     for file in train_file_loader:
 
         # the second loader is for loading the random timed 5-mins intervals
@@ -139,6 +145,7 @@ for iEpoch in range(nEpoch):
                                                     batch_size=batch_size,
                                                     shuffle=True,
                                                     num_workers=0)
+
 
         for series in series_loader:
             ind, tar, chan = series
@@ -151,13 +158,27 @@ for iEpoch in range(nEpoch):
             optimizer.step()
             train_loss.append(loss.item())
 
-            acc, mat = Accuarcy_find(y_pred, tar, device)
-            print(mat)
+            acc, mat, tot_p, tot_n = Accuarcy_find(y_pred, tar, device)
+            train_acc = torch.cat((train_acc, acc.view(1)))
+            t_mat = t_mat + mat
+            total_pos = total_pos + tot_p
+            total_neg = total_neg + tot_n
 
-    avg_train_loss.append(w := (np.mean(np.array(train_loss))))
-    run[f"network/train_loss_pr_file"].log(w)
+
+    run[f"network/train_loss_pr_file"].log(np.mean(np.array(train_loss)))
     train_loss = []
 
+    run[f"network/train_acc_pr_file"].log(torch.mean(train_acc))
+    train_acc = torch.tensor([]).to(device)
+
+    run[f"network/matrix/train_confusion_matrix_pr_file"].log(t_mat)
+    run[f"network/matrix/train_tp_pr_file"].log(t_mat[0][0]/total_pos)
+    run[f"network/matrix/train_fp_pr_file"].log(t_mat[0][1]/total_pos)
+    run[f"network/matrix/train_fn_pr_file"].log(t_mat[1][0]/total_neg)
+    run[f"network/matrix/train_tn_pr_file"].log(t_mat[1][1]/total_neg)
+
+    v_mat = torch.zeros(2,2)
+    total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
     for file in val_file_loader:
         load_series = load_shuffle_5_min(file, device)
@@ -170,14 +191,28 @@ for iEpoch in range(nEpoch):
         for series in series_loader:
             ind, tar, chan = series
             y_pred = model(ind)
-            y_pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
-            loss = lossFunc(y_pred, target)
+            loss = lossFunc(pred, target)
             valid_loss.append(loss.item())
 
-    avg_valid_loss.append(w := (np.mean(np.array(valid_loss))))
-    run[f"network/validation_loss_pr_file"].log(w)
+            acc, mat, tot_p, tot_n = Accuarcy_find(y_pred, tar, device)
+            valid_acc = torch.cat((valid_acc, acc.view(1)))
+            v_mat = v_mat + mat
+            total_pos = total_pos + tot_p
+            total_neg = total_neg + tot_n
+
+    run[f"network/validation_loss_pr_file"].log(np.mean(np.array(valid_loss)))
     valid_loss = []
+
+    run[f"network/val_acc_pr_file"].log(torch.mean(valid_acc))
+    valid_acc = torch.tensor([]).to(device)
+
+    run[f"network/matrix/val_confusion_matrix_pr_file"].log(v_mat)
+    run[f"network/matrix/val_tp_pr_file"].log(v_mat[0][0]/total_pos)
+    run[f"network/matrix/val_fp_pr_file"].log(v_mat[0][1]/total_pos)
+    run[f"network/matrix/val_fn_pr_file"].log(v_mat[1][0]/total_neg)
+    run[f"network/matrix/val_tn_pr_file"].log(v_mat[1][1]/total_neg)
 
 
 
