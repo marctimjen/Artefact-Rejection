@@ -1,0 +1,45 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SDMAFDQ"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "Learning_rate_finder1.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\1. Finding the learning-rate\\Learning_rate_finder1.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.387187957763672, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 4.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 11.3, "step": null, "ts": 1647807252.4263916}]}, "version": 17}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 7.4001312255859375, "step": null, "ts": 1647807252.4263916}]}, "version": 18}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.051025390625, "step": null, "ts": 1647807252.4263916}]}, "version": 19}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "optimizer"], "value": "SGD"}, "version": 20}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "optimizer_learning_rate"], "value": 0.1}, "version": 21}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 22}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "loss_function_weights"], "value": "[1, 12.5]"}, "version": 23}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 24}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "model"], "value": "Unet"}, "version": 25}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "scheduler"], "value": "CyclicLR"}, "version": 26}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "scheduler_base_lr"], "value": 0.001}, "version": 27}
+{"obj": {"type": "AssignInt", "path": ["network_SGD", "parameters", "scheduler_max_lr"], "value": 5}, "version": 28}
+{"obj": {"type": "AssignInt", "path": ["network_SGD", "parameters", "scheduler_step_size_up"], "value": 99}, "version": 29}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1647807252.494453}]}, "version": 30}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1647807252.4954538}]}, "version": 31}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "learning_rate"], "values": [{"value": 0.001, "step": null, "ts": 1647807252.4954538}]}, "version": 32}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "tensor(0.8909, device='cuda:0')", "step": null, "ts": 1647807254.3188798}]}, "version": 33}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1647807254.3198195}]}, "version": 34}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "traceback"], "values": [{"value": "An uncaught exception occurred while run was active on worker DESKTOP-SDMAFDQ.", "step": null, "ts": 1647807254.3198195}, {"value": "Marking run as failed", "step": null, "ts": 1647807254.3198195}, {"value": "Traceback:", "step": null, "ts": 1647807254.3198195}, {"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\1. Finding the learning-rate\\Learning_rate_finder1.py\", line 141, in <module>\n    train_acc = torch.cat((train_acc, acc.view(1)))\n", "step": null, "ts": 1647807254.3198195}, {"value": "expected Tensor as element 0 in argument 0, but got list", "step": null, "ts": 1647807254.3198195}]}, "version": 35}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": true}, "version": 36}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1647807254.3198195}]}, "version": 37}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\1. Finding the learning-rate\\Learning_rate_finder1.py\", line 141, in <module>\n", "step": null, "ts": 1647807254.3208196}]}, "version": 38}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1647807254.3208196}]}, "version": 39}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "train_acc = torch.cat((train_acc, acc.view(1)))", "step": null, "ts": 1647807254.3208196}]}, "version": 40}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647807254.3208196}]}, "version": 41}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "TypeError", "step": null, "ts": 1647807254.3208196}]}, "version": 42}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": ": ", "step": null, "ts": 1647807254.3208196}]}, "version": 43}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "expected Tensor as element 0 in argument 0, but got list", "step": null, "ts": 1647807254.3208196}]}, "version": 44}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1647807254.321821}]}, "version": 45}

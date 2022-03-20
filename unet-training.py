@@ -159,6 +159,7 @@ for iEpoch in range(nEpoch):
             train_loss.append(loss.item())
 
             acc, mat, tot_p, tot_n = Accuarcy_find(y_pred, tar, device)
+            print(acc)
             train_acc = torch.cat((train_acc, acc.view(1)))
             t_mat = t_mat + mat
             total_pos = total_pos + tot_p
