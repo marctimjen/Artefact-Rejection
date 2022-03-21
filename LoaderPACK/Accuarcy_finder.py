@@ -22,7 +22,7 @@ def Accuarcy_find(pred, tar, device):
 
     acc = (fp + fn)/(fp + fn + tp + tn)
 
-    tot_p = tp + fp # total postive
-    tot_n = tn + fn # total negative
+    tot_p = tp + fn # total postive
+    tot_n = tn + fp # total negative
 
     return (acc, torch.tensor([[tp, fp], [fn, tn]]), tot_p, tot_n)
