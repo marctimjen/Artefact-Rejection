@@ -97,6 +97,8 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                 total_pos = total_pos + tot_p
                 total_neg_train = total_neg_train + tot_n
                 #print(tot_n)
+                if tot_n == 0:
+                    print(tar)
 
             #print(total_neg_train)
         run[f"network_SGD/train_loss_pr_file"].log(
@@ -195,7 +197,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
 
-        run[f"network_SGD/learning_rate"].log(optimizer.param_groups[0]['lr'])
+        run[f"network_ADAM/learning_rate"].log(optimizer.param_groups[0]['lr'])
 
         t_mat = torch.zeros(2, 2)
         total_pos, total_neg_train = torch.tensor(0), torch.tensor(0)
@@ -228,21 +230,23 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 total_pos = total_pos + tot_p
                 total_neg_train = total_neg_train + tot_n
                 #print(tot_n)
+                if tot_n == 0:
+                    print(tar)
 
             #print(total_neg_train)
-        run[f"network_SGD/train_loss_pr_file"].log(
+        run[f"network_ADAM/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
         train_loss = []
 
-        run[f"network_SGD/train_acc_pr_file"].log(torch.mean(train_acc))
+        run[f"network_ADAM/train_acc_pr_file"].log(torch.mean(train_acc))
         train_acc = torch.tensor([]).to(device)
 
-        run[f"network_SGD/matrix/train_confusion_matrix_pr_file"].log(t_mat)
-        run[f"network_SGD/matrix/train_tp_pr_file"].log(t_mat[0][0]/total_pos)
-        run[f"network_SGD/matrix/train_fp_pr_file"].log(t_mat[0][1]/total_pos)
-        run[f"network_SGD/matrix/train_fn_pr_file"].log(
+        run[f"network_ADAM/matrix/train_confusion_matrix_pr_file"].log(t_mat)
+        run[f"network_ADAM/matrix/train_tp_pr_file"].log(t_mat[0][0]/total_pos)
+        run[f"network_ADAM/matrix/train_fp_pr_file"].log(t_mat[0][1]/total_pos)
+        run[f"network_ADAM/matrix/train_fn_pr_file"].log(
                                                     t_mat[1][0]/total_neg_train)
-        run[f"network_SGD/matrix/train_tn_pr_file"].log(
+        run[f"network_ADAM/matrix/train_tn_pr_file"].log(
                                                     t_mat[1][1]/total_neg_train)
 
         v_mat = torch.zeros(2,2)
@@ -270,18 +274,18 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 total_pos = total_pos + tot_p
                 total_neg = total_neg + tot_n
 
-        run[f"network_SGD/validation_loss_pr_file"].log(
+        run[f"network_ADAM/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
         valid_loss = []
 
-        run[f"network_SGD/val_acc_pr_file"].log(torch.mean(valid_acc))
+        run[f"network_ADAM/val_acc_pr_file"].log(torch.mean(valid_acc))
         valid_acc = torch.tensor([]).to(device)
 
-        run[f"network_SGD/matrix/val_confusion_matrix_pr_file"].log(v_mat)
-        run[f"network_SGD/matrix/val_tp_pr_file"].log(v_mat[0][0]/total_pos)
-        run[f"network_SGD/matrix/val_fp_pr_file"].log(v_mat[0][1]/total_pos)
-        run[f"network_SGD/matrix/val_fn_pr_file"].log(v_mat[1][0]/total_neg)
-        run[f"network_SGD/matrix/val_tn_pr_file"].log(v_mat[1][1]/total_neg)
+        run[f"network_ADAM/matrix/val_confusion_matrix_pr_file"].log(v_mat)
+        run[f"network_ADAM/matrix/val_tp_pr_file"].log(v_mat[0][0]/total_pos)
+        run[f"network_ADAM/matrix/val_fp_pr_file"].log(v_mat[0][1]/total_pos)
+        run[f"network_ADAM/matrix/val_fn_pr_file"].log(v_mat[1][0]/total_neg)
+        run[f"network_ADAM/matrix/val_tn_pr_file"].log(v_mat[1][1]/total_neg)
 
         scheduler.step()
 
