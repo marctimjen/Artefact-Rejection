@@ -153,6 +153,7 @@ def net_SGD1(device, fl, it, train_file_loader):
         run[f"network_SGD/matrix/val_tn_pr_file"].log(v_mat[1][1]/total_neg)
 
         scheduler.step()
+    run.stop()
 
 def net_ADAM1(device, fl, it, train_file_loader):
 
@@ -284,6 +285,8 @@ def net_ADAM1(device, fl, it, train_file_loader):
 
         scheduler.step()
 
+    run.stop()
+
 
 
 def net_starter(nets, device, fl, it, train_file_loader):
@@ -372,6 +375,3 @@ if __name__ == '__main__':
 
     for process in pres:
         process.join()
-
-
-    run.stop()
