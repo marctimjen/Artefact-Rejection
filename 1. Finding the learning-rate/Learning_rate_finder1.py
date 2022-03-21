@@ -325,7 +325,7 @@ if __name__ == '__main__':
         api_token=token,
     )
 
-    net_SGD1(device)
+    #net_SGD1(device)
     net_ADAM1(device)
 
     #core = torch.cuda.device_count()
