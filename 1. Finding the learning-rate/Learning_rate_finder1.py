@@ -24,7 +24,7 @@ except RuntimeError:
     pass
 
 
-def net_SGD1(device, fl, it, train_file_loader):
+def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
     token = os.getenv('Neptune_api')
     run = neptune.init(
@@ -155,7 +155,7 @@ def net_SGD1(device, fl, it, train_file_loader):
         scheduler.step()
     run.stop()
 
-def net_ADAM1(device, fl, it, train_file_loader):
+def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
     token = os.getenv('Neptune_api')
     run = neptune.init(
@@ -289,10 +289,11 @@ def net_ADAM1(device, fl, it, train_file_loader):
 
 
 
-def net_starter(nets, device, fl, it, train_file_loader):
+def net_starter(nets, device, fl, it, train_file_loader, val_file_loader):
     for net in nets:
         pr1 = mp.Process(target=net, args = (device, fl, it,
-                                                train_file_loader,))
+                                                train_file_loader,
+                                                val_file_loader,))
         pr1.start()
         pr1.join()
 
@@ -368,7 +369,8 @@ if __name__ == '__main__':
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
-                                                           train_file_loader,)))
+                                                           train_file_loader,
+                                                           val_file_loader,)))
 
     for process in pres:
         process.start()
