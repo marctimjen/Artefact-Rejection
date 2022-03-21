@@ -141,7 +141,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         valid_acc = torch.tensor([]).to(device)
 
         run[f"network_SGD/matrix/val_confusion_matrix_pr_file"].log(v_mat)
-        Accuarcy_upload(run, t_mat, total_pos, total_neg, "network_SGD", "val")
+        Accuarcy_upload(run, v_mat, total_pos, total_neg, "network_SGD", "val")
 
         scheduler.step()
     run.stop()
@@ -264,7 +264,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
         valid_acc = torch.tensor([]).to(device)
 
         run[f"network_ADAM/matrix/val_confusion_matrix_pr_file"].log(v_mat)
-        Accuarcy_upload(run, t_mat, total_pos, total_neg, "network_ADAM", "val")
+        Accuarcy_upload(run, v_mat, total_pos, total_neg, "network_ADAM", "val")
 
         scheduler.step()
 
