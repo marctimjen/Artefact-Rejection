@@ -189,7 +189,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
         run[f"network_ADAM/learning_rate"].log(optimizer.param_groups[0]['lr'])
 
         t_mat = torch.zeros(2, 2)
-        total_pos, total_neg_train = torch.tensor(0), torch.tensor(0)
+        total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
         for file in train_file_loader:
 
@@ -217,7 +217,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 train_acc = torch.cat((train_acc, acc.view(1)))
                 t_mat = t_mat + mat
                 total_pos = total_pos + tot_p_g
-                total_neg_train = total_neg_train + tot_n_g
+                total_neg = total_neg + tot_n_g
                 #print(tot_n)
 
             #print(total_neg_train)
