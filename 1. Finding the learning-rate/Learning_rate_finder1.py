@@ -68,7 +68,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         run[f"network_SGD/learning_rate"].log(optimizer.param_groups[0]['lr'])
 
         t_mat = torch.zeros(2, 2)
-        total_pos, total_neg_train = torch.tensor(0), torch.tensor(0)
+        total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
         for file in train_file_loader:
 
