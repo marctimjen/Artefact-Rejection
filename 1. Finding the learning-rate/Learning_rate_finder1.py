@@ -24,7 +24,14 @@ except RuntimeError:
     pass
 
 
-def net_SGD1(device, run, fl, it, train_file_loader):
+def net_SGD1(device, fl, it, train_file_loader):
+
+    token = os.getenv('Neptune_api')
+    run = neptune.init(
+        project="NTLAB/artifact-rej-scalp",
+        api_token=token,
+    )
+
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
@@ -147,7 +154,14 @@ def net_SGD1(device, run, fl, it, train_file_loader):
 
         scheduler.step()
 
-def net_ADAM1(device, run, fl, it, train_file_loader):
+def net_ADAM1(device, fl, it, train_file_loader):
+
+    token = os.getenv('Neptune_api')
+    run = neptune.init(
+        project="NTLAB/artifact-rej-scalp",
+        api_token=token,
+    )
+
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
@@ -272,9 +286,9 @@ def net_ADAM1(device, run, fl, it, train_file_loader):
 
 
 
-def net_starter(nets, device, run, fl, it, train_file_loader):
+def net_starter(nets, device, fl, it, train_file_loader):
     for net in nets:
-        pr1 = mp.Process(target=net, args = (device, run, fl, it,
+        pr1 = mp.Process(target=net, args = (device, fl, it,
                                                 train_file_loader,))
         pr1.start()
         pr1.join()
@@ -326,11 +340,11 @@ if __name__ == '__main__':
                                                   shuffle=True,
                                                   num_workers=0)
 
-    token = os.getenv('Neptune_api')
-    run = neptune.init(
-        project="NTLAB/artifact-rej-scalp",
-        api_token=token,
-    )
+    #token = os.getenv('Neptune_api')
+    #run = neptune.init(
+    #    project="NTLAB/artifact-rej-scalp",
+    #    api_token=token,
+    #)
 
     #net_SGD1(device)
     #net_ADAM1(device)
@@ -349,7 +363,7 @@ if __name__ == '__main__':
     pres = []
     for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
-                                                           f"cuda:{i}", run,
+                                                           f"cuda:{i}",
                                                            fl, it,
                                                            train_file_loader,)))
 
