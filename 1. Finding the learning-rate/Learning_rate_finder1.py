@@ -16,6 +16,7 @@ sys.path.append("..") # adds higher directory to python modules path
 from LoaderPACK.Unet import Unet
 from LoaderPACK.Loader import load_whole_data, load_shuffle_5_min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
+from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
 
 try:
