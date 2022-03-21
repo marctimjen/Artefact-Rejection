@@ -18,6 +18,11 @@ from LoaderPACK.Loader import load_whole_data, load_shuffle_5_min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from multiprocessing import Process
 
+try:
+     set_start_method('spawn')
+except RuntimeError:
+    pass
+
 
 def net_SGD1(device):
     valid_loss, train_loss = [], []
