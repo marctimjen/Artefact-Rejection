@@ -154,7 +154,7 @@ def net_ADAM1(device):
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=5,
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=0.7,
                          step_size_up=nEpoch-1, cycle_momentum = False)
 
     params = {"optimizer":"Adam",
@@ -326,29 +326,29 @@ if __name__ == '__main__':
     )
 
     #net_SGD1(device)
-    net_ADAM1(device)
+    #net_ADAM1(device)
 
-    #core = torch.cuda.device_count()
+    core = torch.cuda.device_count()
 
-    #networks = [net_SGD1, net_ADAM1]
+    networks = [net_SGD1, net_ADAM1]
 
-    #cuda_dict = dict()
-    #for i in range(core):
-    #    cuda_dict[i] = []
+    cuda_dict = dict()
+    for i in range(core):
+        cuda_dict[i] = []
 
-    #for i in range(len(networks)):
-    #    cuda_dict[i % core].append(networks[i])
+    for i in range(len(networks)):
+        cuda_dict[i % core].append(networks[i])
 
-    #pres = []
-    #for i in range(core):
-    #    pres.append(Process(target=net_starter, args = (cuda_dict.get(i),
-    #                                                    f"cuda:{i}")))
+    pres = []
+    for i in range(core):
+        pres.append(Process(target=net_starter, args = (cuda_dict.get(i),
+                                                        f"cuda:{i}")))
 
-    #for process in pres:
-    #    process.start()
+    for process in pres:
+        process.start()
 
-    #for process in pres:
-    #    process.join()
+    for process in pres:
+        process.join()
 
 
     run.stop()
