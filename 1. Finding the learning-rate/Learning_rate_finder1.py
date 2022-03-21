@@ -95,7 +95,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                 train_acc = torch.cat((train_acc, acc.view(1)))
                 t_mat = t_mat + mat
                 total_pos = total_pos + tot_p
-                total_neg_train = total_neg_train + tot_n
+                total_neg = total_neg + tot_n
                 #print(tot_n)
                 if tot_n == 0:
                     print(torch.sum(tar == 0))
@@ -111,12 +111,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         train_acc = torch.tensor([]).to(device)
 
         run[f"network_SGD/matrix/train_confusion_matrix_pr_file"].log(t_mat)
-        run[f"network_SGD/matrix/train_tp_pr_file"].log(t_mat[0][0]/total_pos)
-        run[f"network_SGD/matrix/train_fp_pr_file"].log(t_mat[0][1]/total_pos)
-        run[f"network_SGD/matrix/train_fn_pr_file"].log(
-                                                    t_mat[1][0]/total_neg_train)
-        run[f"network_SGD/matrix/train_tn_pr_file"].log(
-                                                    t_mat[1][1]/total_neg_train)
+        Accuarcy_upload(run, t_mat, total_pos, total_neg, "network_SGD")
 
         v_mat = torch.zeros(2,2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
