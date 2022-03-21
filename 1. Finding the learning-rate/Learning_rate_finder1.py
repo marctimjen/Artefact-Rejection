@@ -24,7 +24,7 @@ except RuntimeError:
     pass
 
 
-def net_SGD1(device):
+def net_SGD1(device, run):
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
@@ -147,7 +147,7 @@ def net_SGD1(device):
 
         scheduler.step()
 
-def net_ADAM1(device):
+def net_ADAM1(device, run):
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
@@ -272,9 +272,9 @@ def net_ADAM1(device):
 
 
 
-def net_starter(nets, device):
+def net_starter(nets, device, run):
     for net in nets:
-        pr1 = mp.Process(target=net, args = (device,))
+        pr1 = mp.Process(target=net, args = (device, run))
         pr1.start()
         pr1.join()
 
@@ -348,7 +348,7 @@ if __name__ == '__main__':
     pres = []
     for i in range(core):
         pres.append(Process(target=net_starter, args = (cuda_dict.get(i),
-                                                        f"cuda:{i}")))
+                                                        f"cuda:{i}", run)))
 
     for process in pres:
         process.start()
