@@ -348,7 +348,7 @@ if __name__ == '__main__':
     pres = []
     for i in range(core):
         pres.append(Process(target=net_starter, args = (cuda_dict.get(i),
-                                                        f"cuda:{i}", run)))
+                                                        f"cuda:{i}", run,)))
 
     for process in pres:
         process.start()
