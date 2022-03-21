@@ -99,6 +99,8 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                 #print(tot_n)
                 if tot_n == 0:
                     print(torch.sum(tar == 0))
+                    print(mat)
+                    print()
 
             #print(total_neg_train)
         run[f"network_SGD/train_loss_pr_file"].log(
@@ -232,6 +234,8 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 #print(tot_n)
                 if tot_n == 0:
                     print(torch.sum(tar == 0))
+                    print(mat)
+                    print()
 
             #print(total_neg_train)
         run[f"network_ADAM/train_loss_pr_file"].log(
