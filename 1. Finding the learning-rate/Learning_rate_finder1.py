@@ -155,7 +155,7 @@ def net_ADAM1(device):
 
     nEpoch = 100
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=5,
-                         step_size_up=nEpoch-1)
+                         step_size_up=nEpoch-1, cycle_momentum = False)
 
     params = {"optimizer":"Adam",
               "optimizer_learning_rate": 0.1,
