@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from torch.optim import SGD, Adam
 from torch.utils.data import DataLoader, random_split
 from torch.optim.lr_scheduler import CyclicLR
-import torch.multiprocessing as mp
+import torch.multiprocessing as mp, set_start_method
 import numpy as np
 import time
 
