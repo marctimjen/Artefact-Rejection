@@ -45,16 +45,16 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=5,
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=0.7,
                          step_size_up=nEpoch-1)
 
     params = {"optimizer":"SGD",
-              "optimizer_learning_rate": 0.1,
+              "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 12.5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":5,
+              "scheduler_base_lr":0.001, "scheduler_max_lr":0.7,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_SGD/parameters"] = params
@@ -170,12 +170,12 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                          step_size_up=nEpoch-1, cycle_momentum = False)
 
     params = {"optimizer":"Adam",
-              "optimizer_learning_rate": 0.1,
+              "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 12.5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":5,
+              "scheduler_base_lr":0.001, "scheduler_max_lr":0.7,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params
