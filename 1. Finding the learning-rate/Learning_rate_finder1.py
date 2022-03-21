@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torch.optim import SGD, Adam
 from torch.utils.data import DataLoader, random_split
 from torch.optim.lr_scheduler import CyclicLR
+import torch.multiprocessing as mp
 import numpy as np
 import time
 
@@ -268,7 +269,7 @@ def net_ADAM1(device):
 
 def net_starter(nets, device):
     for net in nets:
-        pr1 = Process(target=net, args = (device,))
+        pr1 = mp.Process(target=net, args = (device,))
         pr1.start()
         pr1.join()
 
