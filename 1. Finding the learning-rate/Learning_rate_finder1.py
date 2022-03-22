@@ -336,7 +336,8 @@ if __name__ == '__main__':
     #net_SGD1(device)
     #net_ADAM1(device)
 
-    core = torch.cuda.device_count()
+    # core = torch.cuda.device_count()
+    core = 1
 
     networks = [net_SGD1, net_ADAM1]
 
@@ -348,7 +349,7 @@ if __name__ == '__main__':
         cuda_dict[i % core].append(networks[i])
 
     pres = []
-    for i in range(core):
+    for i in range(1, 2):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
