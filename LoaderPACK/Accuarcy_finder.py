@@ -20,7 +20,7 @@ def Accuarcy_find(pred, tar, device):
     tp = torch.sum(art_pred[tar == 1] == True) # true positive
     tn = torch.sum(art_pred[tar == 0] == False) # true negative
 
-    acc = (fp + fn)/(fp + fn + tp + tn)
+    acc = (tp + tn)/(fp + fn + tp + tn)
 
     tot_p_g = tp + fp # total postive
     tot_n_g = tn + fn # total negative
