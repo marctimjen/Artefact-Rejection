@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, random_split
 from torch.optim.lr_scheduler import CyclicLR
 import torch.multiprocessing as mp
 import numpy as np
-import time
+import random
 
 import sys
 sys.path.append("..") # adds higher directory to python modules path
@@ -169,21 +169,21 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     avg_train_loss, avg_valid_loss = [], []
 
     model = Unet(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.001)
+    optimizer = Adam(model.parameters(), lr=0.0001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=3,
+    scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.9,
                          step_size_up=nEpoch-1, cycle_momentum = False)
 
     params = {"optimizer":"Adam", "batch_size":25,
-              "optimizer_learning_rate": 0.001,
+              "optimizer_learning_rate": 0.0001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":3,
+              "scheduler_base_lr":0.0001, "scheduler_max_lr":0.9,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params
@@ -348,24 +348,19 @@ if __name__ == '__main__':
     #    api_token=token,
     #)
 
-    #net_SGD1(device)
-    #net_ADAM1(device)
-
-    # core = torch.cuda.device_count()
-    core = 1
+    core = torch.cuda.device_count()
 
     networks = [net_SGD1, net_ADAM1]
 
     cuda_dict = dict()
-    #for i in range(core):
-    #    cuda_dict[i] = []
+    for i in range(core):
+        cuda_dict[i] = []
 
-    #for i in range(len(networks)):
-    #    cuda_dict[i % core].append(networks[i])
+    for i in range(len(networks)):
+        cuda_dict[i % core].append(networks[i])
 
-    cuda_dict[1] = [net_SGD1, net_ADAM1]
     pres = []
-    for i in range(1, 2):
+    for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
