@@ -41,20 +41,20 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
     model = Unet(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=0.001)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 12.5]).to(device),
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=0.7,
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=3,
                          step_size_up=nEpoch-1)
 
     params = {"optimizer":"SGD",
               "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
-              "loss_function_weights":[1, 12.5],
+              "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":0.7,
+              "scheduler_base_lr":0.001, "scheduler_max_lr":3,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_SGD/parameters"] = params
@@ -162,20 +162,20 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
     model = Unet(n_channels=1, n_classes=2).to(device)
     optimizer = Adam(model.parameters(), lr=0.001)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 12.5]).to(device),
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=0.7,
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=3,
                          step_size_up=nEpoch-1, cycle_momentum = False)
 
     params = {"optimizer":"Adam",
               "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
-              "loss_function_weights":[1, 12.5],
+              "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":0.7,
+              "scheduler_base_lr":0.001, "scheduler_max_lr":3,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params

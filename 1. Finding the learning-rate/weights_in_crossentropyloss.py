@@ -14,11 +14,13 @@ file_loader = torch.utils.data.DataLoader(load_file,
                                           shuffle=False,
                                           num_workers=0)
 
+total_obs = 0
+total_art = 0
 
 for file in load_file:
     file = file[1][..., 30*250:] # remove the first 30 secs of each row
-    total_obs = file.shape[0]*file.shape[1]
-    total_art = np.sum(file.numpy())
+    total_obs += file.shape[0]*file.shape[1]
+    total_art += np.sum(file.numpy())
 
 
 print("Total number of observations:", total_obs)
