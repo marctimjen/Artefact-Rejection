@@ -341,14 +341,14 @@ if __name__ == '__main__':
 
     networks = [net_SGD1, net_ADAM1]
 
-    #cuda_dict = dict()
+    cuda_dict = dict()
     #for i in range(core):
     #    cuda_dict[i] = []
 
     #for i in range(len(networks)):
     #    cuda_dict[i % core].append(networks[i])
 
-    cuda_dict = dict(1:[net_SGD1, net_ADAM1])
+    cuda_dict[1] = [net_SGD1, net_ADAM1]
     pres = []
     for i in range(1, 2):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
