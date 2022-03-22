@@ -45,22 +45,24 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=3,
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=15,
                          step_size_up=nEpoch-1)
 
-    params = {"optimizer":"SGD",
+    params = {"optimizer":"SGD", "batch_size":25,
               "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":3,
+              "scheduler_base_lr":0.001, "scheduler_max_lr":15,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_SGD/parameters"] = params
 
-    batch_size = 10
+    batch_size = 25
 
+    first_train = True
+    first_val = True
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
@@ -88,6 +90,9 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
+                if first_train:
+                    run[f"network_SGD/train_loss_pr_file"].log(loss)
+                    first_train = False
                 loss.backward()
                 optimizer.step()
                 train_loss.append(loss.item())
@@ -125,6 +130,9 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
+                if first_val:
+                    run[f"network_SGD/validation_loss_pr_file"].log(loss)
+                    first_val = False
                 valid_loss.append(loss.item())
 
                 acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -169,7 +177,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=3,
                          step_size_up=nEpoch-1, cycle_momentum = False)
 
-    params = {"optimizer":"Adam",
+    params = {"optimizer":"Adam", "batch_size":25,
               "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
@@ -180,8 +188,10 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
     run[f"network_ADAM/parameters"] = params
 
-    batch_size = 10
+    batch_size = 25
 
+    first_train = True
+    first_val = True
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
@@ -210,6 +220,9 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
                 loss.backward()
+                if first_train:
+                    run[f"network_SGD/train_loss_pr_file"].log(loss)
+                    first_train = False
                 optimizer.step()
                 train_loss.append(loss.item())
 
@@ -248,6 +261,9 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
+                if first_val:
+                    run[f"network_SGD/validation_loss_pr_file"].log(loss)
+                    first_val = False
                 valid_loss.append(loss.item())
 
                 acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -297,11 +313,10 @@ if __name__ == '__main__':
     np.random.seed(42)
 
 
-    val_set, train_set = torch.utils.data.random_split(
-                                np.random.randint(low = 1, high = 284,
-                                size = 50), [10, 40],
-                                generator=torch.Generator().manual_seed(42))
 
+    test_set, train_set = torch.utils.data.random_split(
+                                random.sample(range(1, 284), 50), [10, 40],
+                                generator=torch.Generator().manual_seed(42))
 
     train_load_file = load_whole_data(path = "/home/tyson/model_data",
                                       ind = train_set)
