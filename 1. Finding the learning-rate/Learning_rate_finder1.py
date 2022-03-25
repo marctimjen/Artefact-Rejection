@@ -48,7 +48,9 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=15,
                          step_size_up=nEpoch-1)
 
-    params = {"optimizer":"SGD", "batch_size":25,
+    batch_size = 20
+
+    params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": 0.001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
@@ -59,7 +61,6 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
     run[f"network_SGD/parameters"] = params
 
-    batch_size = 25
 
     first_train = True
     first_val = True
@@ -177,7 +178,9 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.9,
                          step_size_up=nEpoch-1, cycle_momentum = False)
 
-    params = {"optimizer":"Adam", "batch_size":25,
+    batch_size = 20
+
+    params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": 0.0001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
@@ -187,8 +190,6 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params
-
-    batch_size = 25
 
     first_train = True
     first_val = True
