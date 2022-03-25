@@ -314,8 +314,8 @@ if __name__ == '__main__':
 
 
 
-    test_set, train_set = torch.utils.data.random_split(
-                                random.sample(range(1, 284), 50), [10, 40],
+    val_set, train_set = torch.utils.data.random_split(
+                                random.sample(range(1, 226 + 1), 50), [10, 40],
                                 generator=torch.Generator().manual_seed(42))
 
     train_load_file = load_whole_data(path = "/home/tyson/model_data",
