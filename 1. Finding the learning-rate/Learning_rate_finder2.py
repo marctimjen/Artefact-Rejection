@@ -39,7 +39,7 @@ def net_SGD1(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net1"
@@ -63,7 +63,7 @@ def net_SGD1(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD2(device, train_file_loader, val_file_loader):
@@ -79,7 +79,7 @@ def net_SGD2(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net2"
@@ -103,7 +103,7 @@ def net_SGD2(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD3(device, train_file_loader, val_file_loader):
@@ -119,7 +119,7 @@ def net_SGD3(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net3"
@@ -143,7 +143,7 @@ def net_SGD3(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD4(device, train_file_loader, val_file_loader):
@@ -159,7 +159,7 @@ def net_SGD4(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net4"
@@ -183,7 +183,7 @@ def net_SGD4(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD5(device, train_file_loader, val_file_loader):
@@ -199,7 +199,7 @@ def net_SGD5(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net5"
@@ -223,7 +223,7 @@ def net_SGD5(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD6(device, train_file_loader, val_file_loader):
@@ -239,7 +239,7 @@ def net_SGD6(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net6"
@@ -263,7 +263,7 @@ def net_SGD6(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD7(device, train_file_loader, val_file_loader):
@@ -279,7 +279,7 @@ def net_SGD7(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net7"
@@ -303,7 +303,7 @@ def net_SGD7(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD8(device, train_file_loader, val_file_loader):
@@ -319,7 +319,7 @@ def net_SGD8(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net8"
@@ -343,7 +343,7 @@ def net_SGD8(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_SGD9(device, train_file_loader, val_file_loader):
@@ -359,7 +359,7 @@ def net_SGD9(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "SGD_net9"
@@ -383,7 +383,7 @@ def net_SGD9(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 
@@ -402,7 +402,7 @@ def net_ADAM1(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "ADAM_net1"
@@ -426,7 +426,7 @@ def net_ADAM1(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_ADAM2(device, train_file_loader, val_file_loader):
@@ -442,7 +442,7 @@ def net_ADAM2(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "ADAM_net2"
@@ -466,7 +466,7 @@ def net_ADAM2(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 def net_ADAM3(device, train_file_loader, val_file_loader):
@@ -482,7 +482,7 @@ def net_ADAM3(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    batch_size = 4
+    nEpoch = 4
     batch_size = 20
 
     net_name = "ADAM_net3"
@@ -506,7 +506,7 @@ def net_ADAM3(device, train_file_loader, val_file_loader):
               train_file_loader = train_file_loader,
               val_file_loader = val_file_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
+              path = "/home/tyson/networks/",
               scheduler = None)
 
 
