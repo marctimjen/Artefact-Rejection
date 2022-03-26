@@ -39,7 +39,7 @@ def net_SGD1(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net1"
@@ -79,7 +79,7 @@ def net_SGD2(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net2"
@@ -119,7 +119,7 @@ def net_SGD3(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net3"
@@ -159,7 +159,7 @@ def net_SGD4(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net4"
@@ -199,7 +199,7 @@ def net_SGD5(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net5"
@@ -239,7 +239,7 @@ def net_SGD6(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net6"
@@ -279,7 +279,7 @@ def net_SGD7(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net7"
@@ -319,7 +319,7 @@ def net_SGD8(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net8"
@@ -359,7 +359,7 @@ def net_SGD9(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "SGD_net9"
@@ -402,7 +402,7 @@ def net_ADAM1(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "ADAM_net1"
@@ -442,7 +442,7 @@ def net_ADAM2(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "ADAM_net2"
@@ -482,7 +482,7 @@ def net_ADAM3(device, train_file_loader, val_file_loader):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 4
+    nEpoch = 100
     batch_size = 20
 
     net_name = "ADAM_net3"
@@ -535,7 +535,7 @@ if __name__ == '__main__':
     #                            generator=torch.Generator().manual_seed(42))
 
     val_set, train_set = torch.utils.data.random_split(
-                                random.sample(range(1, 226 + 1), 5), [1, 4],
+                                random.sample(range(1, 226 + 1), 50), [10, 40],
                                 generator=torch.Generator().manual_seed(42))
 
 
