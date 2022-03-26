@@ -1,0 +1,105 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SDMAFDQ"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "Network trainer.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\2. Testing and training networks\\Network trainer.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.88718032836914, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 4.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 8.0, "step": null, "ts": 1648305552.1702626}]}, "version": 17}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 8.049358367919922, "step": null, "ts": 1648305552.1702626}]}, "version": 18}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 1.0, "step": null, "ts": 1648305552.1702626}]}, "version": 19}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.5199050903320312, "step": null, "ts": 1648305552.1702626}]}, "version": 20}
+{"obj": {"type": "AssignString", "path": ["ADAM_net", "parameters", "optimizer"], "value": "ADAM"}, "version": 21}
+{"obj": {"type": "AssignInt", "path": ["ADAM_net", "parameters", "batch_size"], "value": 10}, "version": 22}
+{"obj": {"type": "AssignFloat", "path": ["ADAM_net", "parameters", "optimizer_learning_rate"], "value": 0.001}, "version": 23}
+{"obj": {"type": "AssignString", "path": ["ADAM_net", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 24}
+{"obj": {"type": "AssignString", "path": ["ADAM_net", "parameters", "loss_function_weights"], "value": "[1, 5]"}, "version": 25}
+{"obj": {"type": "AssignString", "path": ["ADAM_net", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 26}
+{"obj": {"type": "AssignString", "path": ["ADAM_net", "parameters", "model"], "value": "Unet"}, "version": 27}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1648305552.2376978}]}, "version": 28}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305552.2376978}]}, "version": 29}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "learning_rate"], "values": [{"value": 0.0001, "step": null, "ts": 1648305552.2376978}]}, "version": 30}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_loss_pr_file"], "values": [{"value": 0.775550901889801, "step": null, "ts": 1648305553.8183045}]}, "version": 31}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_loss_pr_file"], "values": [{"value": 0.6736860010359023, "step": null, "ts": 1648305558.7608092}]}, "version": 32}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_acc_pr_file"], "values": [{"value": 0.39574694633483887, "step": null, "ts": 1648305558.7613094}]}, "version": 33}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[7.8371e+06, 1.1499e+07],\n        [1.2923e+04, 6.8800e+02]])", "step": null, "ts": 1648305558.7618098}]}, "version": 34}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.4053010940551758, "step": null, "ts": 1648305558.7623105}]}, "version": 35}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.594698965549469, "step": null, "ts": 1648305558.7623105}]}, "version": 36}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.9494526386260986, "step": null, "ts": 1648305558.7628107}]}, "version": 37}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.05054735019803047, "step": null, "ts": 1648305558.7628107}]}, "version": 38}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "validation_loss_pr_file"], "values": [{"value": 0.6381772756576538, "step": null, "ts": 1648305558.8839142}]}, "version": 39}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "validation_loss_pr_file"], "values": [{"value": 0.6293531145368304, "step": null, "ts": 1648305559.538478}]}, "version": 40}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "val_acc_pr_file"], "values": [{"value": 0.518571138381958, "step": null, "ts": 1648305559.538478}]}, "version": 41}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[2.5862e+06, 2.3624e+06],\n        [8.2100e+02, 5.4800e+02]])", "step": null, "ts": 1648305559.5389779}]}, "version": 42}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.5226122140884399, "step": null, "ts": 1648305559.5394785}]}, "version": 43}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.47738778591156006, "step": null, "ts": 1648305559.5394785}]}, "version": 44}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.599707841873169, "step": null, "ts": 1648305559.539979}]}, "version": 45}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.40029218792915344, "step": null, "ts": 1648305559.539979}]}, "version": 46}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 1", "step": null, "ts": 1648305559.5404782}]}, "version": 47}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305559.5404782}]}, "version": 48}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "learning_rate"], "values": [{"value": 0.0001, "step": null, "ts": 1648305559.5404782}]}, "version": 49}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 16.0, "step": null, "ts": 1648305562.1867497}]}, "version": 50}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 9.95526123046875, "step": null, "ts": 1648305562.1867497}]}, "version": 51}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 98.0, "step": null, "ts": 1648305562.1867497}]}, "version": 52}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 3.8266983032226562, "step": null, "ts": 1648305562.1867497}]}, "version": 53}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_loss_pr_file"], "values": [{"value": 0.6700685796914277, "step": null, "ts": 1648305564.7304327}]}, "version": 54}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_acc_pr_file"], "values": [{"value": 0.3890625238418579, "step": null, "ts": 1648305564.730933}]}, "version": 55}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[7.7071e+06, 1.1638e+07],\n        [4.2440e+03, 5.1800e+02]])", "step": null, "ts": 1648305564.730933}]}, "version": 56}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.39839640259742737, "step": null, "ts": 1648305564.7314332}]}, "version": 57}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.601603627204895, "step": null, "ts": 1648305564.7314332}]}, "version": 58}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.8912221789360046, "step": null, "ts": 1648305564.731933}]}, "version": 59}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.10877782106399536, "step": null, "ts": 1648305564.731933}]}, "version": 60}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "validation_loss_pr_file"], "values": [{"value": 0.6575448257582528, "step": null, "ts": 1648305565.4850812}]}, "version": 61}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "val_acc_pr_file"], "values": [{"value": 0.3599397540092468, "step": null, "ts": 1648305565.4850812}]}, "version": 62}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[1.7672e+06, 3.1825e+06],\n        [2.0200e+02, 1.6500e+02]])", "step": null, "ts": 1648305565.4855819}]}, "version": 63}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.35702890157699585, "step": null, "ts": 1648305565.4860811}]}, "version": 64}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.6429710984230042, "step": null, "ts": 1648305565.4860811}]}, "version": 65}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.5504087209701538, "step": null, "ts": 1648305565.4860811}]}, "version": 66}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.4495912790298462, "step": null, "ts": 1648305565.4865813}]}, "version": 67}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 2", "step": null, "ts": 1648305565.4865813}]}, "version": 68}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305565.4870815}]}, "version": 69}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "learning_rate"], "values": [{"value": 0.0001, "step": null, "ts": 1648305565.4870815}]}, "version": 70}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_loss_pr_file"], "values": [{"value": 0.6658518623422693, "step": null, "ts": 1648305570.8471825}]}, "version": 71}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_acc_pr_file"], "values": [{"value": 0.3963019847869873, "step": null, "ts": 1648305570.8476834}]}, "version": 72}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[7.8207e+06, 1.1525e+07],\n        [3.7940e+03, 5.2000e+01]])", "step": null, "ts": 1648305570.8481846}]}, "version": 73}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.40425270795822144, "step": null, "ts": 1648305570.8481846}]}, "version": 74}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.5957472920417786, "step": null, "ts": 1648305570.8481846}]}, "version": 75}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.9864794611930847, "step": null, "ts": 1648305570.8486843}]}, "version": 76}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.013520540669560432, "step": null, "ts": 1648305570.8486843}]}, "version": 77}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "validation_loss_pr_file"], "values": [{"value": 0.649124528680529, "step": null, "ts": 1648305571.6048324}]}, "version": 78}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "val_acc_pr_file"], "values": [{"value": 0.406330406665802, "step": null, "ts": 1648305571.605333}]}, "version": 79}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[1.9741e+06, 2.9757e+06],\n        [5.9000e+01, 9.9000e+01]])", "step": null, "ts": 1648305571.605333}]}, "version": 80}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.3988218307495117, "step": null, "ts": 1648305571.6058328}]}, "version": 81}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.6011781692504883, "step": null, "ts": 1648305571.6058328}]}, "version": 82}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.3734177350997925, "step": null, "ts": 1648305571.6058328}]}, "version": 83}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.6265822649002075, "step": null, "ts": 1648305571.6063333}]}, "version": 84}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 3", "step": null, "ts": 1648305571.6063333}]}, "version": 85}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305571.6063333}]}, "version": 86}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "learning_rate"], "values": [{"value": 0.0001, "step": null, "ts": 1648305571.6068335}]}, "version": 87}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 18.2, "step": null, "ts": 1648305572.1923363}]}, "version": 88}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 10.09280014038086, "step": null, "ts": 1648305572.1923363}]}, "version": 89}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 100.0, "step": null, "ts": 1648305572.1923363}]}, "version": 90}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 3.8599014282226562, "step": null, "ts": 1648305572.1923363}]}, "version": 91}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_loss_pr_file"], "values": [{"value": 0.6628017867052997, "step": null, "ts": 1648305577.0379953}]}, "version": 92}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "train_acc_pr_file"], "values": [{"value": 0.3995341360569, "step": null, "ts": 1648305577.0379953}]}, "version": 93}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[7.8580e+06, 1.1489e+07],\n        [2.7820e+03, 1.1500e+02]])", "step": null, "ts": 1648305577.0384958}]}, "version": 94}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.4061589241027832, "step": null, "ts": 1648305577.0389955}]}, "version": 95}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.593841016292572, "step": null, "ts": 1648305577.0389955}]}, "version": 96}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.960303783416748, "step": null, "ts": 1648305577.0389955}]}, "version": 97}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.039696238934993744, "step": null, "ts": 1648305577.039496}]}, "version": 98}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "validation_loss_pr_file"], "values": [{"value": 0.6366082089287894, "step": null, "ts": 1648305577.795646}]}, "version": 99}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "val_acc_pr_file"], "values": [{"value": 0.47805094718933105, "step": null, "ts": 1648305577.7961469}]}, "version": 100}
+{"obj": {"type": "LogStrings", "path": ["ADAM_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[2.3519e+06, 2.5980e+06],\n        [5.1000e+01, 3.4000e+01]])", "step": null, "ts": 1648305577.796646}]}, "version": 101}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.47514471411705017, "step": null, "ts": 1648305577.796646}]}, "version": 102}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.5248552560806274, "step": null, "ts": 1648305577.796646}]}, "version": 103}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.6000000238418579, "step": null, "ts": 1648305577.7971466}]}, "version": 104}
+{"obj": {"type": "LogFloats", "path": ["ADAM_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.4000000059604645, "step": null, "ts": 1648305577.7971466}]}, "version": 105}
