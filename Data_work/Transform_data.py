@@ -16,7 +16,7 @@ def make_file_list(edf_list: str, rec_list: str, data_dir: str) -> list:
 
     for i in zip(reader1, reader2):
         first = data_dir + i[0][0][2:]
-        second = data_dir + i[1][0][2:]
+        second = data_dir + i[1][0][2:] + "_ORIG"
         file_list.append([first, second])
 
     file1.close()

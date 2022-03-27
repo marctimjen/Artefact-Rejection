@@ -4,11 +4,11 @@ import os
 import torch
 
 
-#src_path = r"C:\Users\Marc\Desktop\model_data\\"
-#dst_path = r"C:\Users\Marc\Desktop\test_model_data\\"
+src_path = r"C:\Users\Marc\Desktop\model_data\\"
+dst_path = r"C:\Users\Marc\Desktop\test_model_data\\"
 
-src_path = r"/home/tyson/model_data/"
-dst_path = r"/home/tyson/test_model_data/"
+#src_path = r"/home/tyson/model_data/"
+#dst_path = r"/home/tyson/test_model_data/"
 
 files = [] # read the old encoding file so that new ones can be made
 with open(src_path + 'data_encoding.csv', 'r') as file:

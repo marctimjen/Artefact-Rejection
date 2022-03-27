@@ -7,7 +7,7 @@ from LoaderPACK.Unet import Unet
 from LoaderPACK.Loader import load_whole_data, load_5_min_intervals
 
 load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-                                  ind = range(1, 283 + 1))
+                                  ind = range(1, 226 + 1))
 
 file_loader = torch.utils.data.DataLoader(load_file,
                                           batch_size=1,
