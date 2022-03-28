@@ -7,16 +7,16 @@ import math
 import numpy as np
 
 
-def make_file_list(edf_list: str, rec_list: str, data_dir: str) -> list:
+def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
     file_list = []
     file1 = open(edf_list)
-    file2 = open(rec_list)
+    file2 = open(csv_list)
     reader1 = csv.reader(file1) # reader for the edf file locations
     reader2 = csv.reader(file2) # reader for the rec file location
 
     for i in zip(reader1, reader2):
         first = data_dir + i[0][0][2:]
-        second = data_dir + i[1][0][2:] + "_ORIG"
+        second = data_dir + i[1][0][2:-3] + 'csv'
         file_list.append([first, second])
 
     file1.close()
@@ -30,7 +30,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
     global nr
     for direct in file_list:
         edf_dir = direct[0]
-        rec_dir = direct[1]
+        csv_dir = direct[1]
 
         data = mne.io.read_raw_edf(edf_dir, preload=True) # read edf file
 
@@ -42,16 +42,21 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         df = data.to_data_frame() # make pandas dataframe
 
+        inv_map = {v[0]: k for k, v in montage1.items()}
+        # to make sure, that the correct targets are given to the right
+        # channels, the index order is used.
 
         which_montages = set()
         target = []
-        with open(rec_dir, "r") as file: # read rec file
+        with open(csv_dir, "r") as file: # read rec file
             ls = csv.reader(file)
+            skip = 0
             for rows in ls:
-                target.append([int(rows[0]), float(rows[1]),
-                                float(rows[2]), int(rows[3])])
-                which_montages.add(int(rows[0]))
-
+                if rows[0][0] == "#":
+                    continue
+                target.append([inv_map.get(str(rows[1])[1:]), float(rows[2]),
+                                float(rows[3])])
+                which_montages.add(inv_map.get(str(rows[1])[1:]))
 
         sorted_index = sorted(list(which_montages)) # sort the montage index
 
@@ -99,7 +104,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         with open(save_loc + "/data_encoding.csv", "a", newline='') as f:
             write = csv.writer(f) # save information that link the nr of the
                                   # .pt files with the .edf files.
-            write.writerow([edf_dir, rec_dir, nr])
+            write.writerow([edf_dir, csv_dir, nr])
 
         nr += 1
 
@@ -178,15 +183,15 @@ dir1_edf_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/edf_01_tcp_ar.list"
 dir2_edf_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/edf_02_tcp_le.list"
 dir3_edf_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/edf_03_tcp_ar_a.list"
 
-dir1_rec_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_01_tcp_ar.list"
-dir2_rec_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_02_tcp_le.list"
-dir3_rec_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_03_tcp_ar_a.list"
+dir1_csv_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_01_tcp_ar.list"
+dir2_csv_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_02_tcp_le.list"
+dir3_csv_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_03_tcp_ar_a.list"
 
 
 if __name__ == "__main__":
     montage_list = [montage1, montage2, montage3]
     dir_edf_list = [dir1_edf_list, dir2_edf_list, dir3_edf_list]
-    dir_rec_list = [dir1_rec_list, dir2_rec_list, dir3_rec_list]
+    dir_csv_list = [dir1_csv_list, dir2_csv_list, dir3_csv_list]
 
     data_dir = "C:/Users/Marc/Desktop/data/v2.1.0"
     nr = 1
@@ -197,7 +202,7 @@ if __name__ == "__main__":
 
     for i in range(0, 3):
         dir_edf = dir_edf_list[i]
-        dir_rec = dir_rec_list[i]
+        dir_rec = dir_csv_list[i]
 
         file_list = make_file_list(dir_edf, dir_rec, data_dir)
 
