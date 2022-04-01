@@ -40,6 +40,8 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         data = data.filter(0.1, 100) # use filter on data
         data = data.notch_filter(60) # use filter on data
 
+        sfreq = int(data.info['sfreq']) # get the sampling freqency
+
         df = data.to_data_frame() # make pandas dataframe
 
         inv_map = {v[0]: k for k, v in montage1.items()}
@@ -54,9 +56,9 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
             for rows in ls:
                 if rows[0][0] == "#":
                     continue
-                target.append([inv_map.get(str(rows[1])[1:]), float(rows[2]),
+                target.append([inv_map.get(str(rows[1])), float(rows[2]),
                                 float(rows[3])])
-                which_montages.add(inv_map.get(str(rows[1])[1:]))
+                which_montages.add(inv_map.get(str(rows[1])))
 
         sorted_index = sorted(list(which_montages)) # sort the montage index
 
@@ -79,7 +81,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
                 list1 = df[col_names[1]] # get the first series
                 list2 = df[col_names[2]] # get the second series
                 df_new = list1 - list2
-                df_new = df_new.rename(col_names[0]) # Rename
+                df_new = pd.DataFrame(df_new.rename(col_names[0])) # Rename
                 first = False
             else:
                 list1 = df[col_names[1]]
@@ -93,7 +95,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         for i in target: # i = [montage_channel, start, end, type_artifact]
             index = sorted_index.index(i[0]) # Find the correct index in the target
-            tar[index][250 * math.floor(i[1]): 250 * math.ceil(i[2])] = 1
+            tar[index][sfreq * math.floor(i[1]): sfreq * math.ceil(i[2])] = 1
                 # Make the artifacts = 1
 
         ind = torch.tensor(df_new.values.T) # data-frame to tensor
