@@ -40,7 +40,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
     nEpoch = 100
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=15,
-                         step_size_up=nEpoch-1)
+                         step_size_up=nEpoch-1, cycle_momentum=False)
 
     batch_size = 20
 
@@ -51,6 +51,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
               "scheduler_base_lr":0.001, "scheduler_max_lr":15,
+              "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_SGD/parameters"] = params
@@ -170,7 +171,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
     nEpoch = 100
     scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.9,
-                         step_size_up=nEpoch-1, cycle_momentum = False)
+                         step_size_up=nEpoch-1, cycle_momentum=False)
 
     batch_size = 20
 
@@ -180,6 +181,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet", "scheduler":"CyclicLR",
+              "scheduler_cycle_momentum":False,
               "scheduler_base_lr":0.0001, "scheduler_max_lr":0.9,
               "scheduler_step_size_up":nEpoch-1}
 
