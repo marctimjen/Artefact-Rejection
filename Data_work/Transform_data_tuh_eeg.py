@@ -16,7 +16,8 @@ def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
 
     for i in zip(reader1, reader2):
         first = data_dir + i[0][0][2:]
-        second = data_dir + i[1][0][2:-3] + 'csv'
+        #second = data_dir + i[1][0][2:-3] + 'csv'
+        second = data_dir + i[1][0][2:]
         file_list.append([first, second])
 
     file1.close()
@@ -40,6 +41,8 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         data = data.filter(0.1, 100) # use filter on data
         data = data.notch_filter(60) # use filter on data
 
+        sfreq = int(data.info['sfreq']) # get the sampling freqency
+
         df = data.to_data_frame() # make pandas dataframe
 
         inv_map = {v[0]: k for k, v in montage1.items()}
@@ -51,12 +54,23 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         with open(csv_dir, "r") as file: # read rec file
             ls = csv.reader(file)
             skip = 0
+            #for rows in ls:
+            #    if rows[0][0] == "#":
+            #        continue
+            #    target.append([inv_map.get(str(rows[1])), float(rows[2]),
+            #                    float(rows[3])])
+            #    which_montages.add(inv_map.get(str(rows[1])))
+
             for rows in ls:
                 if rows[0][0] == "#":
                     continue
-                target.append([inv_map.get(str(rows[1])), float(rows[2]),
-                                float(rows[3])])
-                which_montages.add(inv_map.get(str(rows[1])))
+
+                if ((int(rows[3]) == 4) or (int(rows[3]) == 5)):
+                    target.append([int(rows[0]), float(rows[1]),
+                                    float(rows[2])])
+
+                    which_montages.add(int(rows[0]))
+
 
         sorted_index = sorted(list(which_montages)) # sort the montage index
 
@@ -93,7 +107,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         for i in target: # i = [montage_channel, start, end, type_artifact]
             index = sorted_index.index(i[0]) # Find the correct index in the target
-            tar[index][250 * math.floor(i[1]): 250 * math.ceil(i[2])] = 1
+            tar[index][sfreq * math.floor(i[1]): sfreq * math.ceil(i[2])] = 1
                 # Make the artifacts = 1
 
         ind = torch.tensor(df_new.values.T) # data-frame to tensor
@@ -188,23 +202,39 @@ dir2_csv_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_02_tcp_le.list"
 dir3_csv_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_03_tcp_ar_a.list"
 
 
-if __name__ == "__main__":
-    montage_list = [montage1, montage2, montage3]
-    dir_edf_list = [dir1_edf_list, dir2_edf_list, dir3_edf_list]
-    dir_csv_list = [dir1_csv_list, dir2_csv_list, dir3_csv_list]
+#if __name__ == "__main__":
+#    montage_list = [montage1, montage2, montage3]
+#    dir_edf_list = [dir1_edf_list, dir2_edf_list, dir3_edf_list]
+#    dir_csv_list = [dir1_csv_list, dir2_csv_list, dir3_csv_list]
+#
+#    data_dir = "C:/Users/Marc/Desktop/data/v2.1.0"
+#    nr = 1
+#
+#    save_loc = "C:/Users/Marc/Desktop/model_data" # location to save files
+#    f = open(save_loc + "/data_encoding.csv", 'w')
+#    f.close() # file for the encoding
+#
+#    for i in range(0, 3):
+#        dir_edf = dir_edf_list[i]
+#        dir_rec = dir_csv_list[i]
+#
+#        file_list = make_file_list(dir_edf, dir_rec, data_dir)
+#
+#        montage = montage_list[i] # find the correct montage
+#        read_and_export_files(file_list, montage, save_loc)
 
-    data_dir = "C:/Users/Marc/Desktop/data/v2.1.0"
+
+if __name__ == "__main__":
+    montage = montage1
+
+    data_dir = "C:/Users/Marc/Desktop/tuh_eeg_events/v1.0.1"
     nr = 1
 
-    save_loc = "C:/Users/Marc/Desktop/model_data" # location to save files
+    save_loc = "C:/Users/Marc/Desktop/new test" # location to save files
     f = open(save_loc + "/data_encoding.csv", 'w')
     f.close() # file for the encoding
 
-    for i in range(0, 3):
-        dir_edf = dir_edf_list[i]
-        dir_rec = dir_csv_list[i]
-
-        file_list = make_file_list(dir_edf, dir_rec, data_dir)
-
-        montage = montage_list[i] # find the correct montage
-        read_and_export_files(file_list, montage, save_loc)
+    file_list = make_file_list("C:/Users/Marc/Desktop/tuh_eeg_events/v1.0.1/edf_list.csv",
+                               "C:/Users/Marc/Desktop/tuh_eeg_events/v1.0.1/rec_list.csv",
+                               data_dir)
+    read_and_export_files(file_list, montage, save_loc)
