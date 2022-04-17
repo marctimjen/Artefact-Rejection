@@ -27,6 +27,12 @@ except RuntimeError:
 
 def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
+    token = os.getenv('Neptune_api')
+    run = neptune.init(
+        project="NTLAB/artifact-rej-scalp",
+        api_token=token,
+    )
+
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
