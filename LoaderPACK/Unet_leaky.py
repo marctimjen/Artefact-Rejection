@@ -31,7 +31,7 @@ class Double_Convolution(nn.Module): # Blue arrow
 
         self.norm1 = nn.BatchNorm1d(out_channels)
         self.norm2 = nn.BatchNorm1d(out_channels)
-        self.relu = nn.ReLU()
+        self.relu = nn.LeakyReLU(1/5.5)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -157,7 +157,7 @@ class OutConv(nn.Module): # light-blue arrow
 #        return output
 
 
-class Unet(nn.Module):
+class Unet_leaky(nn.Module):
     """
     This class is the network. So it combines the subparts listed above.
     """
