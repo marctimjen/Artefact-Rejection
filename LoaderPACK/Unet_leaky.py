@@ -167,7 +167,7 @@ class Unet_leaky(nn.Module):
             n_channels (int): The amount of channels of the input.
             n_classes (int): The amount of channels the output tensor gets.
         """
-        super(Unet, self).__init__()
+        super(Unet_leaky, self).__init__()
 
         self.n_channels = n_channels
         self.n_classes = n_classes
