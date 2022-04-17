@@ -77,6 +77,8 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         for file in train_file_loader:
 
             # the second loader is for loading the random timed 5-mins intervals
+            print(file)
+            print(type(file))
             load_series = load_shuffle_5_min(file, device)
 
             series_loader = torch.utils.data.DataLoader(load_series,
@@ -155,6 +157,9 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
         scheduler.step()
     run.stop()
+
+
+
 
 def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
