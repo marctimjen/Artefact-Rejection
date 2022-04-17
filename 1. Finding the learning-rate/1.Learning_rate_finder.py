@@ -333,8 +333,6 @@ if __name__ == '__main__':
                                                     shuffle=True,
                                                     num_workers=0)
 
-    for i in train_file_loader:
-        print(i)
 
     val_set = random.sample(range(1, 28 + 1), 20)
 
