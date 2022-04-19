@@ -56,12 +56,16 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         with open(csv_dir, "r") as file: # read rec file
             ls = csv.reader(file)
             skip = 0
+            flag = True
             for rows in ls:
                 if rows[0][0] == "#":
                     continue
-                target.append([inv_map.get(str(rows[1])), float(rows[2]),
-                                float(rows[3])])
-                which_montages.add(inv_map.get(str(rows[1])))
+                elif flag:
+                    flag = False
+                    continue
+                target.append([inv_map.get(str(rows[0])), float(rows[1]),
+                                float(rows[2])])
+                which_montages.add(inv_map.get(str(rows[0])))
 
         sorted_index = sorted(list(which_montages)) # sort the montage index
 
