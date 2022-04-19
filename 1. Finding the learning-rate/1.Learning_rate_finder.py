@@ -13,7 +13,7 @@ import random
 import sys
 sys.path.append("..") # adds higher directory to python modules path
 
-from LoaderPACK.Unet import Unet
+from LoaderPACK.Unet_leaky import Unet_leaky
 from LoaderPACK.Loader import load_whole_data, load_shuffle_5_min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
@@ -27,19 +27,25 @@ except RuntimeError:
 
 def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
+    token = os.getenv('Neptune_api')
+    run = neptune.init(
+        project="NTLAB/artifact-rej-scalp",
+        api_token=token,
+    )
+
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
 
     avg_train_loss, avg_valid_loss = [], []
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=0.001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=15,
+    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=6,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
     batch_size = 20
@@ -49,7 +55,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet", "scheduler":"CyclicLR",
+              "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_base_lr":0.001, "scheduler_max_lr":15,
               "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":nEpoch-1}
@@ -71,6 +77,9 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         for file in train_file_loader:
 
             # the second loader is for loading the random timed 5-mins intervals
+            print(file)
+            print(type(file))
+            print(file[0].shape)
             load_series = load_shuffle_5_min(file, device)
 
             series_loader = torch.utils.data.DataLoader(load_series,
@@ -150,6 +159,9 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         scheduler.step()
     run.stop()
 
+
+
+
 def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
     token = os.getenv('Neptune_api')
@@ -164,13 +176,13 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = Adam(model.parameters(), lr=0.0001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 100
-    scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.9,
+    scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=2,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
     batch_size = 20
@@ -180,7 +192,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet", "scheduler":"CyclicLR",
+              "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
               "scheduler_base_lr":0.0001, "scheduler_max_lr":0.9,
               "scheduler_step_size_up":nEpoch-1}
@@ -311,11 +323,11 @@ if __name__ == '__main__':
 
 
 
-    val_set, train_set = torch.utils.data.random_split(
-                                random.sample(range(1, 226 + 1), 50), [10, 40],
-                                generator=torch.Generator().manual_seed(42))
 
-    train_load_file = load_whole_data(path = "/home/tyson/model_data",
+
+    train_set = random.sample(range(1, 198 + 1), 100)
+
+    train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",
                                       ind = train_set)
 
     # train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
@@ -328,7 +340,9 @@ if __name__ == '__main__':
                                                     num_workers=0)
 
 
-    val_load_file = load_whole_data(path = "/home/tyson/model_data",
+    val_set = random.sample(range(1, 28 + 1), 20)
+
+    val_load_file = load_whole_data(path = "/home/tyson/model_data/val_model_data",
                                     ind = val_set)
 
     # val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
