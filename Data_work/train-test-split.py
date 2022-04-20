@@ -5,7 +5,8 @@ import torch
 import re
 from random import randint, seed
 
-seed(40) # 40
+
+seed(26) # 26
 
 
 src_path = r"C:\Users\Marc\Desktop\model_data\\"
@@ -35,9 +36,9 @@ with open(src_path + '\data_encoding.csv', 'r') as file:
 
 print("Number of patients:", len(patient_samples))
 
-train_size = 198 # 146
+train_size = 195 # 145
 val_size = 28 # 21
-test_size = 57 # 42
+test_size = 56 # 42
 
 train_set = []
 val_set = []
@@ -60,6 +61,7 @@ for i in patient_samples:
         data_list.append(patient_samples[i])
     nr_of_series += w
 
+print()
 print("Amount of patients with more than 3 experiments:", many_series)
 print("This is a total amount of series with:", nr_series)
 
@@ -103,71 +105,73 @@ print("Number of patients in the test set:", len(test_set))
 
 
 
-# first move the test files
-set = sorted([int(i) for i in sum(test_set, [])])
-
-
-j = 1
-for i in set:
-    # move input:
-    shutil.move(src_path + f"model_input ({i}).pt",
-    dst_test_path + f"model_input ({j}).pt")
-
-    # move target:
-    shutil.move(src_path + f"model_target ({i}).pt",
-    dst_test_path + f"model_target ({j}).pt")
-    j += 1
-
-# create a test encoding file
-with open(dst_test_path + "/test_encoding.csv", "w", newline='') as f:
-    write = csv.writer(f)
-    j = 1
-    for i in set:
-        write.writerow([files[i - 1][0], files[i - 1][1], j])
-        j += 1
-
-
-
-set = sorted([int(i) for i in sum(train_set, [])])
-
-j = 1
-for i in set:
-    # rename input:
-    os.rename(src_path + f"model_input ({i}).pt",
-    dst_train_path + f"model_input ({j}).pt")
-
-    # rename target:
-    os.rename(src_path + f"model_target ({i}).pt",
-    dst_train_path + f"model_target ({j}).pt")
-    j += 1
-
-# create a train encoding file
-with open(dst_train_path + "/train_encoding.csv", "w", newline='') as f:
-    write = csv.writer(f)
-    j = 1
-    for i in set:
-        write.writerow([files[i - 1][0], files[i - 1][1], j])
-        j += 1
-
-
-
-set = sorted([int(i) for i in sum(val_set, [])])
-
-j = 1
-for i in set:
-    # rename input:
-    os.rename(src_path + f"model_input ({i}).pt",
-    dst_val_path + f"model_input ({j}).pt")
-
-    # rename target:
-    os.rename(src_path + f"model_target ({i}).pt",
-    dst_val_path + f"model_target ({j}).pt")
-    j += 1
-
-# create a train encoding file
-with open(dst_val_path + "/val_encoding.csv", "w", newline='') as f:
-    write = csv.writer(f)
-    j = 1
-    for i in set:
-        write.writerow([files[i - 1][0], files[i - 1][1], j])
-        j += 1
+#
+## first move the test files
+#set = sorted([int(i) for i in sum(test_set, [])])
+#
+#
+#j = 1
+#for i in set:
+#    # move input:
+#    shutil.move(src_path + f"model_input ({i}).pt",
+#    dst_test_path + f"model_input ({j}).pt")
+#
+#    # move target:
+#    shutil.move(src_path + f"model_target ({i}).pt",
+#    dst_test_path + f"model_target ({j}).pt")
+#    j += 1
+#
+## create a test encoding file
+#with open(dst_test_path + "/test_encoding.csv", "w", newline='') as f:
+#    write = csv.writer(f)
+#    j = 1
+#    for i in set:
+#        write.writerow([files[i - 1][0], files[i - 1][1], j])
+#        j += 1
+#
+#
+#
+#set = sorted([int(i) for i in sum(train_set, [])])
+#
+#j = 1
+#for i in set:
+#    # rename input:
+#    os.rename(src_path + f"model_input ({i}).pt",
+#    dst_train_path + f"model_input ({j}).pt")
+#
+#    # rename target:
+#    os.rename(src_path + f"model_target ({i}).pt",
+#    dst_train_path + f"model_target ({j}).pt")
+#    j += 1
+#
+## create a train encoding file
+#with open(dst_train_path + "/train_encoding.csv", "w", newline='') as f:
+#    write = csv.writer(f)
+#    j = 1
+#    for i in set:
+#        write.writerow([files[i - 1][0], files[i - 1][1], j])
+#        j += 1
+#
+#
+#
+#set = sorted([int(i) for i in sum(val_set, [])])
+#
+#j = 1
+#for i in set:
+#    # rename input:
+#    os.rename(src_path + f"model_input ({i}).pt",
+#    dst_val_path + f"model_input ({j}).pt")
+#
+#    # rename target:
+#    os.rename(src_path + f"model_target ({i}).pt",
+#    dst_val_path + f"model_target ({j}).pt")
+#    j += 1
+#
+## create a train encoding file
+#with open(dst_val_path + "/val_encoding.csv", "w", newline='') as f:
+#    write = csv.writer(f)
+#    j = 1
+#    for i in set:
+#        write.writerow([files[i - 1][0], files[i - 1][1], j])
+#        j += 1
+#

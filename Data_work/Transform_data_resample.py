@@ -34,16 +34,13 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         data = mne.io.read_raw_edf(edf_dir, preload=True) # read edf file
 
-        if data.__len__() < 82500: # if the file has less than 5,5 mins of
-            continue               # recorded data then it's discarded
-
         data = data.filter(0.1, 100) # use filter on data
         data = data.notch_filter(60) # use filter on data
 
-        sfreq = int(data.info['sfreq']) # get the sampling freqency
+        data = data.resample(sfreq=200)
 
-        if sfreq != 250:
-            data = data.resample(sfreq=250)
+        if data.__len__() < 60*5.5*200: # if the file has less than 5,5 mins of
+            continue               # recorded data then it's discarded
 
         df = data.to_data_frame() # make pandas dataframe
 
