@@ -322,7 +322,7 @@ if __name__ == '__main__':
 
 
 
-    train_set = random.sample(range(1, 195 + 1), 5)
+    train_set = random.sample(range(1, 195 + 1), 100)
 
     train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",
                                       ind = train_set,
@@ -338,7 +338,7 @@ if __name__ == '__main__':
                                                     num_workers=0)
 
 
-    val_set = random.sample(range(1, 28 + 1), 2)
+    val_set = random.sample(range(1, 28 + 1), 20)
 
     val_load_file = load_whole_data(path = "/home/tyson/model_data/val_model_data",
                                     ind = val_set,
