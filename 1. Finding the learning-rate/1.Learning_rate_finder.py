@@ -48,7 +48,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=6,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
-    batch_size = 20
+    batch_size = 40
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": 0.001,
@@ -182,7 +182,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=2,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
-    batch_size = 20
+    batch_size = 40
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": 0.0001,
