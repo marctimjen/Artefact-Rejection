@@ -56,7 +56,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":15,
+              "scheduler_base_lr":0.001, "scheduler_max_lr":6,
               "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":nEpoch-1}
 
@@ -194,7 +194,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
-              "scheduler_base_lr":0.0001, "scheduler_max_lr":0.9,
+              "scheduler_base_lr":0.0001, "scheduler_max_lr":2,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params
@@ -328,7 +328,8 @@ if __name__ == '__main__':
     train_set = random.sample(range(1, 195 + 1), 100)
 
     train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",
-                                      ind = train_set)
+                                      ind = train_set,
+                                      series_dict = 'train_series_length.pickle')
 
     # train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
     #                                   ind = train_set)
@@ -343,7 +344,8 @@ if __name__ == '__main__':
     val_set = random.sample(range(1, 28 + 1), 20)
 
     val_load_file = load_whole_data(path = "/home/tyson/model_data/val_model_data",
-                                    ind = val_set)
+                                    ind = val_set,
+                                    series_dict = 'val_series_length.pickle')
 
     # val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
     #                                 ind = val_set)
