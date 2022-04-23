@@ -35,7 +35,7 @@ def net_SGD1(device, train_file_loader, val_file_loader):
     )
 
     model = Unet(n_channels=1, n_classes=2).to(device)
-    optimizer = SGD(model.parameters(), lr=0.6, momentum=0.9)
+    optimizer = SGD(model.parameters(), lr=1.6, momentum=0.9)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
@@ -75,7 +75,7 @@ def net_SGD2(device, train_file_loader, val_file_loader):
     )
 
     model = Unet(n_channels=1, n_classes=2).to(device)
-    optimizer = SGD(model.parameters(), lr=0.6, momentum=0.95)
+    optimizer = SGD(model.parameters(), lr=1.6, momentum=0.95)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
@@ -115,7 +115,7 @@ def net_SGD3(device, train_file_loader, val_file_loader):
     )
 
     model = Unet(n_channels=1, n_classes=2).to(device)
-    optimizer = SGD(model.parameters(), lr=0.6, momentum=0.97)
+    optimizer = SGD(model.parameters(), lr=1.6, momentum=0.97)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
@@ -155,7 +155,7 @@ def net_SGD4(device, train_file_loader, val_file_loader):
     )
 
     model = Unet(n_channels=1, n_classes=2).to(device)
-    optimizer = SGD(model.parameters(), lr=0.6, momentum=0.99)
+    optimizer = SGD(model.parameters(), lr=1.6, momentum=0.99)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
