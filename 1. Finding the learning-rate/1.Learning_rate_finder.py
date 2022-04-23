@@ -48,7 +48,7 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=6,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
-    batch_size = 40
+    batch_size = 25
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": 0.001,
@@ -182,7 +182,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=2,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
-    batch_size = 40
+    batch_size = 25
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": 0.0001,
@@ -227,7 +227,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 loss = lossFunc(pred, target)
                 loss.backward()
                 if first_train:
-                    run[f"network_SGD/train_loss_pr_file"].log(loss)
+                    run[f"network_ADAM/train_loss_pr_file"].log(loss)
                     first_train = False
                 optimizer.step()
                 train_loss.append(loss.item())
@@ -268,7 +268,7 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
                 if first_val:
-                    run[f"network_SGD/validation_loss_pr_file"].log(loss)
+                    run[f"network_ADAM/validation_loss_pr_file"].log(loss)
                     first_val = False
                 valid_loss.append(loss.item())
 
