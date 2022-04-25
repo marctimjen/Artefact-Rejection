@@ -320,8 +320,6 @@ if __name__ == '__main__':
 
 
 
-
-
     train_set = random.sample(range(1, 195 + 1), 100)
 
     train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",

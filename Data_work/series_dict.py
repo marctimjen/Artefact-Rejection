@@ -2,7 +2,7 @@ import pickle
 import csv
 import re
 import torch
-
+import math
 
 def series_dict_creator(path: str, encoding: str, name: str, num: int):
 
@@ -25,7 +25,7 @@ def series_dict_creator(path: str, encoding: str, name: str, num: int):
     j = 0
     for file in loader:
         j += 1
-        file_size[j] = file.shape[1]
+        file_size[j] = file.shape
 
 
     ret_dict = dict() # The dictionary that is returned
@@ -33,10 +33,26 @@ def series_dict_creator(path: str, encoding: str, name: str, num: int):
     for values in patient_samples.values():
         vals = 0
         for i in values:
-            vals += file_size[int(i)]
+            vals += file_size[int(i)][1]
 
-        for i in values:
-            ret_dict[int(i)] = [vals, len(values)]
+        # for i in values:
+        #     length = math.floor(((file_size[int(i)][1]-30*200)/(200*60*5))) \
+        #                                     *file_size[int(i)][0]
+        #
+        #     res = int(min(torch.div(110, len(values), rounding_mode='trunc'),
+        #                   length))
+        #
+        #     ret_dict[int(i)] = res
+
+        for i in values:      #REMEMBER MINUS
+
+            length = math.floor(((file_size[int(i)][1])/(200*60*5))) \
+                                            *file_size[int(i)][0]
+
+            res = int(min(torch.div(110, len(values), rounding_mode='trunc'),
+                          length))
+
+            ret_dict[int(i)] = [vals, len(values), res]
 
     with open(path + "/" + name, 'wb') as handle:
         pickle.dump(ret_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)

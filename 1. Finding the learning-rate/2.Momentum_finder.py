@@ -34,7 +34,7 @@ def net_SGD1(device, train_file_loader, val_file_loader):
         api_token=token,
     )
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=1.6, momentum=0.9)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
@@ -49,7 +49,7 @@ def net_SGD1(device, train_file_loader, val_file_loader):
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet"}
+              "model":"Unet_leaky"}
 
     run[f"{net_name}/parameters"] = params
 
@@ -74,7 +74,7 @@ def net_SGD2(device, train_file_loader, val_file_loader):
         api_token=token,
     )
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=1.6, momentum=0.95)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
@@ -89,7 +89,7 @@ def net_SGD2(device, train_file_loader, val_file_loader):
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet"}
+              "model":"Unet_leaky"}
 
     run[f"{net_name}/parameters"] = params
 
@@ -114,7 +114,7 @@ def net_SGD3(device, train_file_loader, val_file_loader):
         api_token=token,
     )
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=1.6, momentum=0.97)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
@@ -129,7 +129,7 @@ def net_SGD3(device, train_file_loader, val_file_loader):
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet"}
+              "model":"Unet_leaky"}
 
     run[f"{net_name}/parameters"] = params
 
@@ -154,7 +154,7 @@ def net_SGD4(device, train_file_loader, val_file_loader):
         api_token=token,
     )
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=1.6, momentum=0.99)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
@@ -169,7 +169,7 @@ def net_SGD4(device, train_file_loader, val_file_loader):
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet"}
+              "model":"Unet_leaky"}
 
     run[f"{net_name}/parameters"] = params
 
@@ -195,8 +195,8 @@ def net_ADAM1(device, train_file_loader, val_file_loader):
         api_token=token,
     )
 
-    model = Unet(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.37)
+    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+    optimizer = Adam(model.parameters(), lr=0.04)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
@@ -206,11 +206,11 @@ def net_ADAM1(device, train_file_loader, val_file_loader):
     net_name = "ADAM_net1"
 
     params = {"optimizer":"ADAM", "batch_size":batch_size,
-              "optimizer_learning_rate": 0.37,
+              "optimizer_learning_rate": 0.04,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
-              "model":"Unet"}
+              "model":"Unet_leaky"}
 
     run[f"{net_name}/parameters"] = params
 
@@ -248,20 +248,14 @@ if __name__ == '__main__':
 
 
 
-    #val_set, train_set = torch.utils.data.random_split(
-    #                            random.sample(range(1, 226 + 1), 200), [26, 200],
-    #                            generator=torch.Generator().manual_seed(42))
+    train_set = random.sample(range(1, 195 + 1), 100)
 
-    val_set, train_set = torch.utils.data.random_split(
-                                random.sample(range(1, 226 + 1), 50), [10, 40],
-                                generator=torch.Generator().manual_seed(42))
+    train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",
+                                      ind = train_set,
+                                      series_dict = 'train_series_length.pickle')
 
-
-    train_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                      ind = train_set)
-
-    #train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                  ind = train_set)
+    # train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+    #                                   ind = train_set)
 
 
     train_file_loader = torch.utils.data.DataLoader(train_load_file,
@@ -270,11 +264,14 @@ if __name__ == '__main__':
                                                     num_workers=0)
 
 
-    val_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                    ind = val_set)
+    val_set = random.sample(range(1, 28 + 1), 20)
 
-    #val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                ind = val_set)
+    val_load_file = load_whole_data(path = "/home/tyson/model_data/val_model_data",
+                                    ind = val_set,
+                                    series_dict = 'val_series_length.pickle')
+
+    # val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
+    #                                 ind = val_set)
 
     val_file_loader = torch.utils.data.DataLoader(val_load_file,
                                                   batch_size=1,
