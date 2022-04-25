@@ -75,8 +75,11 @@ class load_shuffle_5_min(Dataset):
         length = math.floor((self.size[1]/(200*60*5)))*self.size[0]
             # the amount of total possible cuts
 
-        self.length = int(min(torch.div((130 - self.s_len % 130), self.s_num,
+        self.length = int(min(torch.div(110, self.s_num,
                                         rounding_mode='trunc'), length))
+
+        # self.length = int(min(torch.div((130 - self.s_len % 130), self.s_num,
+        #                                 rounding_mode='trunc'), length))
             # make sure that no more than 75 samples is taken from the same
             # individual
 
