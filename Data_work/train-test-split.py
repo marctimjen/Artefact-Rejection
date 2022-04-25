@@ -38,7 +38,7 @@ print("Number of patients:", len(patient_samples))
 
 train_size = 195 # 145
 val_size = 28 # 21
-test_size = 56 # 42
+test_size = 56 # 41
 
 train_set = []
 val_set = []
