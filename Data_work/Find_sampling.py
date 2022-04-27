@@ -6,6 +6,9 @@ import torch
 import math
 import numpy as np
 
+# Was created to find the different sampling frequencies.
+
+
 def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
     file_list = []
     file1 = open(edf_list)

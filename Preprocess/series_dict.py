@@ -46,13 +46,13 @@ def series_dict_creator(path: str, encoding: str, name: str, num: int):
 
         for i in values:      #REMEMBER MINUS
 
-            length = math.floor(((file_size[int(i)][1])/(200*60*5))) \
+            length = math.floor(((file_size[int(i)][1] - 30*200)/(200*60*5))) \
                                             *file_size[int(i)][0]
 
             res = int(min(torch.div(110, len(values), rounding_mode='trunc'),
                           length))
 
-            ret_dict[int(i)] = [vals, len(values), res]
+            ret_dict[int(i)] = [vals, len(values), res, file_size[int(i)]]
 
     with open(path + "/" + name, 'wb') as handle:
         pickle.dump(ret_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)

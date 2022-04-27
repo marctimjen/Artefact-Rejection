@@ -168,3 +168,72 @@ class load_5_min_intervals(Dataset):
         inp = inp.to(self.device)
         tar = tar.to(self.device)
         return inp, tar, chan, cut
+
+
+
+class shuffle_5min(Dataset):
+    """
+    This dataloader loads random 5 minute intervals from a random patient.
+    """
+    def __init__(self, path: str, series_dict: str, size: tuple, device):
+        """
+        Args:
+            path (str): path to the input & target folder.
+            series_dict (list): name of dict for data.
+            size : (number of experiments, number of max. channels, longest series)
+            device (class 'torch.device'): which pytorch device the data should
+            be sent to.
+        """
+
+        self.device = device
+        self.size = size
+
+        with open(path + "/" + series_dict, 'rb') as handle:
+            self.s_dict = pickle.load(handle)
+
+        self.input_data = np.memmap(path + "/model_input.dat", dtype='float32', mode='r', shape=size)
+        self.target_data = np.memmap(path + "/model_target.dat", dtype='float32', mode='r', shape=size)
+
+        prop = [] # list with probabilities
+
+        ss = 0 # sum over all the batches
+        for val in self.s_dict.values():
+            prop.append(val[2])
+            ss += val[2]
+
+        self.prop = np.array(prop) / ss
+        self.length = ss
+
+        self.gen = iter(self.create_data(self.s_dict))
+
+
+
+    def create_data(self, s_dict):
+        while True:
+            ind = np.random.choice(self.size[0], 1, p = self.prop)
+            shp = s_dict[ind[0] + 1][3] # shape of experiment
+
+            cut_point = np.random.randint(low = 200*30, #remove the first 30 secs
+                                high = shp[1] - 5*200*60, size = 1)
+                                # choose the place to cut
+
+            chan = np.random.choice(shp[0], 1)
+
+            inp = self.input_data[ind[0], chan[0], cut_point[0]:cut_point[0]+60*5*200]
+            inp = torch.tensor(inp).view(1, 60*5*200)
+            tar = self.target_data[ind[0], chan[0], cut_point[0]:cut_point[0]+60*5*200]
+            tar = torch.tensor(tar).view(1, 60*5*200)
+            # #inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*200]
+            # #tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*200]
+
+            #tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*200)
+            yield inp, tar, (ind[0], chan[0], cut_point[0])
+
+    def __len__(self):
+        return self.length
+
+    def __getitem__(self, idx):
+        inp, tar, chan = next(self.gen)
+        inp = inp.to(self.device)
+        tar = tar.to(self.device)
+        return inp, tar, chan
