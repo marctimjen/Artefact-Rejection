@@ -14,7 +14,7 @@ import sys
 sys.path.append("..") # adds higher directory to python modules path
 
 from LoaderPACK.Unet_leaky import Unet_leaky
-from LoaderPACK.Loader import load_whole_data, load_shuffle_5_min
+from LoaderPACK.Loader import shuffle_5min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
@@ -25,13 +25,39 @@ except RuntimeError:
     pass
 
 
-def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
+def net_SGD1(device, fl, it, train_path, val_path):
 
     token = os.getenv('Neptune_api')
     run = neptune.init(
         project="NTLAB/artifact-rej-scalp",
         api_token=token,
     )
+
+    batch_size = 5
+
+
+    train_load_file = shuffle_5min(path = train_path,
+                                         series_dict = 'train_series_length.pickle',
+                                         size = (195, 22, 2060000),
+                                         device = device)
+
+
+    train_loader = torch.utils.data.DataLoader(train_load_file,
+                                                    batch_size=batch_size,
+                                                    shuffle=True,
+                                                    num_workers=0)
+
+    val_load_file = shuffle_5min(path = val_path,
+                                         series_dict = 'val_series_length.pickle',
+                                         size = (28, 22, 549200),
+                                         device = device)
+
+
+    val_loader = torch.utils.data.DataLoader(val_load_file,
+                                                    batch_size=batch_size,
+                                                    shuffle=True,
+                                                    num_workers=0)
+
 
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
@@ -47,8 +73,6 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
     nEpoch = 100
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=9,
                          step_size_up=nEpoch-1, cycle_momentum=False)
-
-    batch_size = 20
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": 0.001,
@@ -74,36 +98,26 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         t_mat = torch.zeros(2, 2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
-        for file in train_file_loader:
 
-            # the second loader is for loading the random timed 5-mins intervals
-            load_series = load_shuffle_5_min(file, device)
+        for series in train_loader:
+            ind, tar, chan = series
+            y_pred = model(ind)
+            model.zero_grad()
+            pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            target = tar.view(-1).type(it)
+            loss = lossFunc(pred, target)
+            if first_train:
+                run[f"network_SGD/train_loss_pr_file"].log(loss)
+                first_train = False
+            loss.backward()
+            optimizer.step()
+            train_loss.append(loss.item())
 
-            series_loader = torch.utils.data.DataLoader(load_series,
-                                                        batch_size=batch_size,
-                                                        shuffle=True,
-                                                        num_workers=0)
-
-
-            for series in series_loader:
-                ind, tar, chan = series
-                y_pred = model(ind)
-                model.zero_grad()
-                pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-                target = tar.view(-1).type(it)
-                loss = lossFunc(pred, target)
-                if first_train:
-                    run[f"network_SGD/train_loss_pr_file"].log(loss)
-                    first_train = False
-                loss.backward()
-                optimizer.step()
-                train_loss.append(loss.item())
-
-                acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
-                train_acc = torch.cat((train_acc, acc.view(1)))
-                t_mat = t_mat + mat
-                total_pos = total_pos + tot_p_g
-                total_neg = total_neg + tot_n_g
+            acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
+            train_acc = torch.cat((train_acc, acc.view(1)))
+            t_mat = t_mat + mat
+            total_pos = total_pos + tot_p_g
+            total_neg = total_neg + tot_n_g
 
         run[f"network_SGD/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
@@ -118,30 +132,23 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
         v_mat = torch.zeros(2,2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
-        for file in val_file_loader:
-            load_series = load_shuffle_5_min(file, device)
 
-            series_loader = torch.utils.data.DataLoader(load_series,
-                                                        batch_size=batch_size,
-                                                        shuffle=True,
-                                                        num_workers=0)
+        for series in val_loader:
+            ind, tar, chan = series
+            y_pred = model(ind)
+            pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            target = tar.view(-1).type(it)
+            loss = lossFunc(pred, target)
+            if first_val:
+                run[f"network_SGD/validation_loss_pr_file"].log(loss)
+                first_val = False
+            valid_loss.append(loss.item())
 
-            for series in series_loader:
-                ind, tar, chan = series
-                y_pred = model(ind)
-                pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-                target = tar.view(-1).type(it)
-                loss = lossFunc(pred, target)
-                if first_val:
-                    run[f"network_SGD/validation_loss_pr_file"].log(loss)
-                    first_val = False
-                valid_loss.append(loss.item())
-
-                acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
-                valid_acc = torch.cat((valid_acc, acc.view(1)))
-                v_mat = v_mat + mat
-                total_pos = total_pos + tot_p_g
-                total_neg = total_neg + tot_n_g
+            acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
+            valid_acc = torch.cat((valid_acc, acc.view(1)))
+            v_mat = v_mat + mat
+            total_pos = total_pos + tot_p_g
+            total_neg = total_neg + tot_n_g
 
         run[f"network_SGD/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
@@ -159,13 +166,38 @@ def net_SGD1(device, fl, it, train_file_loader, val_file_loader):
 
 
 
-def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
+def net_ADAM1(device, fl, it, train_path, val_path):
 
     token = os.getenv('Neptune_api')
     run = neptune.init(
         project="NTLAB/artifact-rej-scalp",
         api_token=token,
     )
+
+    batch_size = 5
+
+    train_load_file = shuffle_5min(path = train_path,
+                                         series_dict = 'train_series_length.pickle',
+                                         size = (195, 22, 2060000),
+                                         device = device)
+
+
+    train_loader = torch.utils.data.DataLoader(train_load_file,
+                                                    batch_size=batch_size,
+                                                    shuffle=True,
+                                                    num_workers=0)
+
+    val_load_file = shuffle_5min(path = val_path,
+                                         series_dict = 'val_series_length.pickle',
+                                         size = (28, 22, 549200),
+                                         device = device)
+
+
+    val_loader = torch.utils.data.DataLoader(val_load_file,
+                                                    batch_size=batch_size,
+                                                    shuffle=True,
+                                                    num_workers=0)
+
 
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
@@ -181,8 +213,6 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
     nEpoch = 100
     scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.5,
                          step_size_up=nEpoch-1, cycle_momentum=False)
-
-    batch_size = 20
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": 0.0001,
@@ -207,37 +237,27 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
         t_mat = torch.zeros(2, 2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
-        for file in train_file_loader:
 
-            # the second loader is for loading the random timed 5-mins intervals
-            load_series = load_shuffle_5_min(file, device)
+        for series in train_loader:
+            ind, tar, chan = series
+            y_pred = model(ind)
+            model.zero_grad()
+            pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            target = tar.view(-1).type(it)
+            loss = lossFunc(pred, target)
+            loss.backward()
+            if first_train:
+                run[f"network_ADAM/train_loss_pr_file"].log(loss)
+                first_train = False
+            optimizer.step()
+            train_loss.append(loss.item())
 
-            series_loader = torch.utils.data.DataLoader(load_series,
-                                                        batch_size=batch_size,
-                                                        shuffle=True,
-                                                        num_workers=0)
-
-
-            for series in series_loader:
-                ind, tar, chan = series
-                y_pred = model(ind)
-                model.zero_grad()
-                pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-                target = tar.view(-1).type(it)
-                loss = lossFunc(pred, target)
-                loss.backward()
-                if first_train:
-                    run[f"network_ADAM/train_loss_pr_file"].log(loss)
-                    first_train = False
-                optimizer.step()
-                train_loss.append(loss.item())
-
-                acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
-                train_acc = torch.cat((train_acc, acc.view(1)))
-                t_mat = t_mat + mat
-                total_pos = total_pos + tot_p_g
-                total_neg = total_neg + tot_n_g
-                #print(tot_n)
+            acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
+            train_acc = torch.cat((train_acc, acc.view(1)))
+            t_mat = t_mat + mat
+            total_pos = total_pos + tot_p_g
+            total_neg = total_neg + tot_n_g
+            #print(tot_n)
 
             #print(total_neg_train)
         run[f"network_ADAM/train_loss_pr_file"].log(
@@ -253,30 +273,22 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
         v_mat = torch.zeros(2,2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
-        for file in val_file_loader:
-            load_series = load_shuffle_5_min(file, device)
+        for series in val_loader:
+            ind, tar, chan = series
+            y_pred = model(ind)
+            pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+            target = tar.view(-1).type(it)
+            loss = lossFunc(pred, target)
+            if first_val:
+                run[f"network_ADAM/validation_loss_pr_file"].log(loss)
+                first_val = False
+            valid_loss.append(loss.item())
 
-            series_loader = torch.utils.data.DataLoader(load_series,
-                                                        batch_size=batch_size,
-                                                        shuffle=True,
-                                                        num_workers=0)
-
-            for series in series_loader:
-                ind, tar, chan = series
-                y_pred = model(ind)
-                pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-                target = tar.view(-1).type(it)
-                loss = lossFunc(pred, target)
-                if first_val:
-                    run[f"network_ADAM/validation_loss_pr_file"].log(loss)
-                    first_val = False
-                valid_loss.append(loss.item())
-
-                acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
-                valid_acc = torch.cat((valid_acc, acc.view(1)))
-                v_mat = v_mat + mat
-                total_pos = total_pos + tot_p_g
-                total_neg = total_neg + tot_n_g
+            acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
+            valid_acc = torch.cat((valid_acc, acc.view(1)))
+            v_mat = v_mat + mat
+            total_pos = total_pos + tot_p_g
+            total_neg = total_neg + tot_n_g
 
         run[f"network_ADAM/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
@@ -294,11 +306,11 @@ def net_ADAM1(device, fl, it, train_file_loader, val_file_loader):
 
 
 
-def net_starter(nets, device, fl, it, train_file_loader, val_file_loader):
+def net_starter(nets, device, fl, it, train_path, val_path):
     for net in nets:
         pr1 = mp.Process(target=net, args = (device, fl, it,
-                                                train_file_loader,
-                                                val_file_loader,))
+                                                train_path,
+                                                val_path,))
         pr1.start()
         pr1.join()
 
@@ -318,44 +330,6 @@ if __name__ == '__main__':
     # Set up the datasets
     np.random.seed(42)
 
-
-
-    train_set = random.sample(range(1, 195 + 1), 100)
-
-    train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",
-                                      ind = train_set,
-                                      series_dict = 'train_series_length.pickle')
-
-    # train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                   ind = train_set)
-
-
-    train_file_loader = torch.utils.data.DataLoader(train_load_file,
-                                                    batch_size=1,
-                                                    shuffle=True,
-                                                    num_workers=0)
-
-
-    val_set = random.sample(range(1, 28 + 1), 20)
-
-    val_load_file = load_whole_data(path = "/home/tyson/model_data/val_model_data",
-                                    ind = val_set,
-                                    series_dict = 'val_series_length.pickle')
-
-    # val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                 ind = val_set)
-
-    val_file_loader = torch.utils.data.DataLoader(val_load_file,
-                                                  batch_size=1,
-                                                  shuffle=True,
-                                                  num_workers=0)
-
-    #token = os.getenv('Neptune_api')
-    #run = neptune.init(
-    #    project="NTLAB/artifact-rej-scalp",
-    #    api_token=token,
-    #)
-
     core = torch.cuda.device_count()
 
     networks = [net_SGD1, net_ADAM1]
@@ -367,13 +341,18 @@ if __name__ == '__main__':
     for i in range(len(networks)):
         cuda_dict[i % core].append(networks[i])
 
+        #"/home/tyson/model_data/train_model_data"
+
+    train_path = "C:/Users/Marc/Desktop/data/train_model_data"
+    val_path = "C:/Users/Marc/Desktop/data/val_model_data"
+
     pres = []
     for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
-                                                           train_file_loader,
-                                                           val_file_loader,)))
+                                                           train_path,
+                                                           val_path,)))
 
     for process in pres:
         process.start()

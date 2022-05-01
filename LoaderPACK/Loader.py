@@ -187,12 +187,13 @@ class shuffle_5min(Dataset):
 
         self.device = device
         self.size = size
+        self.path = path
 
         with open(path + "/" + series_dict, 'rb') as handle:
             self.s_dict = pickle.load(handle)
 
-        self.input_data = np.memmap(path + "/model_input.dat", dtype='float32', mode='r', shape=size)
-        self.target_data = np.memmap(path + "/model_target.dat", dtype='float32', mode='r', shape=size)
+        self.input_data = np.memmap(self.path + "/model_input.dat", dtype='float32', mode='r', shape=self.size)
+        self.target_data = np.memmap(self.path + "/model_target.dat", dtype='float32', mode='r', shape=self.size)
 
         prop = [] # list with probabilities
 
@@ -229,6 +230,17 @@ class shuffle_5min(Dataset):
             #tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*200)
             yield inp, tar, (ind[0], chan[0], cut_point[0])
 
+
+    def clear_ram(self, index):
+        """
+        This function is for clearing the ram.
+        """
+        if index % 1000 == 0:
+            del self.input_data
+            del self.target_data
+            self.input_data = np.memmap(self.path + "/model_input.dat", dtype='float32', mode='r', shape=self.size)
+            self.target_data = np.memmap(self.path + "/model_target.dat", dtype='float32', mode='r', shape=self.size)
+
     def __len__(self):
         return self.length
 
@@ -236,4 +248,5 @@ class shuffle_5min(Dataset):
         inp, tar, chan = next(self.gen)
         inp = inp.to(self.device)
         tar = tar.to(self.device)
+        self.clear_ram(idx)
         return inp, tar, chan

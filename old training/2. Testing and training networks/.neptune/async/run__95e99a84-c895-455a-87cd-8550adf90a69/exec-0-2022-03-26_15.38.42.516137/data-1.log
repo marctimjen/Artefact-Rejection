@@ -1,0 +1,105 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SDMAFDQ"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "Network trainer.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\2. Testing and training networks\\Network trainer.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.88718032836914, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 4.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 21.6, "step": null, "ts": 1648305522.8594983}]}, "version": 17}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 8.002334594726562, "step": null, "ts": 1648305522.8594983}]}, "version": 18}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 1.0, "step": null, "ts": 1648305522.8594983}]}, "version": 19}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.5921707153320312, "step": null, "ts": 1648305522.8594983}]}, "version": 20}
+{"obj": {"type": "AssignString", "path": ["SGD_net", "parameters", "optimizer"], "value": "SGD"}, "version": 21}
+{"obj": {"type": "AssignInt", "path": ["SGD_net", "parameters", "batch_size"], "value": 10}, "version": 22}
+{"obj": {"type": "AssignFloat", "path": ["SGD_net", "parameters", "optimizer_learning_rate"], "value": 0.6}, "version": 23}
+{"obj": {"type": "AssignString", "path": ["SGD_net", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 24}
+{"obj": {"type": "AssignString", "path": ["SGD_net", "parameters", "loss_function_weights"], "value": "[1, 5]"}, "version": 25}
+{"obj": {"type": "AssignString", "path": ["SGD_net", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 26}
+{"obj": {"type": "AssignString", "path": ["SGD_net", "parameters", "model"], "value": "Unet"}, "version": 27}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1648305522.936064}]}, "version": 28}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305522.936064}]}, "version": 29}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "learning_rate"], "values": [{"value": 0.6, "step": null, "ts": 1648305522.936064}]}, "version": 30}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_loss_pr_file"], "values": [{"value": 0.7462722659111023, "step": null, "ts": 1648305524.5660422}]}, "version": 31}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_loss_pr_file"], "values": [{"value": 0.6620608777911575, "step": null, "ts": 1648305529.5623775}]}, "version": 32}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_acc_pr_file"], "values": [{"value": 0.4751824736595154, "step": null, "ts": 1648305529.562879}]}, "version": 33}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[6316326., 8865695.],\n        [1559655., 2608324.]])", "step": null, "ts": 1648305529.5638793}]}, "version": 34}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.4160398542881012, "step": null, "ts": 1648305529.5638793}]}, "version": 35}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.5839601159095764, "step": null, "ts": 1648305529.5643795}]}, "version": 36}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.3741993308067322, "step": null, "ts": 1648305529.5643795}]}, "version": 37}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.6258006691932678, "step": null, "ts": 1648305529.5648801}]}, "version": 38}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "validation_loss_pr_file"], "values": [{"value": 0.7948581576347351, "step": null, "ts": 1648305529.740029}]}, "version": 39}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "validation_loss_pr_file"], "values": [{"value": 0.7881893345287868, "step": null, "ts": 1648305530.4146094}]}, "version": 40}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "val_acc_pr_file"], "values": [{"value": 0.5601692199707031, "step": null, "ts": 1648305530.41511}]}, "version": 41}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[ 274345.,  270076.],\n        [1930829., 2474750.]])", "step": null, "ts": 1648305530.4156094}]}, "version": 42}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.5039206743240356, "step": null, "ts": 1648305530.4161098}]}, "version": 43}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.49607932567596436, "step": null, "ts": 1648305530.4161098}]}, "version": 44}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.43826907873153687, "step": null, "ts": 1648305530.4166102}]}, "version": 45}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.5617309212684631, "step": null, "ts": 1648305530.4166102}]}, "version": 46}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 1", "step": null, "ts": 1648305530.4166102}]}, "version": 47}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305530.4171104}]}, "version": 48}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "learning_rate"], "values": [{"value": 0.6, "step": null, "ts": 1648305530.4171104}]}, "version": 49}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 16.7, "step": null, "ts": 1648305532.8762207}]}, "version": 50}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 9.867839813232422, "step": null, "ts": 1648305532.8762207}]}, "version": 51}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 98.0, "step": null, "ts": 1648305532.8762207}]}, "version": 52}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 3.8210830688476562, "step": null, "ts": 1648305532.8762207}]}, "version": 53}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_loss_pr_file"], "values": [{"value": 0.6252373379689676, "step": null, "ts": 1648305535.5850465}]}, "version": 54}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_acc_pr_file"], "values": [{"value": 0.6602126359939575, "step": null, "ts": 1648305535.5850465}]}, "version": 55}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[5189250., 4027254.],\n        [2673930., 7459566.]])", "step": null, "ts": 1648305535.5855465}]}, "version": 56}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.5630388855934143, "step": null, "ts": 1648305535.5855465}]}, "version": 57}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.4369611442089081, "step": null, "ts": 1648305535.5855465}]}, "version": 58}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.2638704478740692, "step": null, "ts": 1648305535.586047}]}, "version": 59}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.7361295819282532, "step": null, "ts": 1648305535.586047}]}, "version": 60}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "validation_loss_pr_file"], "values": [{"value": 0.556413071496146, "step": null, "ts": 1648305536.3502033}]}, "version": 61}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "val_acc_pr_file"], "values": [{"value": 0.42410367727279663, "step": null, "ts": 1648305536.3502033}]}, "version": 62}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[2.0995e+06, 2.8463e+06],\n        [2.0020e+03, 2.2850e+03]])", "step": null, "ts": 1648305536.3507035}]}, "version": 63}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.4245013892650604, "step": null, "ts": 1648305536.3512034}]}, "version": 64}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.575498640537262, "step": null, "ts": 1648305536.3512034}]}, "version": 65}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.4669932425022125, "step": null, "ts": 1648305536.351704}]}, "version": 66}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.5330067873001099, "step": null, "ts": 1648305536.351704}]}, "version": 67}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 2", "step": null, "ts": 1648305536.351704}]}, "version": 68}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305536.3522043}]}, "version": 69}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "learning_rate"], "values": [{"value": 0.6, "step": null, "ts": 1648305536.3522043}]}, "version": 70}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_loss_pr_file"], "values": [{"value": 0.5306401892944619, "step": null, "ts": 1648305541.6537545}]}, "version": 71}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_acc_pr_file"], "values": [{"value": 0.7036917805671692, "step": null, "ts": 1648305541.6542552}]}, "version": 72}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[7676144., 5774075.],\n        [  63638., 5836143.]])", "step": null, "ts": 1648305541.6547554}]}, "version": 73}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.5707077383995056, "step": null, "ts": 1648305541.6547554}]}, "version": 74}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.4292922616004944, "step": null, "ts": 1648305541.6547554}]}, "version": 75}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.010786501690745354, "step": null, "ts": 1648305541.6552558}]}, "version": 76}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.9892135262489319, "step": null, "ts": 1648305541.6552558}]}, "version": 77}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "validation_loss_pr_file"], "values": [{"value": 0.9252402612141201, "step": null, "ts": 1648305542.4154084}]}, "version": 78}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "val_acc_pr_file"], "values": [{"value": 0.5135307312011719, "step": null, "ts": 1648305542.4154084}]}, "version": 79}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[ 220992.,  146716.],\n        [2270669., 2311623.]])", "step": null, "ts": 1648305542.4159086}]}, "version": 80}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.6009986400604248, "step": null, "ts": 1648305542.4159086}]}, "version": 81}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.3990013897418976, "step": null, "ts": 1648305542.4159086}]}, "version": 82}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.49553126096725464, "step": null, "ts": 1648305542.4164088}]}, "version": 83}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.5044687390327454, "step": null, "ts": 1648305542.4164088}]}, "version": 84}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 3", "step": null, "ts": 1648305542.4164088}]}, "version": 85}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1648305542.4169092}]}, "version": 86}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "learning_rate"], "values": [{"value": 0.6, "step": null, "ts": 1648305542.4169092}]}, "version": 87}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 18.3, "step": null, "ts": 1648305542.8823092}]}, "version": 88}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 9.86025619506836, "step": null, "ts": 1648305542.8823092}]}, "version": 89}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 100.0, "step": null, "ts": 1648305542.8823092}]}, "version": 90}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 3.8210830688476562, "step": null, "ts": 1648305542.8823092}]}, "version": 91}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_loss_pr_file"], "values": [{"value": 0.6201631813137619, "step": null, "ts": 1648305547.7124548}]}, "version": 92}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "train_acc_pr_file"], "values": [{"value": 0.6858752965927124, "step": null, "ts": 1648305547.7124548}]}, "version": 93}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[4088894., 2538194.],\n        [3654507., 9068405.]])", "step": null, "ts": 1648305547.712956}]}, "version": 94}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tp_pr_file"], "values": [{"value": 0.6169970631599426, "step": null, "ts": 1648305547.7134562}]}, "version": 95}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fp_pr_file"], "values": [{"value": 0.383002907037735, "step": null, "ts": 1648305547.7134562}]}, "version": 96}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_fn_pr_file"], "values": [{"value": 0.2872382402420044, "step": null, "ts": 1648305547.7134562}]}, "version": 97}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "train_tn_pr_file"], "values": [{"value": 0.7127617597579956, "step": null, "ts": 1648305547.7139566}]}, "version": 98}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "validation_loss_pr_file"], "values": [{"value": 0.5710763079779488, "step": null, "ts": 1648305548.4716058}]}, "version": 99}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "val_acc_pr_file"], "values": [{"value": 0.40436065196990967, "step": null, "ts": 1648305548.4716058}]}, "version": 100}
+{"obj": {"type": "LogStrings", "path": ["SGD_net", "matrix", "val_confusion_matrix_pr_file"], "values": [{"value": "tensor([[2.0207e+06, 2.9292e+06],\n        [6.0000e+00, 6.0000e+00]])", "step": null, "ts": 1648305548.4721062}]}, "version": 101}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tp_pr_file"], "values": [{"value": 0.40823251008987427, "step": null, "ts": 1648305548.472607}]}, "version": 102}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fp_pr_file"], "values": [{"value": 0.5917674899101257, "step": null, "ts": 1648305548.472607}]}, "version": 103}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_fn_pr_file"], "values": [{"value": 0.5, "step": null, "ts": 1648305548.472607}]}, "version": 104}
+{"obj": {"type": "LogFloats", "path": ["SGD_net", "matrix", "val_tn_pr_file"], "values": [{"value": 0.5, "step": null, "ts": 1648305548.4731069}]}, "version": 105}
