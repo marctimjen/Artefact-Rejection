@@ -33,7 +33,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
         api_token=token,
     )
 
-    batch_size = 5
+    batch_size = 20
 
 
     train_load_file = shuffle_5min(path = train_path,
@@ -174,7 +174,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
         api_token=token,
     )
 
-    batch_size = 5
+    batch_size = 20
 
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
@@ -342,9 +342,10 @@ if __name__ == '__main__':
         cuda_dict[i % core].append(networks[i])
 
         #"/home/tyson/model_data/train_model_data"
+        # "C:/Users/Marc/Desktop/model_data/train_model_data"
 
-    train_path = "C:/Users/Marc/Desktop/data/train_model_data"
-    val_path = "C:/Users/Marc/Desktop/data/val_model_data"
+    train_path = "/home/tyson/data/train_model_data"
+    val_path = "/home/tyson/data/val_model_data"
 
     pres = []
     for i in range(core):
