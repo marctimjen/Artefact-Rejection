@@ -10,9 +10,9 @@ seed(26) # 26
 
 
 src_path = r"C:\Users\Marc\Desktop\model_data\\"
-dst_train_path = r"C:\Users\Marc\Desktop\train_model_data\\"
-dst_val_path = r"C:\Users\Marc\Desktop\val_model_data\\"
-dst_test_path = r"C:\Users\Marc\Desktop\test_model_data\\"
+dst_train_path = r"C:\Users\Marc\Desktop\model_data\train_model_data\\"
+dst_val_path = r"C:\Users\Marc\Desktop\model_data\val_model_data\\"
+dst_test_path = r"C:\Users\Marc\Desktop\model_data\test_model_data\\"
 
 #src_path = r"/home/tyson/model_data/"
 #dst_train_path = r"/home/tyson/train_model_data/"
