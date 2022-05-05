@@ -35,11 +35,11 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     batch_size = 20
 
-
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
                                          size = (195, 22, 2060000),
-                                         device = device)
+                                         device = device,
+                                         length = 200)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -50,12 +50,14 @@ def net_SGD1(device, fl, it, train_path, val_path):
     val_load_file = shuffle_5min(path = val_path,
                                          series_dict = 'val_series_length.pickle',
                                          size = (28, 22, 549200),
-                                         device = device)
+                                         device = device,
+                                         seed = 42,
+                                         length = 20)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                                     batch_size=batch_size,
-                                                    shuffle=True,
+                                                    shuffle=False,
                                                     num_workers=0)
 
 
@@ -70,7 +72,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 100
+    nEpoch = 200
     scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=9,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
@@ -179,7 +181,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
                                          size = (195, 22, 2060000),
-                                         device = device)
+                                         device = device,
+                                         length = 200)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -190,12 +193,14 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     val_load_file = shuffle_5min(path = val_path,
                                          series_dict = 'val_series_length.pickle',
                                          size = (28, 22, 549200),
-                                         device = device)
+                                         device = device,
+                                         seed = 42,
+                                         length = 20)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                                     batch_size=batch_size,
-                                                    shuffle=True,
+                                                    shuffle=False,
                                                     num_workers=0)
 
 
@@ -210,7 +215,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 100
+    nEpoch = 200
     scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.5,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
