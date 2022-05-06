@@ -157,6 +157,42 @@ class OutConv(nn.Module): # light-blue arrow
 #        return output
 
 
+# class Unet_leaky(nn.Module):
+#     """
+#     This class is the network. So it combines the subparts listed above.
+#     """
+#     def __init__(self, n_channels, n_classes):
+#         """
+#         Args:
+#             n_channels (int): The amount of channels of the input.
+#             n_classes (int): The amount of channels the output tensor gets.
+#         """
+#         super(Unet_leaky, self).__init__()
+#
+#         self.n_channels = n_channels
+#         self.n_classes = n_classes
+#
+#         self.inc = Double_Convolution(n_channels, 10)
+#         self.down1 = Down_Scale(10, 20)
+#         self.down2 = Down_Scale(20, 40)
+#         self.down3 = Down_Scale(40, 80)
+#         self.up1 = Up_Scale(80, 40)
+#         self.up2 = Up_Scale(40, 20)
+#         self.up3 = Up_Scale(20, 10, up_conv = True)
+#         self.outc = OutConv(10, n_classes)
+#
+#     def forward(self, x):
+#         x1 = self.inc(x)
+#         x2 = self.down1(x1)
+#         x3 = self.down2(x2)
+#         x4 = self.down3(x3)
+#         x = self.up1(x4, x3)
+#         x = self.up2(x, x2)
+#         x = self.up3(x, x1)
+#         output = self.outc(x)
+#         return output
+
+
 class Unet_leaky(nn.Module):
     """
     This class is the network. So it combines the subparts listed above.
@@ -172,14 +208,14 @@ class Unet_leaky(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
 
-        self.inc = Double_Convolution(n_channels, 10)
-        self.down1 = Down_Scale(10, 20)
-        self.down2 = Down_Scale(20, 40)
-        self.down3 = Down_Scale(40, 80)
-        self.up1 = Up_Scale(80, 40)
-        self.up2 = Up_Scale(40, 20)
-        self.up3 = Up_Scale(20, 10, up_conv = True)
-        self.outc = OutConv(10, n_classes)
+        self.inc = Double_Convolution(n_channels, 30)
+        self.down1 = Down_Scale(30, 60)
+        self.down2 = Down_Scale(60, 120)
+        self.down3 = Down_Scale(120, 240)
+        self.up1 = Up_Scale(240, 120)
+        self.up2 = Up_Scale(120, 60)
+        self.up3 = Up_Scale(60, 30, up_conv = True)
+        self.outc = OutConv(30, n_classes)
 
     def forward(self, x):
         x1 = self.inc(x)

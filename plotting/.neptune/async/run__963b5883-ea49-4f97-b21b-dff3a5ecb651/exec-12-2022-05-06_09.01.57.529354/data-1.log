@@ -1,0 +1,14 @@
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 5.4, "step": null, "ts": 1651820517.6577702}]}, "version": 1}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 8.194194793701172, "step": null, "ts": 1651820517.6577702}]}, "version": 2}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 1.3088569641113281, "step": null, "ts": 1651820517.6577702}]}, "version": 3}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "traceback"], "values": [{"value": "An uncaught exception occurred while run was active on worker DESKTOP-SDMAFDQ.", "step": null, "ts": 1651820518.4329786}, {"value": "Marking run as failed", "step": null, "ts": 1651820518.4329786}, {"value": "Traceback:", "step": null, "ts": 1651820518.4329786}, {"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\plotting\\max_learnplotter.py\", line 18, in <module>\n    adam_acc = run2['network_ADAM/val_acc_pr_file'].fetch_values() #62\n", "step": null, "ts": 1651820518.4329786}, {"value": "name 'run2' is not defined", "step": null, "ts": 1651820518.4329786}]}, "version": 4}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": true}, "version": 5}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1651820518.4333732}]}, "version": 6}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\plotting\\max_learnplotter.py\", line 18, in <module>\n", "step": null, "ts": 1651820518.433884}]}, "version": 7}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "    ", "step": null, "ts": 1651820518.4343758}]}, "version": 8}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "adam_acc = run2['network_ADAM/val_acc_pr_file'].fetch_values() #62", "step": null, "ts": 1651820518.4343758}]}, "version": 9}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1651820518.4343758}]}, "version": 10}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "NameError", "step": null, "ts": 1651820518.4343758}]}, "version": 11}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": ": ", "step": null, "ts": 1651820518.4343758}]}, "version": 12}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "name 'run2' is not defined", "step": null, "ts": 1651820518.4343758}]}, "version": 13}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "\n", "step": null, "ts": 1651820518.434876}]}, "version": 14}
