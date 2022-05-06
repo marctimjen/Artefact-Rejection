@@ -6,8 +6,8 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-259"
-) # adam network
+    run="AR1-263"
+) # adam network - AR1-259
 
 adam_rate = run['network_ADAM/learning_rate'].fetch_values()
 adam_tp = run['network_ADAM/matrix/val_tp_pr_file'].fetch_values()
@@ -22,8 +22,8 @@ adam_loss = run['network_ADAM/validation_loss_pr_file'].fetch_values() #62
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-258"
-) # sgd network
+    run="AR1-262"
+) # sgd network - AR1-258
 
 sgd_rate = run2['network_SGD/learning_rate'].fetch_values()
 sgd_tp = run2['network_SGD/matrix/val_tp_pr_file'].fetch_values()
@@ -36,6 +36,8 @@ sgd_loss = run2['network_SGD/validation_loss_pr_file'].fetch_values() #62
 
 run.stop()
 run2.stop()
+
+print(len(adam_rate["value"]))
 
 fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
 fig.suptitle('Linear increasing learning_rates')

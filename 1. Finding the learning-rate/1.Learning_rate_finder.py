@@ -75,7 +75,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     nEpoch = 10
 
-    scheduler = CyclicLR(optimizer, base_lr=0.00001, max_lr=9,
+    scheduler = CyclicLR(optimizer, base_lr=0.00001, max_lr=5,
                          step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
                          cycle_momentum=False)
 
@@ -85,7 +85,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.00001, "scheduler_max_lr":10,
+              "scheduler_base_lr":0.00001, "scheduler_max_lr":5,
               "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
@@ -219,7 +219,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                    reduction = "mean")
 
     nEpoch = 10
-    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=1,
+    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.5,
                          step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
                          cycle_momentum=False)
 
@@ -230,7 +230,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
-              "scheduler_base_lr":0.0000001, "scheduler_max_lr":1,
+              "scheduler_base_lr":0.0000001, "scheduler_max_lr":0.5,
               "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
     run[f"network_ADAM/parameters"] = params
