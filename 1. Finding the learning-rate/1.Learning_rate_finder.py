@@ -216,7 +216,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                    reduction = "mean")
 
     nEpoch = 200
-    scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=0.5,
+    scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=5,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
@@ -226,7 +226,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
-              "scheduler_base_lr":0.0001, "scheduler_max_lr":0.5,
+              "scheduler_base_lr":0.0001, "scheduler_max_lr":5,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params
