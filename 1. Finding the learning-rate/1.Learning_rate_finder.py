@@ -68,21 +68,21 @@ def net_SGD1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = SGD(model.parameters(), lr=0.001)
+    optimizer = SGD(model.parameters(), lr=0.00001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 200
-    scheduler = CyclicLR(optimizer, base_lr=0.001, max_lr=15,
+    scheduler = CyclicLR(optimizer, base_lr=0.00001, max_lr=10,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
-              "optimizer_learning_rate": 0.001,
+              "optimizer_learning_rate": 0.00001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.001, "scheduler_max_lr":15,
+              "scheduler_base_lr":0.00001, "scheduler_max_lr":10,
               "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":nEpoch-1}
 
@@ -211,22 +211,22 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.0001)
+    optimizer = Adam(model.parameters(), lr=0.0000001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 200
-    scheduler = CyclicLR(optimizer, base_lr=0.0001, max_lr=1,
+    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.6,
                          step_size_up=nEpoch-1, cycle_momentum=False)
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
-              "optimizer_learning_rate": 0.0001,
+              "optimizer_learning_rate": 0.0000001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
-              "scheduler_base_lr":0.0001, "scheduler_max_lr":1,
+              "scheduler_base_lr":0.0000001, "scheduler_max_lr":1,
               "scheduler_step_size_up":nEpoch-1}
 
     run[f"network_ADAM/parameters"] = params
