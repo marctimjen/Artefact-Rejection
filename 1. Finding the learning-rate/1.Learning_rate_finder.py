@@ -34,7 +34,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 1000 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
@@ -53,7 +53,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
                                          size = (28, 22, 549200),
                                          device = device,
                                          seed = 42,
-                                         length = 100)
+                                         length = 50)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -87,7 +87,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_base_lr":0.00001, "scheduler_max_lr":10,
               "scheduler_cycle_momentum":False,
-              "scheduler_step_size_up":nEpoch-1}
+              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
     run[f"network_SGD/parameters"] = params
 
@@ -178,13 +178,14 @@ def net_ADAM1(device, fl, it, train_path, val_path):
         api_token=token,
     )
 
-    batch_size = 7
+    batch_size = 10
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
                                          size = (195, 22, 2060000),
                                          device = device,
-                                         length = 1000)
+                                         length = n_samples)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -197,7 +198,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                          size = (28, 22, 549200),
                                          device = device,
                                          seed = 42,
-                                         length = 100)
+                                         length = 50)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -217,9 +218,10 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    nEpoch = 200
-    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.6,
-                         step_size_up=nEpoch-1, cycle_momentum=False)
+    nEpoch = 10
+    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=1,
+                         step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
+                         cycle_momentum=False)
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": 0.0000001,
@@ -229,7 +231,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
               "scheduler_base_lr":0.0000001, "scheduler_max_lr":1,
-              "scheduler_step_size_up":nEpoch-1}
+              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
     run[f"network_ADAM/parameters"] = params
 
@@ -239,13 +241,12 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
 
-        run[f"network_ADAM/learning_rate"].log(optimizer.param_groups[0]['lr'])
-
-        t_mat = torch.zeros(2, 2)
-        total_pos, total_neg = torch.tensor(0), torch.tensor(0)
-
-
         for series in train_loader:
+            run[f"network_ADAM/learning_rate"].log(optimizer.param_groups[0]['lr'])
+
+            t_mat = torch.zeros(2, 2)
+            total_pos, total_neg = torch.tensor(0), torch.tensor(0)
+
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
@@ -267,47 +268,47 @@ def net_ADAM1(device, fl, it, train_path, val_path):
             #print(tot_n)
 
             #print(total_neg_train)
-        run[f"network_ADAM/train_loss_pr_file"].log(
-                                                np.mean(np.array(train_loss)))
-        train_loss = []
+            run[f"network_ADAM/train_loss_pr_file"].log(
+                                                    np.mean(np.array(train_loss)))
+            train_loss = []
 
-        run[f"network_ADAM/train_acc_pr_file"].log(torch.mean(train_acc))
-        train_acc = torch.tensor([]).to(device)
+            run[f"network_ADAM/train_acc_pr_file"].log(torch.mean(train_acc))
+            train_acc = torch.tensor([]).to(device)
 
-        run[f"network_ADAM/matrix/train_confusion_matrix_pr_file"].log(t_mat)
-        Accuarcy_upload(run, t_mat, total_pos, total_neg, "network_ADAM", "train")
+            run[f"network_ADAM/matrix/train_confusion_matrix_pr_file"].log(t_mat)
+            Accuarcy_upload(run, t_mat, total_pos, total_neg, "network_ADAM", "train")
 
-        v_mat = torch.zeros(2,2)
-        total_pos, total_neg = torch.tensor(0), torch.tensor(0)
+            v_mat = torch.zeros(2,2)
+            total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
-        for series in val_loader:
-            ind, tar, chan = series
-            y_pred = model(ind)
-            pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-            target = tar.view(-1).type(it)
-            loss = lossFunc(pred, target)
-            if first_val:
-                run[f"network_ADAM/validation_loss_pr_file"].log(loss)
-                first_val = False
-            valid_loss.append(loss.item())
+            for series in val_loader:
+                ind, tar, chan = series
+                y_pred = model(ind)
+                pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+                target = tar.view(-1).type(it)
+                loss = lossFunc(pred, target)
+                if first_val:
+                    run[f"network_ADAM/validation_loss_pr_file"].log(loss)
+                    first_val = False
+                valid_loss.append(loss.item())
 
-            acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
-            valid_acc = torch.cat((valid_acc, acc.view(1)))
-            v_mat = v_mat + mat
-            total_pos = total_pos + tot_p_g
-            total_neg = total_neg + tot_n_g
+                acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
+                valid_acc = torch.cat((valid_acc, acc.view(1)))
+                v_mat = v_mat + mat
+                total_pos = total_pos + tot_p_g
+                total_neg = total_neg + tot_n_g
 
-        run[f"network_ADAM/validation_loss_pr_file"].log(
-                                                  np.mean(np.array(valid_loss)))
-        valid_loss = []
+            run[f"network_ADAM/validation_loss_pr_file"].log(
+                                                      np.mean(np.array(valid_loss)))
+            valid_loss = []
 
-        run[f"network_ADAM/val_acc_pr_file"].log(torch.mean(valid_acc))
-        valid_acc = torch.tensor([]).to(device)
+            run[f"network_ADAM/val_acc_pr_file"].log(torch.mean(valid_acc))
+            valid_acc = torch.tensor([]).to(device)
 
-        run[f"network_ADAM/matrix/val_confusion_matrix_pr_file"].log(v_mat)
-        Accuarcy_upload(run, v_mat, total_pos, total_neg, "network_ADAM", "val")
+            run[f"network_ADAM/matrix/val_confusion_matrix_pr_file"].log(v_mat)
+            Accuarcy_upload(run, v_mat, total_pos, total_neg, "network_ADAM", "val")
 
-        scheduler.step()
+            scheduler.step()
 
     run.stop()
 
@@ -339,7 +340,7 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    networks = [net_SGD1] # , net_ADAM1
+    networks = [net_SGD1, net_ADAM1]
 
     cuda_dict = dict()
     for i in range(core):
