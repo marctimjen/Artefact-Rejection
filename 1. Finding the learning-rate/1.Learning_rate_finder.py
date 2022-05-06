@@ -33,7 +33,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
         api_token=token,
     )
 
-    batch_size = 20
+    batch_size = 10
 
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
@@ -176,7 +176,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
         api_token=token,
     )
 
-    batch_size = 20
+    batch_size = 10
 
     train_load_file = shuffle_5min(path = train_path,
                                          series_dict = 'train_series_length.pickle',
