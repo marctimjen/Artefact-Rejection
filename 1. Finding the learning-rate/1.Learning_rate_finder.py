@@ -39,7 +39,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
                                          series_dict = 'train_series_length.pickle',
                                          size = (195, 22, 2060000),
                                          device = device,
-                                         length = 200)
+                                         length = 1000)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -52,7 +52,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
                                          size = (28, 22, 549200),
                                          device = device,
                                          seed = 42,
-                                         length = 20)
+                                         length = 100)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -182,7 +182,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                          series_dict = 'train_series_length.pickle',
                                          size = (195, 22, 2060000),
                                          device = device,
-                                         length = 200)
+                                         length = 1000)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -195,7 +195,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                          size = (28, 22, 549200),
                                          device = device,
                                          seed = 42,
-                                         length = 20)
+                                         length = 100)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
