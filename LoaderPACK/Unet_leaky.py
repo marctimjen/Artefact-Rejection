@@ -208,14 +208,14 @@ class Unet_leaky(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
 
-        self.inc = Double_Convolution(n_channels, 30)
-        self.down1 = Down_Scale(30, 60)
-        self.down2 = Down_Scale(60, 120)
-        self.down3 = Down_Scale(120, 240)
-        self.up1 = Up_Scale(240, 120)
-        self.up2 = Up_Scale(120, 60)
-        self.up3 = Up_Scale(60, 30, up_conv = True)
-        self.outc = OutConv(30, n_classes)
+        self.inc = Double_Convolution(n_channels, 20)
+        self.down1 = Down_Scale(20, 40)
+        self.down2 = Down_Scale(40, 80)
+        self.down3 = Down_Scale(80, 160)
+        self.up1 = Up_Scale(160, 80)
+        self.up2 = Up_Scale(80, 40)
+        self.up3 = Up_Scale(40, 20, up_conv = True)
+        self.outc = OutConv(20, n_classes)
 
     def forward(self, x):
         x1 = self.inc(x)

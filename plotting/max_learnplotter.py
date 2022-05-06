@@ -6,7 +6,7 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-248"
+    run="AR1-259"
 ) # adam network
 
 adam_rate = run['network_ADAM/learning_rate'].fetch_values()
@@ -22,7 +22,7 @@ adam_loss = run['network_ADAM/validation_loss_pr_file'].fetch_values() #62
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-249"
+    run="AR1-258"
 ) # sgd network
 
 sgd_rate = run2['network_SGD/learning_rate'].fetch_values()
@@ -41,12 +41,14 @@ fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
 fig.suptitle('Linear increasing learning_rates')
 ax1.set_title('ADAM optimizor with base_lr=0.0001, max_lr=0.5')
 
-ax1.plot(adam_rate["value"], adam_acc["value"], label = "acc", color = "orange")
+
 
 ax1.plot(adam_rate["value"], adam_tp["value"], label = "tp", color = "blue")
 ax1.plot(adam_rate["value"], adam_fp["value"], label = "fp", color = "red")
 ax1.plot(adam_rate["value"], adam_tn["value"], label = "tn", color = "green")
 ax1.plot(adam_rate["value"], adam_fn["value"], label = "fn", color = "black")
+
+ax1.plot(adam_rate["value"], adam_acc["value"], label = "acc", color = "orange")
 
 ax1.set_xlabel('learning_rate')
 ax1.set_ylabel('accuarcy')
