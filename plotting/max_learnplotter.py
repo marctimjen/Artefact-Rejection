@@ -6,8 +6,10 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-263"
+    run="AR1-267"
 ) # adam network - AR1-259
+
+# AR1-263
 
 adam_rate = run['network_ADAM/learning_rate'].fetch_values()
 adam_tp = run['network_ADAM/matrix/val_tp_pr_file'].fetch_values()
@@ -22,8 +24,10 @@ adam_loss = run['network_ADAM/validation_loss_pr_file'].fetch_values() #62
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-262"
+    run="AR1-266"
 ) # sgd network - AR1-258
+
+# AR1-262
 
 sgd_rate = run2['network_SGD/learning_rate'].fetch_values()
 sgd_tp = run2['network_SGD/matrix/val_tp_pr_file'].fetch_values()
