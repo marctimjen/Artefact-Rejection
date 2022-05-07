@@ -214,23 +214,23 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.0000001)
+    optimizer = Adam(model.parameters(), lr=0.000000001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     nEpoch = 10
-    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.3,
+    scheduler = CyclicLR(optimizer, base_lr=0.000000001, max_lr=0.15,
                          step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
                          cycle_momentum=False)
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
-              "optimizer_learning_rate": 0.0000001,
+              "optimizer_learning_rate": 0.000000001,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
-              "scheduler_base_lr":0.0000001, "scheduler_max_lr":0.3,
+              "scheduler_base_lr":0.000000001, "scheduler_max_lr":0.15,
               "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
     run[f"network_ADAM/parameters"] = params
