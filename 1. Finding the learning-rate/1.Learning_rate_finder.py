@@ -75,7 +75,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     nEpoch = 10
 
-    scheduler = CyclicLR(optimizer, base_lr=0.00001, max_lr=5,
+    scheduler = CyclicLR(optimizer, base_lr=0.00001, max_lr=3,
                          step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
                          cycle_momentum=False)
 
@@ -85,7 +85,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.00001, "scheduler_max_lr":5,
+              "scheduler_base_lr":0.00001, "scheduler_max_lr":3,
               "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
@@ -219,7 +219,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                    reduction = "mean")
 
     nEpoch = 10
-    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.5,
+    scheduler = CyclicLR(optimizer, base_lr=0.0000001, max_lr=0.3,
                          step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
                          cycle_momentum=False)
 
@@ -230,7 +230,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
-              "scheduler_base_lr":0.0000001, "scheduler_max_lr":0.5,
+              "scheduler_base_lr":0.0000001, "scheduler_max_lr":0.3,
               "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
 
     run[f"network_ADAM/parameters"] = params
@@ -334,10 +334,6 @@ if __name__ == '__main__':
         fl = torch.cuda.FloatTensor
         it = torch.cuda.LongTensor
 
-
-    # Set up the datasets
-    np.random.seed(42)
-
     core = torch.cuda.device_count()
 
     networks = [net_SGD1, net_ADAM1]
@@ -354,6 +350,9 @@ if __name__ == '__main__':
 
     train_path = "/home/tyson/data_cutoff/train_model_data"
     val_path = "/home/tyson/data_cutoff/val_model_data"
+
+    core = 1
+    cuda_dict[0] = [net_ADAM1]
 
     pres = []
     for i in range(core):

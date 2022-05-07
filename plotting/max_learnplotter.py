@@ -50,7 +50,7 @@ ax1.set_title('ADAM optimizor with base_lr=0.0001, max_lr=0.5')
 
 
 ax1.plot(adam_rate["value"], adam_tp["value"], label = "tp", color = "blue")
-ax1.plot(adam_rate["value"], adam_fp["value"], label = "fp", color = "red")
+ax1.plot(adam_rate["value"], adam_fp["value"], label = "fp", color = "gray")
 ax1.plot(adam_rate["value"], adam_tn["value"], label = "tn", color = "green")
 ax1.plot(adam_rate["value"], adam_fn["value"], label = "fn", color = "black")
 
@@ -58,7 +58,7 @@ ax1.plot(adam_rate["value"], adam_acc["value"], label = "acc", color = "orange")
 
 ax1.set_xlabel('learning_rate')
 ax1.set_ylabel('accuarcy')
-ax1.legend()
+ax1.legend(loc = 'upper right')
 
 ax2.set_title('ADAM optimizor loss duing training')
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_loss["value"])
@@ -66,23 +66,34 @@ ax2.set_xlabel('learning_rate')
 ax2.set_ylabel('loss')
 
 
-ax3.set_title('SGD optimizor with base_lr=0.001, max_lr=9')
+ax3.set_title('SGD optimizor with lr range: 0.001 to 9')
+
+ax3.axvline(x = 0.01, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
+ax3.axvline(x = 0.32, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
 
 ax3.plot(sgd_rate["value"], sgd_acc["value"], label = "acc", color = "orange")
 
 ax3.plot(sgd_rate["value"], sgd_tp["value"], label = "tp", color = "blue")
-ax3.plot(sgd_rate["value"], sgd_fp["value"], label = "fp", color = "red")
+ax3.plot(sgd_rate["value"], sgd_fp["value"], label = "fp", color = "gray")
 ax3.plot(sgd_rate["value"], sgd_tn["value"], label = "tn", color = "green")
 ax3.plot(sgd_rate["value"], sgd_fn["value"], label = "fn", color = "black")
 
 ax3.set_xlabel('learning_rate')
 ax3.set_ylabel('accuarcy')
-ax3.legend()
+ax3.legend(loc = 'upper right')
+
+
 
 ax4.set_title('SGD optimizor loss duing training')
-ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"])
+
+ax4.axvline(x = 0.01, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
+ax4.axvline(x = 0.32, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
+
+ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"], label = "loss")
 ax4.set_xlabel('learning_rate')
 ax4.set_ylabel('loss')
+
+ax4.legend(loc = 'upper right')
 
 fig.tight_layout(pad=2.0)
 plt.show()
