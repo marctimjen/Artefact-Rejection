@@ -355,15 +355,15 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    networks = [net_SGD1, net_SGD2, net_SGD3, net_SGD4,
-                net_ADAM1, net_ADAM2, net_ADAM3, net_ADAM3]
+    # networks = [net_SGD1, net_SGD2, net_SGD3, net_SGD4,
+    #             net_ADAM1, net_ADAM2, net_ADAM3, net_ADAM3]
 
     cuda_dict = dict()
-    for i in range(core):
-        cuda_dict[i] = []
-
-    for i in range(len(networks)):
-        cuda_dict[i % core].append(networks[i])
+    # for i in range(core):
+    #     cuda_dict[i] = []
+    #
+    # for i in range(len(networks)):
+    #     cuda_dict[i % core].append(networks[i])
 
     core = 2
     cuda_dict[1] = [net_SGD1]
