@@ -221,7 +221,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     nEpoch = 10
     scheduler = CyclicLR(optimizer, base_lr=0.0000000000001, max_lr=0.0025,
                          step_size_up=nEpoch*(n_samples/batch_size)-1, # how often do we update the learning rate
-                         cycle_momentum=False)
+                         cycle_momentum=True)
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": 0.0000000000001,

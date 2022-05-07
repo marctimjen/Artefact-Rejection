@@ -6,7 +6,7 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-274"
+    run="AR1-275"
 ) # adam network - AR1-259
 
 # AR1-263
@@ -48,7 +48,8 @@ fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
 fig.suptitle('Linear increasing learning_rates')
 ax1.set_title('ADAM optimizor with base_lr=0.0001, max_lr=0.5')
 
-
+ax1.axvline(x = 0.000015, color = 'r', linestyle = "--", label = 'base_rl = 0.000015')
+ax1.axvline(x = 0.0002, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
 
 ax1.plot(adam_rate["value"], adam_tp["value"], label = "tp", color = "blue")
 ax1.plot(adam_rate["value"], adam_fp["value"], label = "fp", color = "gray")
@@ -61,7 +62,12 @@ ax1.set_xlabel('learning_rate')
 ax1.set_ylabel('accuarcy')
 ax1.legend(loc = 'upper right')
 
+
+
 ax2.set_title('ADAM optimizor loss duing training')
+ax2.axvline(x = 0.000015, color = 'r', linestyle = "--", label = 'base_rl = 0.000015')
+ax2.axvline(x = 0.0002, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
+
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_loss["value"])
 ax2.set_xlabel('learning_rate')
 ax2.set_ylabel('loss')
