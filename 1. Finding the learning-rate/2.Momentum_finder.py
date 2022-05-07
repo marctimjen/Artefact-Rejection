@@ -333,56 +333,25 @@ def net_SGD1(device, fl, it, train_path, val_path):
 #               scheduler = None)
 
 
-def net_starter(nets, device, train_file_loader, val_file_loader):
+def net_starter(nets, device, fl, it, train_path, val_path):
     for net in nets:
-        pr1 = mp.Process(target=net, args = (device,
-                                             train_file_loader,
-                                             val_file_loader,))
+        pr1 = mp.Process(target=net, args = (device, fl, it,
+                                                train_path,
+                                                val_path,))
         pr1.start()
         pr1.join()
-
 
 if __name__ == '__main__':
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
 
-
-    # Set up the datasets
-    np.random.seed(42)
-
-
-
-    train_set = random.sample(range(1, 195 + 1), 100)
-
-    train_load_file = load_whole_data(path = "/home/tyson/model_data/train_model_data",
-                                      ind = train_set,
-                                      series_dict = 'train_series_length.pickle')
-
-    # train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                   ind = train_set)
-
-
-    train_file_loader = torch.utils.data.DataLoader(train_load_file,
-                                                    batch_size=1,
-                                                    shuffle=True,
-                                                    num_workers=0)
-
-
-    val_set = random.sample(range(1, 28 + 1), 20)
-
-    val_load_file = load_whole_data(path = "/home/tyson/model_data/val_model_data",
-                                    ind = val_set,
-                                    series_dict = 'val_series_length.pickle')
-
-    # val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                 ind = val_set)
-
-    val_file_loader = torch.utils.data.DataLoader(val_load_file,
-                                                  batch_size=1,
-                                                  shuffle=True,
-                                                  num_workers=0)
-
+    if device == "cpu":
+        fl = torch.FloatTensor
+        it = torch.LongTensor
+    else:
+        fl = torch.cuda.FloatTensor
+        it = torch.cuda.LongTensor
 
     core = torch.cuda.device_count()
 
@@ -403,8 +372,9 @@ if __name__ == '__main__':
     for i in range(1, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
-                                                           train_file_loader,
-                                                           val_file_loader,)))
+                                                           fl, it,
+                                                           train_path,
+                                                           val_path,)))
 
     for process in pres:
         process.start()
