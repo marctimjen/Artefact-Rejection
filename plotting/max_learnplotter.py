@@ -6,7 +6,7 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-268"
+    run="AR1-269"
 ) # adam network - AR1-259
 
 # AR1-263
