@@ -75,17 +75,17 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     nEpoch = 10
 
-    scheduler = CyclicLR(optimizer, base_lr=0.00001, max_lr=3,
+    scheduler = CyclicLR(optimizer, base_lr=0.01, max_lr=0.32,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6)-1, # how often do we update the learning rate
                          cycle_momentum=True, base_momentum=0.8, max_momentum=0.9)
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
-              "optimizer_learning_rate": 0.00001,
+              "optimizer_learning_rate": 0.01,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky", "scheduler":"CyclicLR",
-              "scheduler_base_lr":0.00001, "scheduler_max_lr":3,
+              "scheduler_base_lr":0.01, "scheduler_max_lr":0.32,
               "scheduler_cycle_momentum":True,
               "scheduler_cycle_base_momentum":0.8,
               "scheduler_cycle_max_momentum":0.9,
