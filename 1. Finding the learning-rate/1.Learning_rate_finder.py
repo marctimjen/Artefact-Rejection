@@ -351,11 +351,11 @@ if __name__ == '__main__':
     train_path = "/home/tyson/data_cutoff/train_model_data"
     val_path = "/home/tyson/data_cutoff/val_model_data"
 
-    core = 1
-    cuda_dict[0] = [net_ADAM1]
+    core = 2
+    cuda_dict[1] = [net_ADAM1]
 
     pres = []
-    for i in range(core):
+    for i in range(1, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
