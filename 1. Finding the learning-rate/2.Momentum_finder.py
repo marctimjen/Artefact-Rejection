@@ -365,6 +365,9 @@ if __name__ == '__main__':
     # for i in range(len(networks)):
     #     cuda_dict[i % core].append(networks[i])
 
+    train_path = "/home/tyson/data_cutoff/train_model_data"
+    val_path = "/home/tyson/data_cutoff/val_model_data"
+
     core = 2
     cuda_dict[1] = [net_SGD1]
 
