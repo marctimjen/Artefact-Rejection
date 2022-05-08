@@ -7,9 +7,10 @@ token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-287"
+    run="AR1-290"
 ) # SGD 1
 
+# 287 - 286 - 285
 
 sgd1_rate = run1['network_SGD/learning_rate'].fetch_values()
 sgd1_mom = run1['network_SGD/momentum'].fetch_values()
@@ -26,7 +27,7 @@ token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-286"
+    run="AR1-289"
 ) # SGD 2
 
 
@@ -45,7 +46,7 @@ token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-285"
+    run="AR1-288"
 ) # SGD 3
 
 

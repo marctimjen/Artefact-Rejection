@@ -108,6 +108,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
+            optimizer.zero_grad()
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
@@ -257,6 +258,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
+            optimizer.zero_grad()
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
@@ -404,6 +406,7 @@ def net_SGD3(device, fl, it, train_path, val_path):
             ind, tar, chan = series
             y_pred = model(ind)
             model.zero_grad()
+            optimizer.zero_grad()
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
