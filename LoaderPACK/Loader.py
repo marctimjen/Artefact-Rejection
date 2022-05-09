@@ -400,6 +400,9 @@ class testload_5min(Dataset):
                         clear_point = cut_point + w
                         inp = torch.zeros(5*60*200)
                         tar = torch.zeros(5*60*200)
+                        print("cut_point", cut_point)
+                        print("len", shp[1])
+                        print()
                         print(len(torch.Tensor(self.input_data[exp_nr, chan, cut_point:])))
                         print(w)
                         inp[:w] = torch.Tensor(self.input_data[exp_nr, chan, cut_point:])
