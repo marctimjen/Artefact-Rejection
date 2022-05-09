@@ -390,7 +390,7 @@ class testload_5min(Dataset):
         exp_nr = -1
         for ind in s_dict.values():
             exp_nr += 1
-            shp = [3]
+            shp = ind[3]
             for chan in range(shp[0]): # number of channels
                 for cut_point in range(first_drop, shp[1], 5*60*200): # cut the experiment
 
