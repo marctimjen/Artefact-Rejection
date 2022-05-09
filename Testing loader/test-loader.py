@@ -11,7 +11,7 @@ import torch
 
 val_load_file = testload_5min(path = "/home/tyson/data_cutoff/val_model_data",
                                      series_dict = 'val_series_length.pickle',
-                                     size = (28, 22, 549200),
+                                     size = (28, 22, 2642),
                                      device = "cpu")
 
 
