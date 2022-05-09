@@ -373,14 +373,11 @@ class testload_5min(Dataset):
         self.input_data = np.memmap(self.path + "/model_input.dat", dtype='float32', mode='r', shape=self.size)
         self.target_data = np.memmap(self.path + "/model_target.dat", dtype='float32', mode='r', shape=self.size)
 
-        prop = [] # list with probabilities
-
         ss = 0 # sum over all the batches
         for val in self.s_dict.values():
-            prop.append(val[2])
-            ss += val[2]
+            jj = val[3][0]*math.ceil((val[3][1]-20*300) / (5*60*200))
+            ss += jj
 
-        self.prop = np.array(prop) / ss
         self.length = ss
 
         self.gen = self.load_data(self.s_dict)
