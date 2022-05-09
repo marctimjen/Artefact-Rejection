@@ -394,7 +394,7 @@ class testload_5min(Dataset):
             for chan in range(shp[0]): # number of channels
                 for cut_point in range(first_drop, shp[1], 5*60*200): # cut the experiment
 
-                    clear_point = None # if the series is not long enough this is used
+                    clear_point = 0 # if the series is not long enough this is used
 
                     if (w := (shp[1] - cut_point)) < 5*60*200: # There is not enough data!
                         clear_point = cut_point + w
