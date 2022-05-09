@@ -8,7 +8,7 @@ sys.path.append("..") # adds higher directory to python modules path
 
 from LoaderPACK.Loader import testload_5min
 from LoaderPACK.tester import val_tester
-from LoaderPACK.Unet_leaky import Unet_leaky
+from LoaderPACK.Unet import Unet
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
@@ -49,6 +49,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
-model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+model = Unet(n_channels=1, n_classes=2)
+x = torch.load(f"C:/Users/Marc/Desktop/networks/SGD_net1.pt")
+model.load_state_dict(x)
+model.to(device)
 
 val_tester(run = "1", network = "2", model = model, lossFunc = lossFunc, device = device)

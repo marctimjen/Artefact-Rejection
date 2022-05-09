@@ -389,7 +389,6 @@ class testload_5min(Dataset):
             exp_nr += 1
             shp = ind[3]
             for chan in range(shp[0]): # number of channels
-                print(chan)
                 for cut_point in range(first_drop, shp[1], 5*60*200): # cut the experiment
 
                     clear_point = 0 # if the series is not long enough this is used
@@ -398,9 +397,9 @@ class testload_5min(Dataset):
                         clear_point = cut_point + w
                         inp = torch.zeros(5*60*200)
                         tar = torch.zeros(5*60*200)
-                        inp[:w] = torch.Tensor(self.input_data[exp_nr, chan, cut_point:shp[1]]).clone().detach().requires_grad_(True)
+                        inp[:w] = torch.Tensor(self.input_data[exp_nr, chan, cut_point:shp[1]]).clone().detach()
                         inp = torch.tensor(inp).view(1, 60*5*200)
-                        tar[:w] = torch.Tensor(self.target_data[exp_nr, chan, cut_point:shp[1]]).clone().detach().requires_grad_(True)
+                        tar[:w] = torch.Tensor(self.target_data[exp_nr, chan, cut_point:shp[1]]).clone().detach()
                         tar = torch.tensor(tar).view(1, 60*5*200)
                         # if there is not enough data, the point "clear_point"
                         # will be the position on which data is no longer
@@ -409,9 +408,9 @@ class testload_5min(Dataset):
                         # the model, since this is not "true" data
                     else:
                         inp = self.input_data[exp_nr, chan, cut_point:cut_point+60*5*200]
-                        inp = torch.tensor(inp).view(1, 60*5*200)
+                        inp = torch.tensor(inp).view(1, 60*5*200).clone().detach()
                         tar = self.target_data[exp_nr, chan, cut_point:cut_point+60*5*200]
-                        tar = torch.tensor(tar).view(1, 60*5*200)
+                        tar = torch.tensor(tar).view(1, 60*5*200).clone().detach()
 
                     yield inp, tar, (exp_nr, chan, cut_point, clear_point)
 
