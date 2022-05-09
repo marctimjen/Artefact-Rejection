@@ -17,7 +17,7 @@ val_load_file = testload_5min(path = "/home/tyson/data_cutoff/val_model_data",
 
 val_loader = torch.utils.data.DataLoader(val_load_file,
                                                 batch_size=1,
-                                                shuffle=True,
+                                                shuffle=False,
                                                 num_workers=0)
 j = 0
 for i in val_loader:
