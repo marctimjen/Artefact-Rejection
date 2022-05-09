@@ -1,0 +1,2 @@
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 43.1, "step": null, "ts": 1652078215.0327413}]}, "version": 1}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 5.6485595703125, "step": null, "ts": 1652078215.0327413}]}, "version": 2}

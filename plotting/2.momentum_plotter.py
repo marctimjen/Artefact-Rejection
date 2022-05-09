@@ -7,7 +7,7 @@ token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-290"
+    run="AR1-293"
 ) # SGD 1
 
 # 287 - 286 - 285
@@ -27,7 +27,7 @@ token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-289"
+    run="AR1-292"
 ) # SGD 2
 
 
@@ -46,7 +46,7 @@ token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-288"
+    run="AR1-291"
 ) # SGD 3
 
 

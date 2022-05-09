@@ -346,3 +346,93 @@ class shuffle_5min(Dataset):
         tar = tar.to(self.device)
         self.clear_ram(idx)
         return inp, tar, chan
+
+
+
+class testload_5min(Dataset):
+    """
+    This dataloader loads random 5 minute intervals from a random patient.
+    """
+    def __init__(self, path: str, series_dict: str, size: tuple, device):
+        """
+        Args:
+            path (str): path to the input & target folder.
+            series_dict (list): name of dict for data.
+            size : (number of experiments, number of max. channels, longest series)
+            device (class 'torch.device'): which pytorch device the data should
+            be sent to.
+        """
+
+        self.device = device
+        self.size = size
+        self.path = path
+
+        with open(path + "/" + series_dict, 'rb') as handle:
+            self.s_dict = pickle.load(handle)
+
+        self.input_data = np.memmap(self.path + "/model_input.dat", dtype='float32', mode='r', shape=self.size)
+        self.target_data = np.memmap(self.path + "/model_target.dat", dtype='float32', mode='r', shape=self.size)
+
+        prop = [] # list with probabilities
+
+        ss = 0 # sum over all the batches
+        for val in self.s_dict.values():
+            prop.append(val[2])
+            ss += val[2]
+
+        self.prop = np.array(prop) / ss
+        self.length = ss
+
+
+    def load_data(self, s_dict, first_drop = 200*30):
+        exp_nr = -1
+        for ind in s_dict.values():
+            exp_nr += 1
+            shp = [3]
+            for chan in range(shp[0]): # number of channels
+                for cut_point in range(first_drop, shp[1], 5*60*200): # cut the experiment
+
+                    clear_point = None # if the series is not long enough this is used
+
+                    if (w := (shp[1] - cut_point)) < 5*60*200: # There is not enough data!
+                        clear_point = cut_point + w
+                        inp = torch.zeros(5*60*200)
+                        tar = torch.zeros(5*60*200)
+                        inp[:w] = self.input_data[exp_nr, chan, cut_point:]
+                        inp = torch.tensor(inp).view(1, 60*5*200)
+                        tar[:w] = self.target_data[exp_nr, chan, cut_point:]
+                        tar = torch.tensor(tar).view(1, 60*5*200)
+                        # if there is not enough data, the point "clear_point"
+                        # will be the position on which data is no longer
+                        # generated from the experiment. Thus the range:
+                        # tar[clear_point:] should not be used for evalutaing
+                        # the model, since this is not "true" data
+
+                    else:
+                        inp = self.input_data[exp_nr, chan, cut_point:cut_point+60*5*200]
+                        inp = torch.tensor(inp).view(1, 60*5*200)
+                        tar = self.target_data[exp_nr, chan, cut_point:cut_point+60*5*200]
+                        tar = torch.tensor(tar).view(1, 60*5*200)
+
+                    yield inp, tar, (exp_nr, chan, cut_point, clear_point)
+
+
+    def clear_ram(self, index):
+        """
+        This function is for clearing the ram.
+        """
+        if index % 1000 == 0:
+            del self.input_data
+            del self.target_data
+            self.input_data = np.memmap(self.path + "/model_input.dat", dtype='float32', mode='r', shape=self.size)
+            self.target_data = np.memmap(self.path + "/model_target.dat", dtype='float32', mode='r', shape=self.size)
+
+    def __len__(self):
+        return self.length
+
+    def __getitem__(self, idx):
+        inp, tar, meta = next(self.gen)
+        inp = inp.to(self.device)
+        tar = tar.to(self.device)
+        self.clear_ram(idx)
+        return inp, tar, meta
