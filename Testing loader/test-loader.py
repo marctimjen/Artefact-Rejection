@@ -19,6 +19,9 @@ val_loader = torch.utils.data.DataLoader(val_load_file,
                                                 batch_size=1,
                                                 shuffle=True,
                                                 num_workers=0)
-
+j = 0
 for i in val_loader:
+    j += 1
     print(i)
+
+print("Total series loaded:", j)
