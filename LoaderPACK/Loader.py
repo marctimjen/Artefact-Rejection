@@ -383,6 +383,8 @@ class testload_5min(Dataset):
         self.prop = np.array(prop) / ss
         self.length = ss
 
+        self.gen = self.load_data(self.s_dict)
+
 
     def load_data(self, s_dict, first_drop = 200*30):
         exp_nr = -1
