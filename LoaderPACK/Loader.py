@@ -392,6 +392,7 @@ class testload_5min(Dataset):
             exp_nr += 1
             shp = ind[3]
             for chan in range(shp[0]): # number of channels
+                print(chan)
                 for cut_point in range(first_drop, shp[1], 5*60*200): # cut the experiment
 
                     clear_point = 0 # if the series is not long enough this is used
@@ -409,7 +410,6 @@ class testload_5min(Dataset):
                         # generated from the experiment. Thus the range:
                         # tar[clear_point:] should not be used for evalutaing
                         # the model, since this is not "true" data
-
                     else:
                         inp = self.input_data[exp_nr, chan, cut_point:cut_point+60*5*200]
                         inp = torch.tensor(inp).view(1, 60*5*200)
