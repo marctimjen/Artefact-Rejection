@@ -400,9 +400,9 @@ class testload_5min(Dataset):
                         clear_point = cut_point + w
                         inp = torch.zeros(5*60*200)
                         tar = torch.zeros(5*60*200)
-                        inp[:w] = self.input_data[exp_nr, chan, cut_point:]
+                        inp[:w] = torch.Tensor(self.input_data[exp_nr, chan, cut_point:])
                         inp = torch.tensor(inp).view(1, 60*5*200)
-                        tar[:w] = self.target_data[exp_nr, chan, cut_point:]
+                        tar[:w] = torch.Tensor(self.target_data[exp_nr, chan, cut_point:])
                         tar = torch.tensor(tar).view(1, 60*5*200)
                         # if there is not enough data, the point "clear_point"
                         # will be the position on which data is no longer
