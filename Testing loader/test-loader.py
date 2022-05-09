@@ -21,6 +21,7 @@ val_loader = torch.utils.data.DataLoader(val_load_file,
                                                 num_workers=0)
 j = 0
 for i in val_loader:
+    print(i)
     j += 1
 
 print("Total series loaded:", j)
