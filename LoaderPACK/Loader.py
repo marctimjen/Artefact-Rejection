@@ -403,7 +403,7 @@ class testload_5min(Dataset):
                         print("cut_point", cut_point)
                         print("len", shp[1])
                         print()
-                        print(len(torch.Tensor(self.input_data[exp_nr, chan, cut_point:])))
+                        print(len(torch.Tensor(self.input_data[exp_nr, chan, cut_point:shp[1]])))
                         print(w)
                         inp[:w] = torch.Tensor(self.input_data[exp_nr, chan, cut_point:])
                         inp = torch.tensor(inp).view(1, 60*5*200)
