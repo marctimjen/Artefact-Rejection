@@ -109,6 +109,14 @@ class OutConv(nn.Module): # light-blue arrow
         """
         super(OutConv, self).__init__()
         self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=1)
+
+        # implementer LSTM eller GRU HER!! <- før pseudo!!
+        # Bidirectional lag - så den kører begge veje.
+        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
+        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
+
+        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
+
         self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
         #self.sig = nn.Sigmoid()
 
