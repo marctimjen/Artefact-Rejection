@@ -101,14 +101,39 @@ class OutConv(nn.Module): # light-blue arrow
     function that does the 1x1 convolution and makes the channels fit to the
     desired output.
     """
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, batch_size, device):
         """
         Args:
             in_channels (int): The amount of channels of the input.
             out_channels (int): The amount of channels the output tensor gets.
         """
         super(OutConv, self).__init__()
-        self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=1)
+        self.conv = nn.Conv1d(in_channels, 1, kernel_size=1)
+
+        input_size = 2 # the number of series
+        hidden_size = 2 # hyper para
+
+        D = 2 # bc. bi = True
+        num_layers = 1 # default
+
+
+        proj_size = 1 # This allows us to rechive two values
+        hout = proj_size # since proj_size > 0
+
+
+        seq_len = 200*5*60 # length of the sequence
+
+
+        self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True, \
+                            bidirectional=True, proj_size = proj_size)
+                            # (input_size, hidden)
+
+        self.h = torch.randn(D*num_layers, batch_size, hout).to(device)
+        # (D * num_layers, batch_size, hidden)
+
+        self.c = torch.randn(D*num_layers, batch_size, hidden_size).to(device)
+        # (D * num_layers, batch_size, hidden)
+
 
         # implementer LSTM eller GRU HER!! <- før pseudo!!
         # Bidirectional lag - så den kører begge veje.
@@ -120,9 +145,13 @@ class OutConv(nn.Module): # light-blue arrow
         self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
         #self.sig = nn.Sigmoid()
 
-    def forward(self, x):
+    def forward(self, x, inp):
         x = self.conv(x)
-        return self.soft(x)
+        stack_att = torch.stack((x, inp), dim = 3)
+        stack_att = torch.squeeze(stack_att, 1)
+
+        out, (self.h, self.c) = self.lstm(stack_att, (self.h, self.c))
+        return self.soft(out)
 
 
 #class Unet(nn.Module):
@@ -205,16 +234,13 @@ class Unet_leaky(nn.Module):
     """
     This class is the network. So it combines the subparts listed above.
     """
-    def __init__(self, n_channels, n_classes):
+    def __init__(self, n_channels, batch_size, device):
         """
         Args:
             n_channels (int): The amount of channels of the input.
             n_classes (int): The amount of channels the output tensor gets.
         """
         super(Unet_leaky, self).__init__()
-
-        self.n_channels = n_channels
-        self.n_classes = n_classes
 
         self.inc = Double_Convolution(n_channels, 20)
         self.down1 = Down_Scale(20, 40)
@@ -223,15 +249,15 @@ class Unet_leaky(nn.Module):
         self.up1 = Up_Scale(160, 80)
         self.up2 = Up_Scale(80, 40)
         self.up3 = Up_Scale(40, 20, up_conv = True)
-        self.outc = OutConv(20, n_classes)
+        self.outc = OutConv(20, batch_size, device)
 
-    def forward(self, x):
-        x1 = self.inc(x)
+    def forward(self, inp):
+        x1 = self.inc(inp)
         x2 = self.down1(x1)
         x3 = self.down2(x2)
         x4 = self.down3(x3)
         x = self.up1(x4, x3)
         x = self.up2(x, x2)
         x = self.up3(x, x1)
-        output = self.outc(x)
+        output = self.outc(x, inp)
         return output
