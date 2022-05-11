@@ -13,12 +13,11 @@ import random
 import sys
 sys.path.append("..") # adds higher directory to python modules path
 
-from LoaderPACK.Unet_leaky import Unet_leaky
+from LoaderPACK.Unet_leaky import Unet_leaky, Unet_leaky_lstm
 from LoaderPACK.Loader import shuffle_5min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
-import matplotlib.pyplot as plt
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -38,7 +37,7 @@ train_path = "/home/tyson/data/train_model_data"
 torch.autograd.set_detect_anomaly(True)
 
 batch_size = 2
-n_samples = 100
+n_samples = 2
 
 
 train_load_file = shuffle_5min(path = train_path,
@@ -58,13 +57,14 @@ train_loss = []
 
 train_avg = []
 
-model = Unet_leaky(n_channels=1, batch_size=batch_size, device=device).to(device)
+model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+model2 = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
 
 optimizer = SGD(model.parameters(), lr=1.6)
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
-nEpoch = 5
+nEpoch = 1
 
 
 for iEpoch in range(nEpoch):
@@ -73,6 +73,9 @@ for iEpoch in range(nEpoch):
     for series in train_loader:
         ind, tar, chan = series
         y_pred = model(ind)
+        print(y_pred.shape)
+        y_pred = model2(ind)
+        print(y_pred.shape)
         model.zero_grad()
         pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
         target = tar.view(-1).type(it)
@@ -80,9 +83,11 @@ for iEpoch in range(nEpoch):
         loss.backward(retain_graph=True)
         optimizer.step()
         train_loss.append(loss.item())
+        break
 
     train_avg.append(np.mean(train_loss))
     train_loss = []
+
 
 print(train_avg)
 
