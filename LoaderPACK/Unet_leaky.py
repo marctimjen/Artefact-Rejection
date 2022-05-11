@@ -159,6 +159,36 @@ class OutConv(nn.Module): # light-blue arrow
         return self.soft(out)
 
 
+class OutConv(nn.Module): # light-blue arrow
+    """
+    This class constitute light-blue arrows in the U-net figure. So this is the
+    function that does the 1x1 convolution and makes the channels fit to the
+    desired output.
+    """
+    def __init__(self, in_channels, n_classes):
+        """
+        Args:
+            in_channels (int): The amount of channels of the input.
+            out_channels (int): The amount of channels the output tensor gets.
+        """
+        super(OutConv, self).__init__()
+        self.conv = nn.Conv1d(in_channels, n_classes, kernel_size=1)
+
+
+        # implementer LSTM eller GRU HER!! <- før pseudo!!
+        # Bidirectional lag - så den kører begge veje.
+        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
+        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
+
+        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
+
+        self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
+        #self.sig = nn.Sigmoid()
+
+    def forward(self, x):
+        out = self.conv(x)
+        return self.soft(out)
+
 #class Unet(nn.Module):
 #    """
 #    This class is the network. So it combines the subparts listed above.
@@ -235,7 +265,7 @@ class OutConv(nn.Module): # light-blue arrow
 #         return output
 
 
-class Unet_leaky(nn.Module):
+class Unet_leaky_lstm(nn.Module):
     """
     This class is the network. So it combines the subparts listed above.
     """
@@ -265,4 +295,37 @@ class Unet_leaky(nn.Module):
         x = self.up2(x, x2)
         x = self.up3(x, x1)
         output = self.outc(x, inp)
+        return output
+
+
+class Unet_leaky(nn.Module):
+    """
+    This class is the network. So it combines the subparts listed above.
+    """
+    def __init__(self, n_channels, n_classes):
+        """
+        Args:
+            n_channels (int): The amount of channels of the input.
+            n_classes (int): The amount of channels the output tensor gets.
+        """
+        super(Unet_leaky, self).__init__()
+
+        self.inc = Double_Convolution(n_channels, 20)
+        self.down1 = Down_Scale(20, 40)
+        self.down2 = Down_Scale(40, 80)
+        self.down3 = Down_Scale(80, 160)
+        self.up1 = Up_Scale(160, 80)
+        self.up2 = Up_Scale(80, 40)
+        self.up3 = Up_Scale(40, 20, up_conv = True)
+        self.outc = OutConv(20, n_classes)
+
+    def forward(self, x):
+        x1 = self.inc(x)
+        x2 = self.down1(x1)
+        x3 = self.down2(x2)
+        x4 = self.down3(x3)
+        x = self.up1(x4, x3)
+        x = self.up2(x, x2)
+        x = self.up3(x, x1)
+        output = self.outc(x)
         return output
