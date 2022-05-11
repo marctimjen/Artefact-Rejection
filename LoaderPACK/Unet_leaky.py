@@ -275,7 +275,7 @@ class Unet_leaky_lstm(nn.Module):
             n_channels (int): The amount of channels of the input.
             n_classes (int): The amount of channels the output tensor gets.
         """
-        super(Unet_leaky, self).__init__()
+        super(Unet_leaky_lstm, self).__init__()
 
         self.inc = Double_Convolution(n_channels, 20)
         self.down1 = Down_Scale(20, 40)
