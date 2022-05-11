@@ -32,12 +32,12 @@ else:
     it = torch.cuda.LongTensor
 
 
-train_path = "C:/Users/Marc/Desktop/model_data/train_model_data"
-# val_path = "/home/tyson/data/val_model_data"
+# train_path = "C:/Users/Marc/Desktop/model_data/train_model_data"
+train_path = "/home/tyson/data/train_model_data"
 
 torch.autograd.set_detect_anomaly(True)
 
-batch_size = 2
+batch_size = 1
 n_samples = 6
 
 
