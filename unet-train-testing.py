@@ -62,13 +62,14 @@ optimizer = SGD(model.parameters(), lr=1.6)
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
-nEpoch = 10
+nEpoch = 5
 
 
 for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
 
     for series in train_loader:
+        print(series)
         ind, tar, chan = series
         y_pred = model(ind)
         model.zero_grad()
