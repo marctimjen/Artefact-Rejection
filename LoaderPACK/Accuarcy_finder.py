@@ -10,8 +10,9 @@ def Accuarcy_find(pred, tar, device):
     else:
         ft = torch.cuda.FloatTensor
 
-
+    print(tar)
     tar = tar.view(-1, tar.shape[-1])
+    print(tar)
     art_pred = pred[:, 1] >= 0.5 # what the model predicts as artefacts
 
     fp = torch.sum(art_pred[tar == 0] == True) # false positive, tar = 0 and pred = 1
