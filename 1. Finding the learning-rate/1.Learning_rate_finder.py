@@ -118,6 +118,12 @@ def net_SGD1(device, fl, it, train_path, val_path):
             optimizer.step()
             train_loss.append(loss.item())
 
+            print("y_rped", y_pred)
+            print(y_pred.shape)
+            print()
+            print("tar", tar)
+            print(tar.shape)
+
             acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
             train_acc = torch.cat((train_acc, acc.view(1)))
             t_mat = t_mat + mat
