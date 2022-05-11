@@ -68,8 +68,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    # model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
-    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
+    # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=0.00001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
@@ -107,9 +107,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             ind, tar, chan = series
             y_pred = model(ind)
-            model.zero_grad()
+            y_perd = y_pred.transpose(1, 2)
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-            print("pred", pred.shape)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
             if first_train:
@@ -119,11 +118,6 @@ def net_SGD1(device, fl, it, train_path, val_path):
             optimizer.step()
             train_loss.append(loss.item())
 
-            print("y_rped", y_pred)
-            print(y_pred.shape)
-            print()
-            print("tar", tar)
-            print(tar.shape)
 
             acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
             train_acc = torch.cat((train_acc, acc.view(1)))
