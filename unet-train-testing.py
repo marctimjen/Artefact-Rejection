@@ -71,13 +71,15 @@ for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
 
     for series in train_loader:
-        ind, tar, chan = series
+        #ind, tar, chan = series
+        ind = torch.rand((2, 1, 60))
 
-        print(ind)
-        print(ind.shape)
-
-        y_pred = model(ind)
+        y_pred1 = model(ind)
+        print(y_pred1)
         y_pred = model2(ind)
+        print(y_pred)
+        print(y_pred1.shape)
+        print(y_pred.shape)
 
         model.zero_grad()
         pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
