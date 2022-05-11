@@ -111,7 +111,7 @@ class OutConv(nn.Module): # light-blue arrow
         self.conv = nn.Conv1d(in_channels, 1, kernel_size=1)
 
         input_size = 2 # the number of series
-        hidden_size = 2 # hyper para
+        hidden_size = 5 # hyper para
 
         D = 2 # bc. bi = True
         num_layers = 1 # default
