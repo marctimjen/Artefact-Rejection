@@ -72,7 +72,7 @@ for iEpoch in range(nEpoch):
 
     for series in train_loader:
         #ind, tar, chan = series
-        ind = torch.rand((2, 1, 60)).to(device)
+        ind = torch.rand((2, 1, 600)).to(device)
 
         y_pred1 = model(ind)
         print(y_pred1)
