@@ -64,7 +64,7 @@ optimizer = SGD(model.parameters(), lr=1.6)
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
-nEpoch = 1
+nEpoch = 10
 
 
 for iEpoch in range(nEpoch):
@@ -74,10 +74,7 @@ for iEpoch in range(nEpoch):
         ind, tar, chan = series
         # ind = torch.rand((2, 1, 600)).to(device)
 
-        y_pred1 = model(ind)
         y_pred = model2(ind)
-        print(y_pred1.shape)
-        print(y_pred.shape)
 
         model.zero_grad()
         pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
@@ -86,7 +83,6 @@ for iEpoch in range(nEpoch):
         loss.backward(retain_graph=True)
         optimizer.step()
         train_loss.append(loss.item())
-        break
 
     train_avg.append(np.mean(train_loss))
     train_loss = []
