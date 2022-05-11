@@ -13,7 +13,7 @@ import random
 import sys
 sys.path.append("..") # adds higher directory to python modules path
 
-from LoaderPACK.Unet_leaky import Unet_leaky #, Unet_leaky_lstm
+from LoaderPACK.Unet_leaky import Unet_leaky, Unet_leaky_lstm
 from LoaderPACK.Loader import shuffle_5min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
@@ -68,7 +68,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    model = Unet_leaky(n_channels=1, batch_size=batch_size, device=device).to(device)
+    model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
     # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = SGD(model.parameters(), lr=0.00001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
@@ -214,7 +214,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    model = Unet_leaky(n_channels=1, batch_size=batch_size, device=device).to(device)
+    model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
     # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = Adam(model.parameters(), lr=0.0000000000001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
