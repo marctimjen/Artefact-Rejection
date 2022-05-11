@@ -73,6 +73,7 @@ for iEpoch in range(nEpoch):
     for series in train_loader:
         ind, tar, chan = series
         y_pred = model(ind)
+        print(y_pred)
         print(y_pred.shape)
         y_pred = model2(ind)
         print(y_pred.shape)
