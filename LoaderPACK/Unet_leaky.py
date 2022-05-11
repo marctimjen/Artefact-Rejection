@@ -156,8 +156,6 @@ class OutConv_lstm(nn.Module): # light-blue arrow
 
         out = torch.stack((ss, minusss), dim = 1)
 
-        print("lstm", out.shape)
-
         return self.soft(out)
 
 
@@ -189,7 +187,6 @@ class OutConv(nn.Module): # light-blue arrow
 
     def forward(self, x):
         out = self.conv(x)
-        print("lstm", out.shape)
         return self.soft(out)
 
 #class Unet(nn.Module):
