@@ -150,7 +150,8 @@ class OutConv(nn.Module): # light-blue arrow
         stack_att = torch.stack((x, inp), dim = 3)
         stack_att = torch.squeeze(stack_att, 1)
 
-        out, (self.h, self.c) = self.lstm(stack_att, (self.h, self.c))
+        out, (h, c) = self.lstm(stack_att, (self.h, self.c))
+        print(h)
         return self.soft(out)
 
 
