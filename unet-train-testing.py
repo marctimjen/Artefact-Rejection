@@ -84,7 +84,7 @@ for iEpoch in range(nEpoch):
     train_avg.append(np.mean(train_loss))
     train_loss = []
 
-print(train_loss)
+print(train_avg)
 
 
 
