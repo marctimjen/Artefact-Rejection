@@ -72,11 +72,13 @@ for iEpoch in range(nEpoch):
 
     for series in train_loader:
         ind, tar, chan = series
-        y_pred = model(ind)
 
+        print(ind)
+        print(ind.shape)
+
+        y_pred = model(ind)
         y_pred = model2(ind)
-        print(y_pred)
-        print(y_pred.shape)
+
         model.zero_grad()
         pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
         target = tar.view(-1).type(it)
