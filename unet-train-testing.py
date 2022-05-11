@@ -18,7 +18,7 @@ from LoaderPACK.Loader import shuffle_5min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
-
+import matplotlib.pyplot as plt
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -37,8 +37,8 @@ train_path = "/home/tyson/data/train_model_data"
 
 torch.autograd.set_detect_anomaly(True)
 
-batch_size = 1
-n_samples = 6
+batch_size = 2
+n_samples = 10
 
 
 train_load_file = shuffle_5min(path = train_path,
@@ -62,7 +62,7 @@ optimizer = SGD(model.parameters(), lr=1.6)
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
-nEpoch = 1
+nEpoch = 10
 
 
 for iEpoch in range(nEpoch):
@@ -80,7 +80,7 @@ for iEpoch in range(nEpoch):
         train_loss.append(loss.item())
 
 
-
+print(train_loss)
 
 
 
