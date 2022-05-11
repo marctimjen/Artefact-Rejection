@@ -107,10 +107,11 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             ind, tar, chan = series
             y_pred = model(ind)
-            y_perd = y_pred.transpose(1, 2)
+            model.zero_grad()
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
+            loss.backward()
             if first_train:
                 run[f"network_SGD/train_loss_pr_file"].log(loss)
                 first_train = False
@@ -215,8 +216,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    # model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
-    model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+    model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
+    # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
     optimizer = Adam(model.parameters(), lr=0.0000000000001)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
