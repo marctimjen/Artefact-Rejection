@@ -95,7 +95,7 @@ class Up_Scale(nn.Module): # green arrow + double_conv
         x = self.doub(x)
         return x
 
-class OutConv(nn.Module): # light-blue arrow
+class OutConv_lstm(nn.Module): # light-blue arrow
     """
     This class constitute light-blue arrows in the U-net figure. So this is the
     function that does the 1x1 convolution and makes the channels fit to the
@@ -284,7 +284,7 @@ class Unet_leaky_lstm(nn.Module):
         self.up1 = Up_Scale(160, 80)
         self.up2 = Up_Scale(80, 40)
         self.up3 = Up_Scale(40, 20, up_conv = True)
-        self.outc = OutConv(20, batch_size, device)
+        self.outc = OutConv_lstm(20, batch_size, device)
 
     def forward(self, inp):
         x1 = self.inc(inp)
