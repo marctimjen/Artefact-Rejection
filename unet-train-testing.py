@@ -69,7 +69,6 @@ for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
 
     for series in train_loader:
-        print(series)
         ind, tar, chan = series
         y_pred = model(ind)
         model.zero_grad()
@@ -80,6 +79,7 @@ for iEpoch in range(nEpoch):
         optimizer.step()
         train_loss.append(loss.item())
 
+    print(series)
 
 print(train_loss)
 
