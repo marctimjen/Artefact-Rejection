@@ -75,7 +75,6 @@ for iEpoch in range(nEpoch):
         y_pred = model(ind)
 
         y_pred = model2(ind)
-        y_pred = y_pred.view(2, 2, 60000)
         print(y_pred)
         print(y_pred.shape)
         model.zero_grad()
