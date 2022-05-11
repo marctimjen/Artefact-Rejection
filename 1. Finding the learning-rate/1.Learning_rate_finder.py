@@ -111,7 +111,6 @@ def net_SGD1(device, fl, it, train_path, val_path):
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
-            loss.backward()
             if first_train:
                 run[f"network_SGD/train_loss_pr_file"].log(loss)
                 first_train = False
