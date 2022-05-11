@@ -154,7 +154,7 @@ class OutConv_lstm(nn.Module): # light-blue arrow
         ss = torch.sum(out, 2)
         minusss = ss - 1
 
-        out = torch.stack((ss, minusss), dim = 2)
+        out = torch.stack((ss, minusss), dim = 1)
 
         print("lstm", out.shape)
 
