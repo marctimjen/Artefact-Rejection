@@ -56,6 +56,8 @@ train_loader = torch.utils.data.DataLoader(train_load_file,
 
 train_loss = []
 
+train_avg = []
+
 model = Unet_leaky(n_channels=1, batch_size=batch_size, device=device).to(device)
 
 optimizer = SGD(model.parameters(), lr=1.6)
@@ -79,7 +81,8 @@ for iEpoch in range(nEpoch):
         optimizer.step()
         train_loss.append(loss.item())
 
-    print(series)
+    train_avg.append(np.mean(train_loss))
+    train_loss = []
 
 print(train_loss)
 
