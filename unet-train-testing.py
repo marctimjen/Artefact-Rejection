@@ -38,7 +38,7 @@ train_path = "/home/tyson/data/train_model_data"
 torch.autograd.set_detect_anomaly(True)
 
 batch_size = 2
-n_samples = 10
+n_samples = 100
 
 
 train_load_file = shuffle_5min(path = train_path,
