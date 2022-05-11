@@ -156,6 +156,8 @@ class OutConv_lstm(nn.Module): # light-blue arrow
 
         out = torch.stack((ss, minusss), dim = 2)
 
+        print(out)
+
         return self.soft(out)
 
 
