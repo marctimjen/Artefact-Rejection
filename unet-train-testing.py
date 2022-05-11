@@ -62,7 +62,7 @@ optimizer = SGD(model.parameters(), lr=1.6)
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
-nEpoch = 10
+nEpoch = 1
 
 
 for iEpoch in range(nEpoch):
