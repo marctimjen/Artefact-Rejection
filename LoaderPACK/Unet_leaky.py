@@ -128,10 +128,10 @@ class OutConv_lstm(nn.Module): # light-blue arrow
                             bidirectional=True, proj_size = proj_size)
                             # (input_size, hidden)
 
-        self.h = torch.randn(D*num_layers, batch_size, hout).to(device)
+        self.h = torch.zeros(D*num_layers, batch_size, hout).to(device)
         # (D * num_layers, batch_size, hidden)
 
-        self.c = torch.randn(D*num_layers, batch_size, hidden_size).to(device)
+        self.c = torch.zeros(D*num_layers, batch_size, hidden_size).to(device)
         # (D * num_layers, batch_size, hidden)
 
 
