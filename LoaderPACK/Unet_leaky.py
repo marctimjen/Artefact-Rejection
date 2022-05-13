@@ -151,6 +151,8 @@ class OutConv_lstm(nn.Module): # light-blue arrow
         stack_att = torch.squeeze(stack_att, 1)
         out, _ = self.lstm(stack_att, (self.h, self.c))
 
+        print(out)
+
         ss = torch.sum(out, 2)
         minusss = ss - 1
 
@@ -295,7 +297,6 @@ class Unet_leaky_lstm(nn.Module):
         x = self.up2(x, x2)
         x = self.up3(x, x1)
         output = self.outc(x, inp)
-        print(output)
         return output
 
 
