@@ -734,7 +734,7 @@ if __name__ == '__main__':
         cuda_dict[i] = []
 
     for i in range(len(networks)):
-        cuda_dict[i % core].append(networks[i])
+        cuda_dict[1].append(networks[i]) # i % core
 
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
