@@ -180,7 +180,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_valid_loss[-1]
-
+            print(sm_loss)
             smooth_valid_loss.append(sm_loss)
             run[f"network_SGD/smooth_val_loss_pr_file"].log(sm_loss)
 
