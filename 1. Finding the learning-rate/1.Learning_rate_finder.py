@@ -252,7 +252,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
                                    reduction = "mean")
 
 
-    lam = lambda x: math.exp(x*math.log(base_lr / max_lr) \
+    lam = lambda x: math.exp(x*math.log(max_lr / base_lr) \
                                 / (nEpoch*n_samples / batch_size))
     scheduler = LambdaLR(optimizer, lam)
     # implement the exponential learning rate
@@ -589,7 +589,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
-    lam = lambda x: math.exp(x*math.log(base_lr / max_lr) \
+    lam = lambda x: math.exp(x*math.log(max_lr / base_lr) \
                                 / (nEpoch*n_samples / batch_size))
     scheduler = LambdaLR(optimizer, lam)
     # implement the exponential learning rate
@@ -726,7 +726,7 @@ if __name__ == '__main__':
 
     core = 1
 
-    networks = [net_SGD2, net_ADAM2] # net_SGD1, net_ADAM1, 
+    networks = [net_SGD2, net_ADAM2] # net_SGD1, net_ADAM1,
 
     cuda_dict = dict()
     for i in range(1, core + 1):
