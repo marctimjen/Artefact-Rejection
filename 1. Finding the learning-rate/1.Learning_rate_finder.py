@@ -70,9 +70,9 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    nEpoch = 10
+    nEpoch = 5
     base_lr = 0.00001 # where we start the learning rate
-    max_lr = 5 # where the learning rate is supposed to end
+    max_lr = 4 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -240,9 +240,9 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    nEpoch = 10
+    nEpoch = 5
     base_lr = 0.00001 # where we start the learning rate
-    max_lr = 5 # where the learning rate is supposed to end
+    max_lr = 4 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -407,9 +407,9 @@ def net_ADAM1(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    nEpoch = 10
+    nEpoch = 5
     base_lr = 0.0000000000001 # where we start the learning rate
-    max_lr = 3 # where the learning rate is supposed to end
+    max_lr = 1.5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -578,9 +578,9 @@ def net_ADAM2(device, fl, it, train_path, val_path):
 
     avg_train_loss, avg_valid_loss = [], []
 
-    nEpoch = 10
+    nEpoch = 5
     base_lr = 0.0000000000001 # where we start the learning rate
-    max_lr = 3 # where the learning rate is supposed to end
+    max_lr = 1.5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
