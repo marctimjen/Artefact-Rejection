@@ -1,15 +1,15 @@
-import torch
+import matplotlib.pyplot as plt
+import math
+
+samples = 400
+epochs = 10
+
+end_lr = 10
+start_lr = 1
 
 
-v = torch.rand((3, 6, 2))
 
-# Skal laves til (10, 2, 60000)
 
-# pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
 
-ef = v.transpose(1, 2)
-
-print(v)
-
-print(ef)
-print(ef.shape)
+plt.plot([a(i) for i in range(400*10)])
+plt.show()
