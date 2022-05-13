@@ -9,6 +9,7 @@ from torch.optim.lr_scheduler import CyclicLR, LambdaLR
 import torch.multiprocessing as mp
 import numpy as np
 import random
+import math
 
 import sys
 sys.path.append("..") # adds higher directory to python modules path
@@ -204,7 +205,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 50 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -542,7 +543,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 50 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -725,7 +726,7 @@ if __name__ == '__main__':
 
     core = 1
 
-    networks = [net_SGD1, net_ADAM1, net_SGD2, net_ADAM2]
+    networks = [net_SGD2, net_ADAM2] # net_SGD1, net_ADAM1, 
 
     cuda_dict = dict()
     for i in range(1, core + 1):
