@@ -66,6 +66,7 @@ lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
 
 nEpoch = 10
 
+flag = False
 
 for iEpoch in range(nEpoch):
     print(f"Training epoch {iEpoch}")
@@ -83,6 +84,11 @@ for iEpoch in range(nEpoch):
         loss.backward(retain_graph=True)
         optimizer.step()
         train_loss.append(loss.item())
+
+        if flag:
+            break
+
+        flag = True
 
     train_avg.append(np.mean(train_loss))
     train_loss = []
