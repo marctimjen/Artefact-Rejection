@@ -176,13 +176,14 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             run[f"network_SGD/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
-            valid_loss = []
 
             sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_valid_loss[-1]
-            print(sm_loss)
+
             smooth_valid_loss.append(sm_loss)
             run[f"network_SGD/smooth_val_loss_pr_file"].log(sm_loss)
+
+            valid_loss = []
 
             run[f"network_SGD/val_acc_pr_file"].log(torch.mean(valid_acc))
             valid_acc = torch.tensor([]).to(device)
@@ -342,13 +343,14 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
             run[f"network_SGD/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
-            valid_loss = []
 
             sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_valid_loss[-1]
 
             smooth_valid_loss.append(sm_loss)
             run[f"network_SGD/smooth_val_loss_pr_file"].log(sm_loss)
+
+            valid_loss = []
 
             run[f"network_SGD/val_acc_pr_file"].log(torch.mean(valid_acc))
             valid_acc = torch.tensor([]).to(device)
@@ -511,13 +513,14 @@ def net_ADAM1(device, fl, it, train_path, val_path):
 
             run[f"network_ADAM/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
-            valid_loss = []
 
             sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_train_loss[-1]
 
             smooth_train_loss.append(sm_loss)
             run[f"network_ADAM/smooth_val_loss_pr_file"].log(sm_loss)
+
+            valid_loss = []
 
             run[f"network_ADAM/val_acc_pr_file"].log(torch.mean(valid_acc))
             valid_acc = torch.tensor([]).to(device)
@@ -678,13 +681,14 @@ def net_ADAM2(device, fl, it, train_path, val_path):
 
             run[f"network_ADAM/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
-            valid_loss = []
 
             sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_train_loss[-1]
 
             smooth_train_loss.append(sm_loss)
             run[f"network_ADAM/smooth_val_loss_pr_file"].log(sm_loss)
+
+            valid_loss = []
 
             run[f"network_ADAM/val_acc_pr_file"].log(torch.mean(valid_acc))
             valid_acc = torch.tensor([]).to(device)
