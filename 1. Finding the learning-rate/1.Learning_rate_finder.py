@@ -34,7 +34,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 50 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -63,6 +63,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
 
     valid_loss, train_loss = [], []
+    smooth_valid_loss, smooth_train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
 
@@ -70,7 +71,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     nEpoch = 10
     base_lr = 0.00001 # where we start the learning rate
-    max_lr = 3 # where the learning rate is supposed to end
+    max_lr = 5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -84,6 +85,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
                          cycle_momentum=False)
     # step_size_up is set so the learning rate is updated linearly
 
+    smooth = 0.05
+
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
               "loss_function":"CrossEntropyLoss",
@@ -92,7 +95,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
               "scheduler_cycle_momentum":False,
-              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
+              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1,
+              "smooting_loss":smooth}
 
     run[f"network_SGD/parameters"] = params
 
@@ -118,6 +122,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
             loss = lossFunc(pred, target)
             if first_train:
                 run[f"network_SGD/train_loss_pr_file"].log(loss)
+                run[f"network_SGD/smooth_train_loss_pr_file"].log(loss)
+                smooth_train_loss.append(loss.item())
                 first_train = False
             loss.backward()
             optimizer.step()
@@ -132,7 +138,12 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             run[f"network_SGD/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
+
             train_loss = []
+
+            sm_loss = loss.item() * smooth + (1-smooth) * smooth_train_loss[-1]
+            smooth_train_loss.append(sm_loss)
+            run[f"network_SGD/smooth_train_loss_pr_file"].log(sm_loss)
 
             run[f"network_SGD/train_acc_pr_file"].log(torch.mean(train_acc))
             train_acc = torch.tensor([]).to(device)
@@ -185,7 +196,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 50 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -221,7 +232,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
     nEpoch = 10
     base_lr = 0.00001 # where we start the learning rate
-    max_lr = 3 # where the learning rate is supposed to end
+    max_lr = 5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -236,13 +247,16 @@ def net_SGD2(device, fl, it, train_path, val_path):
     scheduler = LambdaLR(optimizer, lam)
     # implement the exponential learning rate
 
+    smooth = 0.05
+
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"Exponential",
-              "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr}
+              "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
+              "smooting_loss":smooth}
 
     run[f"network_SGD/parameters"] = params
 
@@ -268,6 +282,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
             loss = lossFunc(pred, target)
             if first_train:
                 run[f"network_SGD/train_loss_pr_file"].log(loss)
+                run[f"network_SGD/smooth_train_loss_pr_file"].log(loss)
+                smooth_train_loss.append(loss.item())
                 first_train = False
             loss.backward()
             optimizer.step()
@@ -283,6 +299,10 @@ def net_SGD2(device, fl, it, train_path, val_path):
             run[f"network_SGD/train_loss_pr_file"].log(
                                                   np.mean(np.array(train_loss)))
             train_loss = []
+
+            sm_loss = loss.item() * smooth + (1-smooth) * smooth_train_loss[-1]
+            smooth_train_loss.append(sm_loss)
+            run[f"network_SGD/smooth_train_loss_pr_file"].log(sm_loss)
 
             run[f"network_SGD/train_acc_pr_file"].log(torch.mean(train_acc))
             train_acc = torch.tensor([]).to(device)
@@ -335,7 +355,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 50 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -371,7 +391,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
 
     nEpoch = 10
     base_lr = 0.0000000000001 # where we start the learning rate
-    max_lr = 0.0025 # where the learning rate is supposed to end
+    max_lr = 3 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -384,7 +404,9 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                          step_size_up=nEpoch*(n_samples/batch_size)-1,
                          cycle_momentum=False)
 
-    # how often we update the learning rate
+    # step_size_up is set accordingly to how often we update the learning rate
+
+    smooth = 0.05
 
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
@@ -394,7 +416,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_cycle_momentum":False,
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1}
+              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1,
+              "smooting_loss":smooth}
 
     run[f"network_ADAM/parameters"] = params
 
@@ -420,6 +443,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
             loss.backward()
             if first_train:
                 run[f"network_ADAM/train_loss_pr_file"].log(loss)
+                run[f"network_ADAM/smooth_train_loss_pr_file"].log(loss)
+                smooth_train_loss.append(loss.item())
                 first_train = False
             optimizer.step()
             train_loss.append(loss.item())
@@ -435,6 +460,10 @@ def net_ADAM1(device, fl, it, train_path, val_path):
             run[f"network_ADAM/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
             train_loss = []
+
+            sm_loss = loss.item() * smooth + (1-smooth) * smooth_train_loss[-1]
+            smooth_train_loss.append(sm_loss)
+            run[f"network_ADAM/smooth_train_loss_pr_file"].log(sm_loss)
 
             run[f"network_ADAM/train_acc_pr_file"].log(torch.mean(train_acc))
             train_acc = torch.tensor([]).to(device)
@@ -488,7 +517,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 50 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -524,7 +553,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
 
     nEpoch = 10
     base_lr = 0.0000000000001 # where we start the learning rate
-    max_lr = 0.0025 # where the learning rate is supposed to end
+    max_lr = 3 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -538,13 +567,16 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     scheduler = LambdaLR(optimizer, lam)
     # implement the exponential learning rate
 
+    smooth = 0.05
+
     params = {"optimizer":"Adam", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"Exponential",
-              "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr}
+              "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
+              "smooting_loss":smooth}
 
     run[f"network_ADAM/parameters"] = params
 
@@ -570,6 +602,8 @@ def net_ADAM2(device, fl, it, train_path, val_path):
             loss.backward()
             if first_train:
                 run[f"network_ADAM/train_loss_pr_file"].log(loss)
+                run[f"network_ADAM/smooth_train_loss_pr_file"].log(loss)
+                smooth_train_loss.append(loss.item())
                 first_train = False
             optimizer.step()
             train_loss.append(loss.item())
@@ -585,6 +619,10 @@ def net_ADAM2(device, fl, it, train_path, val_path):
             run[f"network_ADAM/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
             train_loss = []
+
+            sm_loss = loss.item() * smooth + (1-smooth) * smooth_train_loss[-1]
+            smooth_train_loss.append(sm_loss)
+            run[f"network_ADAM/smooth_train_loss_pr_file"].log(sm_loss)
 
             run[f"network_ADAM/train_acc_pr_file"].log(torch.mean(train_acc))
             train_acc = torch.tensor([]).to(device)
@@ -651,7 +689,7 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    networks = [net_SGD1, net_ADAM1, net_SGD1, net_ADAM2]
+    networks = [net_SGD1, net_ADAM1, net_SGD2, net_ADAM2]
 
     cuda_dict = dict()
     for i in range(core):
