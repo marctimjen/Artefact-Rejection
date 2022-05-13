@@ -6,12 +6,12 @@ import torchvision.models as models
 
 resnet18 = models.resnet18()
 
-samples = 400
+samples = 500
 b_size = 10
 epochs = 10
 
-end_lr = 10
-start_lr = 1
+end_lr = 5
+start_lr = 0.00001
 
 lam = lambda x: math.exp(x * math.log(end_lr / start_lr) \
                         / (epochs * samples / b_size))
@@ -28,6 +28,8 @@ for i in range(epochs):
         ls.append(optimizer.param_groups[0]['lr'])
         scheduler.step()
 
+
+print(len(ls))
 
 plt.plot(ls)
 plt.show()
