@@ -181,9 +181,9 @@ def net_SGD1(device, fl, it, train_path, val_path):
             valid_loss = []
 
             sm_loss = np.mean(np.array(valid_loss)).item() * smooth \
-                        + (1-smooth) * smooth_train_loss[-1]
+                        + (1-smooth) * smooth_valid_loss[-1]
 
-            smooth_train_loss.append(sm_loss)
+            smooth_valid_loss.append(sm_loss)
             run[f"network_SGD/smooth_val_loss_pr_file"].log(sm_loss)
 
             run[f"network_SGD/val_acc_pr_file"].log(torch.mean(valid_acc))
@@ -349,9 +349,9 @@ def net_SGD2(device, fl, it, train_path, val_path):
             valid_loss = []
 
             sm_loss = np.mean(np.array(valid_loss)).item() * smooth \
-                        + (1-smooth) * smooth_train_loss[-1]
+                        + (1-smooth) * smooth_valid_loss[-1]
 
-            smooth_train_loss.append(sm_loss)
+            smooth_valid_loss.append(sm_loss)
             run[f"network_SGD/smooth_val_loss_pr_file"].log(sm_loss)
 
             run[f"network_SGD/val_acc_pr_file"].log(torch.mean(valid_acc))
