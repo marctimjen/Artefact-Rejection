@@ -725,7 +725,7 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    core = 2
+    core = 1
 
     networks = [net_SGD1, net_ADAM1, net_SGD2, net_ADAM2]
 
