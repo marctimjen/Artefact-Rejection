@@ -101,8 +101,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
     run[f"network_SGD/parameters"] = params
 
 
-    first_train = True
-    first_val = True
+    first_loss_save = True
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
@@ -120,11 +119,16 @@ def net_SGD1(device, fl, it, train_path, val_path):
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
-            if first_train:
+            if first_loss_save:
                 run[f"network_SGD/train_loss_pr_file"].log(loss)
                 run[f"network_SGD/smooth_train_loss_pr_file"].log(loss)
                 smooth_train_loss.append(loss.item())
-                first_train = False
+
+                run[f"network_SGD/validation_loss_pr_file"].log(loss)
+                run[f"network_SGD/smooth_val_loss_pr_file"].log(loss)
+                smooth_valid_loss.append(loss.item())
+                first_loss_save = False
+
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())
@@ -143,7 +147,6 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             sm_loss = loss.item() * smooth + (1-smooth) * smooth_train_loss[-1]
             smooth_train_loss.append(sm_loss)
-            print(sm_loss)
             run[f"network_SGD/smooth_train_loss_pr_file"].log(sm_loss)
 
             run[f"network_SGD/train_acc_pr_file"].log(torch.mean(train_acc))
@@ -163,11 +166,6 @@ def net_SGD1(device, fl, it, train_path, val_path):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
-                if first_val:
-                    run[f"network_SGD/validation_loss_pr_file"].log(loss)
-                    run[f"network_SGD/smooth_val_loss_pr_file"].log(loss)
-                    smooth_valid_loss.append(loss.item())
-                    first_val = False
                 valid_loss.append(loss.item())
 
                 acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -180,7 +178,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
                                                   np.mean(np.array(valid_loss)))
             valid_loss = []
 
-            sm_loss = np.mean(np.array(valid_loss)).item() * smooth \
+            sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_valid_loss[-1]
 
             smooth_valid_loss.append(sm_loss)
@@ -271,8 +269,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
     run[f"network_SGD/parameters"] = params
 
 
-    first_train = True
-    first_val = True
+    first_loss_save = True
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
@@ -290,11 +287,15 @@ def net_SGD2(device, fl, it, train_path, val_path):
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
-            if first_train:
+            if first_loss_save:
                 run[f"network_SGD/train_loss_pr_file"].log(loss)
                 run[f"network_SGD/smooth_train_loss_pr_file"].log(loss)
                 smooth_train_loss.append(loss.item())
-                first_train = False
+
+                run[f"network_SGD/validation_loss_pr_file"].log(loss)
+                run[f"network_SGD/smooth_val_loss_pr_file"].log(loss)
+                smooth_valid_loss.append(loss.item())
+                first_loss_save = False
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())
@@ -331,11 +332,6 @@ def net_SGD2(device, fl, it, train_path, val_path):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
-                if first_val:
-                    run[f"network_SGD/validation_loss_pr_file"].log(loss)
-                    run[f"network_SGD/smooth_val_loss_pr_file"].log(loss)
-                    smooth_valid_loss.append(loss.item())
-                    first_val = False
                 valid_loss.append(loss.item())
 
                 acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -348,7 +344,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
                                                   np.mean(np.array(valid_loss)))
             valid_loss = []
 
-            sm_loss = np.mean(np.array(valid_loss)).item() * smooth \
+            sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_valid_loss[-1]
 
             smooth_valid_loss.append(sm_loss)
@@ -440,8 +436,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
 
     run[f"network_ADAM/parameters"] = params
 
-    first_train = True
-    first_val = True
+    first_loss_save = True
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
@@ -460,11 +455,16 @@ def net_ADAM1(device, fl, it, train_path, val_path):
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
             loss.backward()
-            if first_train:
+            if first_loss_save:
                 run[f"network_ADAM/train_loss_pr_file"].log(loss)
                 run[f"network_ADAM/smooth_train_loss_pr_file"].log(loss)
                 smooth_train_loss.append(loss.item())
-                first_train = False
+
+                run[f"network_ADAM/validation_loss_pr_file"].log(loss)
+                run[f"network_ADAM/smooth_val_loss_pr_file"].log(loss)
+                smooth_valid_loss.append(loss.item())
+                first_loss_save = False
+
             optimizer.step()
             train_loss.append(loss.item())
 
@@ -501,11 +501,6 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
-                if first_val:
-                    run[f"network_ADAM/validation_loss_pr_file"].log(loss)
-                    run[f"network_ADAM/smooth_val_loss_pr_file"].log(loss)
-                    smooth_valid_loss.append(loss.item())
-                    first_val = False
                 valid_loss.append(loss.item())
 
                 acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -518,7 +513,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                                                   np.mean(np.array(valid_loss)))
             valid_loss = []
 
-            sm_loss = np.mean(np.array(valid_loss)).item() * smooth \
+            sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_train_loss[-1]
 
             smooth_train_loss.append(sm_loss)
@@ -608,8 +603,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
 
     run[f"network_ADAM/parameters"] = params
 
-    first_train = True
-    first_val = True
+    first_loss_save = True
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
@@ -628,11 +622,16 @@ def net_ADAM2(device, fl, it, train_path, val_path):
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
             loss.backward()
-            if first_train:
+            if first_loss_save:
                 run[f"network_ADAM/train_loss_pr_file"].log(loss)
                 run[f"network_ADAM/smooth_train_loss_pr_file"].log(loss)
                 smooth_train_loss.append(loss.item())
-                first_train = False
+
+                run[f"network_ADAM/validation_loss_pr_file"].log(loss)
+                run[f"network_ADAM/smooth_val_loss_pr_file"].log(loss)
+                smooth_valid_loss.append(loss.item())
+                first_loss_save = False
+
             optimizer.step()
             train_loss.append(loss.item())
 
@@ -669,11 +668,6 @@ def net_ADAM2(device, fl, it, train_path, val_path):
                 pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
                 target = tar.view(-1).type(it)
                 loss = lossFunc(pred, target)
-                if first_val:
-                    run[f"network_ADAM/validation_loss_pr_file"].log(loss)
-                    run[f"network_ADAM/smooth_val_loss_pr_file"].log(loss)
-                    smooth_valid_loss.append(loss.item())
-                    first_val = False
                 valid_loss.append(loss.item())
 
                 acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -686,7 +680,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
                                                   np.mean(np.array(valid_loss)))
             valid_loss = []
 
-            sm_loss = np.mean(np.array(valid_loss)).item() * smooth \
+            sm_loss = np.mean(np.array(valid_loss)) * smooth \
                         + (1-smooth) * smooth_train_loss[-1]
 
             smooth_train_loss.append(sm_loss)
