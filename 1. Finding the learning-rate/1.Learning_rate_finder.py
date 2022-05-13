@@ -143,6 +143,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
             sm_loss = loss.item() * smooth + (1-smooth) * smooth_train_loss[-1]
             smooth_train_loss.append(sm_loss)
+            print(sm_loss)
             run[f"network_SGD/smooth_train_loss_pr_file"].log(sm_loss)
 
             run[f"network_SGD/train_acc_pr_file"].log(torch.mean(train_acc))
