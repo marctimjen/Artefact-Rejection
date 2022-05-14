@@ -6,7 +6,7 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-378"
+    run="AR1-380"
 ) # adam network - AR1-259
 
 # AR1-263
@@ -24,7 +24,7 @@ adam_smloss = run['network_ADAM/smooth_val_loss_pr_file'].fetch_values() #62
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-377"
+    run="AR1-379"
 ) # sgd network - AR1-258
 
 # AR1-262
@@ -46,12 +46,23 @@ run2.stop()
 
 print(len(adam_rate["value"]))
 
+adam_base = 0.006
+adam_max = 0.02
+
+SGD_base = 1.12
+SGD_max = 1.28
+
+log_x_scale = True
+
+
+pos_pf_label_cont = 'upper left'
+
 fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
 fig.suptitle('Linear increasing learning_rates')
 ax1.set_title('ADAM optimizor with base_lr=0.0001, max_lr=0.5')
 
-ax1.axvline(x = 0.000015, color = 'r', linestyle = "--", label = 'base_rl = 0.000015')
-ax1.axvline(x = 0.0002, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
+ax1.axvline(x = adam_base, color = 'r', linestyle = "--", label = 'base_rl = 0.000015')
+ax1.axvline(x = adam_max, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
 
 ax1.plot(adam_rate["value"], adam_tp["value"], label = "tp", color = "blue")
 ax1.plot(adam_rate["value"], adam_fp["value"], label = "fp", color = "gray")
@@ -60,26 +71,34 @@ ax1.plot(adam_rate["value"], adam_fn["value"], label = "fn", color = "black")
 
 ax1.plot(adam_rate["value"], adam_acc["value"], label = "acc", color = "orange")
 
+
+if log_x_scale:
+    ax1.semilogx()
+
 ax1.set_xlabel('learning_rate')
 ax1.set_ylabel('accuarcy')
-ax1.legend(loc = 'upper right')
+ax1.legend(loc = pos_pf_label_cont)
 
 
 
 ax2.set_title('ADAM optimizor loss duing training')
-ax2.axvline(x = 0.000015, color = 'r', linestyle = "--", label = 'base_rl = 0.000015')
-ax2.axvline(x = 0.0002, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
+ax2.axvline(x = adam_base, color = 'r', linestyle = "--", label = 'base_rl = 0.000015')
+ax2.axvline(x = adam_max, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
 
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_loss["value"])
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_smloss["value"])
 ax2.set_xlabel('learning_rate')
 ax2.set_ylabel('loss')
 
+if log_x_scale:
+    ax2.semilogx()
+
+
 
 ax3.set_title('SGD optimizor with lr range: 0.001 to 9')
 
-ax3.axvline(x = 0.01, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
-ax3.axvline(x = 0.32, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
+ax3.axvline(x = SGD_base, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
+ax3.axvline(x = SGD_max, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
 
 ax3.plot(sgd_rate["value"], sgd_acc["value"], label = "acc", color = "orange")
 
@@ -88,23 +107,29 @@ ax3.plot(sgd_rate["value"], sgd_fp["value"], label = "fp", color = "gray")
 ax3.plot(sgd_rate["value"], sgd_tn["value"], label = "tn", color = "green")
 ax3.plot(sgd_rate["value"], sgd_fn["value"], label = "fn", color = "black")
 
+if log_x_scale:
+    ax3.semilogx()
+
 ax3.set_xlabel('learning_rate')
 ax3.set_ylabel('accuarcy')
-ax3.legend(loc = 'upper right')
+ax3.legend(loc = pos_pf_label_cont)
 
 
 
 ax4.set_title('SGD optimizor loss duing training')
 
-ax4.axvline(x = 0.01, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
-ax4.axvline(x = 0.32, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
+ax4.axvline(x = SGD_base, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
+ax4.axvline(x = SGD_max, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
 
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"], label = "loss")
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_smloss["value"])
 ax4.set_xlabel('learning_rate')
 ax4.set_ylabel('loss')
 
-ax4.legend(loc = 'upper right')
+if log_x_scale:
+    ax4.semilogx()
+
+ax4.legend(loc = pos_pf_label_cont)
 
 fig.tight_layout(pad=2.0)
 plt.show()

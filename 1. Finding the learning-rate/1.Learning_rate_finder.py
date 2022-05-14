@@ -241,7 +241,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.00001 # where we start the learning rate
+    base_lr = 0.001 # where we start the learning rate
     max_lr = 8 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -726,7 +726,7 @@ if __name__ == '__main__':
 
     # core = 1
 
-    networks = [net_SGD2, net_ADAM2] # net_SGD1, net_ADAM1,
+    networks = [net_SGD2] # net_SGD1, net_ADAM1, net_ADAM2
 
     cuda_dict = dict()
     for i in range(core):
