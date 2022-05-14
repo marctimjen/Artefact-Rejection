@@ -24,7 +24,7 @@ adam_smloss = run['network_ADAM/smooth_val_loss_pr_file'].fetch_values() #62
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-375"
+    run="AR1-382"
 ) # sgd network
 
 
@@ -46,7 +46,7 @@ run2.stop()
 
 print(len(adam_rate["value"]))
 
-exp_mode = False
+exp_mode = True
 
 if exp_mode:
     adam_base = 0.006
