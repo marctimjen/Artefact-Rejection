@@ -2,13 +2,52 @@ import neptune.new as neptune
 import os
 import matplotlib.pyplot as plt
 
+
+
+exp_mode = False
+
+if exp_mode:
+
+    adam_model_run = "AR1-385"
+    sgd_model_run = "AR1-384"
+
+    adam_base = 0.004
+    adam_max = 0.006
+
+
+    SGD_base = 0.2
+    SGD_max = 0.5
+
+    magenta = True
+    SGD_base_m = 0.8  # magenta values
+    SGD_max_m = 1.12  # magenta values
+
+
+    log_x_scale = True
+    pos_pf_label_cont = 'upper left'
+else:
+
+    adam_model_run = "AR1-387"
+    sgd_model_run = "AR1-386"
+
+    adam_base = 0.015
+    adam_max = 0.035
+
+    SGD_base = 0.76
+    SGD_max = 0.9
+
+    magenta = False
+
+    log_x_scale = False
+    pos_pf_label_cont = 'upper right'
+
+
 token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-376"
+    run=adam_model_run
 ) # adam network
-# adam network exp - "AR1-380"
 
 
 adam_rate = run['network_ADAM/learning_rate'].fetch_values()
@@ -24,11 +63,8 @@ adam_smloss = run['network_ADAM/smooth_val_loss_pr_file'].fetch_values() #62
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-382"
+    run=sgd_model_run
 ) # sgd network
-
-
-# sgd network exp - "AR1-381"
 
 sgd_rate = run2['network_SGD/learning_rate'].fetch_values()
 sgd_tp = run2['network_SGD/matrix/val_tp_pr_file'].fetch_values()
@@ -45,27 +81,6 @@ run.stop()
 run2.stop()
 
 print(len(adam_rate["value"]))
-
-exp_mode = True
-
-if exp_mode:
-    adam_base = 0.006
-    adam_max = 0.02
-
-    SGD_base = 1.12
-    SGD_max = 1.28
-
-    log_x_scale = True
-    pos_pf_label_cont = 'upper left'
-else:
-    adam_base = 0.02
-    adam_max = 0.03
-
-    SGD_base = 0.98
-    SGD_max = 1.07
-
-    log_x_scale = False
-    pos_pf_label_cont = 'upper right'
 
 
 fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
@@ -111,6 +126,10 @@ ax3.set_title('SGD optimizor with lr range: 0.001 to 9')
 ax3.axvline(x = SGD_base, color = 'r', linestyle = "--", label = f'base_rl = {SGD_base}')
 ax3.axvline(x = SGD_max, color = 'r', linestyle = "--", label = f'max_lr = {SGD_max}')
 
+if magenta:
+    ax3.axvline(x = SGD_base_m, color = 'm', linestyle = "--", label = f'base_rl = {SGD_base_m}')
+    ax3.axvline(x = SGD_max_m, color = 'm', linestyle = "--", label = f'max_lr = {SGD_max_m}')
+
 ax3.plot(sgd_rate["value"], sgd_acc["value"], label = "acc", color = "orange")
 
 ax3.plot(sgd_rate["value"], sgd_tp["value"], label = "tp", color = "blue")
@@ -131,6 +150,11 @@ ax4.set_title('SGD optimizor loss duing training')
 
 ax4.axvline(x = SGD_base, color = 'r', linestyle = "--", label = f'base_rl = {SGD_base}')
 ax4.axvline(x = SGD_max, color = 'r', linestyle = "--", label = f'max_lr = {SGD_max}')
+
+if magenta:
+    ax4.axvline(x = SGD_base_m, color = 'm', linestyle = "--", label = f'base_rl = {SGD_base_m}')
+    ax4.axvline(x = SGD_max_m, color = 'm', linestyle = "--", label = f'max_lr = {SGD_max_m}')
+
 
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"], label = "loss")
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_smloss["value"])

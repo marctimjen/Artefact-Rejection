@@ -408,8 +408,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.0001 # where we start the learning rate
-    max_lr = 0.7 # where the learning rate is supposed to end
+    base_lr = 0.0000001 # where we start the learning rate
+    max_lr = 0.4 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -726,7 +726,7 @@ if __name__ == '__main__':
 
     core = 1
 
-    networks = [net_SGD2, net_ADAM2, net_SGD1, net_ADAM1] # net_SGD1, net_ADAM1, net_ADAM2
+    networks = [net_ADAM1] # net_SGD2, net_ADAM2, net_SGD1,
 
     cuda_dict = dict()
     cuda_dict[core] = networks

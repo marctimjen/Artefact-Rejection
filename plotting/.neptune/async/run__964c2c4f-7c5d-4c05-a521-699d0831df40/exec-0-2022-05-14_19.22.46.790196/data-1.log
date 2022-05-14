@@ -1,0 +1,8 @@
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 1}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 2}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 8.0, "unit": "GB"}, "version": 3}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 4}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 5.1, "step": null, "ts": 1652548966.8602602}]}, "version": 5}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 6.723476409912109, "step": null, "ts": 1652548966.8602602}]}, "version": 6}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 1.0, "step": null, "ts": 1652548966.8602602}]}, "version": 7}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.5828399658203125, "step": null, "ts": 1652548966.8602602}]}, "version": 8}
