@@ -8,10 +8,10 @@ resnet18 = models.resnet18()
 
 samples = 500
 b_size = 10
-epochs = 10
+epochs = 5
 
-end_lr = 5
-start_lr = 0.00001
+end_lr = 2.5
+start_lr = 0.0001
 
 lam = lambda x: math.exp(x * math.log(end_lr / start_lr) \
                         / (epochs * samples / b_size))
