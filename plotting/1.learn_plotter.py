@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-exp_mode = False
+exp_mode = True
 
 if exp_mode:
 
@@ -27,11 +27,11 @@ if exp_mode:
     pos_pf_label_cont = 'upper left'
 else:
 
-    adam_model_run = "AR1-387"
+    adam_model_run = "AR1-388"
     sgd_model_run = "AR1-386"
 
     adam_base = 0.015
-    adam_max = 0.035
+    adam_max = 0.027
 
     SGD_base = 0.76
     SGD_max = 0.9
