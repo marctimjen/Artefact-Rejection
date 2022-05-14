@@ -6,7 +6,7 @@ token = os.getenv('Neptune_api')
 run = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-275"
+    run="AR1-378"
 ) # adam network - AR1-259
 
 # AR1-263
@@ -19,12 +19,12 @@ adam_fn = run['network_ADAM/matrix/val_fn_pr_file'].fetch_values()
 
 adam_acc = run['network_ADAM/val_acc_pr_file'].fetch_values() #62
 adam_loss = run['network_ADAM/validation_loss_pr_file'].fetch_values() #62
-
+adam_smloss = run['network_ADAM/smooth_val_loss_pr_file'].fetch_values() #62
 
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-266"
+    run="AR1-377"
 ) # sgd network - AR1-258
 
 # AR1-262
@@ -36,8 +36,10 @@ sgd_fp = run2['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd_tn = run2['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd_fn = run2['network_SGD/matrix/val_fn_pr_file'].fetch_values()
 
+
 sgd_acc = run2['network_SGD/val_acc_pr_file'].fetch_values() #62
 sgd_loss = run2['network_SGD/validation_loss_pr_file'].fetch_values() #62
+sgd_smloss = run2['network_SGD/smooth_val_loss_pr_file'].fetch_values() #62
 
 run.stop()
 run2.stop()
@@ -69,6 +71,7 @@ ax2.axvline(x = 0.000015, color = 'r', linestyle = "--", label = 'base_rl = 0.00
 ax2.axvline(x = 0.0002, color = 'r', linestyle = "--", label = 'max_lr = 0.0002')
 
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_loss["value"])
+ax2.plot([0]+ [i for i in adam_rate["value"]], adam_smloss["value"])
 ax2.set_xlabel('learning_rate')
 ax2.set_ylabel('loss')
 
@@ -97,6 +100,7 @@ ax4.axvline(x = 0.01, color = 'r', linestyle = "--", label = 'base_rl = 0.01')
 ax4.axvline(x = 0.32, color = 'r', linestyle = "--", label = 'max_lr = 0.32')
 
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"], label = "loss")
+ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_smloss["value"])
 ax4.set_xlabel('learning_rate')
 ax4.set_ylabel('loss')
 
