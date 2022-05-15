@@ -7,10 +7,8 @@ token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-293"
+    run="AR1-393"
 ) # SGD 1
-
-# 287 - 286 - 285
 
 sgd1_rate = run1['network_SGD/learning_rate'].fetch_values()
 sgd1_mom = run1['network_SGD/momentum'].fetch_values()
@@ -19,15 +17,15 @@ sgd1_fp = run1['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd1_tn = run1['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd1_fn = run1['network_SGD/matrix/val_fn_pr_file'].fetch_values()
 
-sgd1_acc = run1['network_SGD/val_acc_pr_file'].fetch_values() #62
-sgd1_loss = run1['network_SGD/validation_loss_pr_file'].fetch_values() #62
-
+sgd1_acc = run1['network_SGD/val_acc_pr_file'].fetch_values()
+sgd1_loss = run1['network_SGD/validation_loss_pr_file'].fetch_values()
+sgd1_smloss = run1['network_SGD/smooth_val_loss_pr_file'].fetch_values()
 
 token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-292"
+    run="AR1-394"
 ) # SGD 2
 
 
@@ -38,15 +36,15 @@ sgd2_fp = run2['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd2_tn = run2['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd2_fn = run2['network_SGD/matrix/val_fn_pr_file'].fetch_values()
 
-sgd2_acc = run2['network_SGD/val_acc_pr_file'].fetch_values() #62
-sgd2_loss = run2['network_SGD/validation_loss_pr_file'].fetch_values() #62
-
+sgd2_acc = run2['network_SGD/val_acc_pr_file'].fetch_values()
+sgd2_loss = run2['network_SGD/validation_loss_pr_file'].fetch_values()
+sgd2_smloss = run2['network_SGD/smooth_val_loss_pr_file'].fetch_values()
 
 token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-291"
+    run="AR1-395"
 ) # SGD 3
 
 
@@ -57,8 +55,9 @@ sgd3_fp = run3['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd3_tn = run3['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd3_fn = run3['network_SGD/matrix/val_fn_pr_file'].fetch_values()
 
-sgd3_acc = run3['network_SGD/val_acc_pr_file'].fetch_values() #62
-sgd3_loss = run3['network_SGD/validation_loss_pr_file'].fetch_values() #62
+sgd3_acc = run3['network_SGD/val_acc_pr_file'].fetch_values()
+sgd3_loss = run3['network_SGD/validation_loss_pr_file'].fetch_values()
+sgd3_smloss = run3['network_SGD/smooth_val_loss_pr_file'].fetch_values()
 
 run1.stop()
 run2.stop()
@@ -87,6 +86,7 @@ ax4.plot(sgd1_acc["value"], label = "acc", color = "orange")
 ax4.set_ylim(acc_y_range)
 
 ax7.plot(sgd1_loss["value"])
+ax7.plot(sgd1_smloss["value"])
 ax7.set_ylim(loss_y_range)
 
 
@@ -107,6 +107,7 @@ ax5.plot(sgd1_acc["value"], label = "acc", color = "orange")
 ax5.set_ylim(acc_y_range)
 
 ax8.plot(sgd2_loss["value"])
+ax8.plot(sgd2_smloss["value"])
 ax8.set_ylim(loss_y_range)
 
 l5, = ax3.plot(sgd3_rate["value"])
@@ -125,6 +126,7 @@ ax6.plot(sgd1_acc["value"], label = "acc", color = "orange")
 ax6.set_ylim(acc_y_range)
 
 ax9.plot(sgd3_loss["value"])
+ax9.plot(sgd3_smloss["value"])
 ax9.set_ylim(loss_y_range)
 
 fig.tight_layout(pad=2.0)

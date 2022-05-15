@@ -70,8 +70,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.75 # where we start the learning rate
-    max_lr = 1 # where the learning rate is supposed to end
+    base_lr = 0.2 # where we start the learning rate
+    max_lr = 0.5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -109,6 +109,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
         for series in train_loader:
             run[f"network_SGD/learning_rate"].log(
                                                 optimizer.param_groups[0]['lr'])
+            run[f"network_SGD/momentum"].log(
+                                          optimizer.param_groups[0]['momentum'])
 
             t_mat = torch.zeros(2, 2)
             total_pos, total_neg = torch.tensor(0), torch.tensor(0)
@@ -239,8 +241,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.75 # where we start the learning rate
-    max_lr = 1 # where the learning rate is supposed to end
+    base_lr = 0.2 # where we start the learning rate
+    max_lr = 0.5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -280,6 +282,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
         for series in train_loader:
             run[f"network_SGD/learning_rate"].log(
                                                 optimizer.param_groups[0]['lr'])
+            run[f"network_SGD/momentum"].log(
+                                          optimizer.param_groups[0]['momentum'])
 
             t_mat = torch.zeros(2, 2)
             total_pos, total_neg = torch.tensor(0), torch.tensor(0)
@@ -411,8 +415,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.75 # where we start the learning rate
-    max_lr = 1 # where the learning rate is supposed to end
+    base_lr = 0.2 # where we start the learning rate
+    max_lr = 0.5 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -437,7 +441,7 @@ def net_SGD3(device, fl, it, train_path, val_path):
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
               "scheduler_cycle_momentum":True,
-              "base_momentum":0.8, "max_momentum":0.9,
+              "base_momentum":0.9, "max_momentum":0.99,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
               "smooting_loss":smooth}
 
@@ -452,6 +456,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
         for series in train_loader:
             run[f"network_SGD/learning_rate"].log(
                                                 optimizer.param_groups[0]['lr'])
+            run[f"network_SGD/momentum"].log(
+                                          optimizer.param_groups[0]['momentum'])
 
             t_mat = torch.zeros(2, 2)
             total_pos, total_neg = torch.tensor(0), torch.tensor(0)
