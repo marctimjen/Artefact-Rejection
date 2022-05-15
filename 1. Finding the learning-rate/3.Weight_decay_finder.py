@@ -34,7 +34,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 50 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -210,7 +210,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 50 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -387,7 +387,7 @@ def net_SGD3(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 50 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -564,7 +564,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 50 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -735,7 +735,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 50 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -906,7 +906,7 @@ def net_ADAM3(device, fl, it, train_path, val_path):
     )
 
     batch_size = 10
-    n_samples = 50 # how many samples do we collect
+    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
