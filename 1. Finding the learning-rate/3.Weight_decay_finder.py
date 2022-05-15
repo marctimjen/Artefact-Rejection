@@ -641,8 +641,6 @@ def net_ADAM1(device, fl, it, train_path, val_path):
         for series in train_loader:
             run[f"network_ADAM/learning_rate"].log(
                                                 optimizer.param_groups[0]['lr'])
-            run[f"network_ADAM/momentum"].log(
-                                          optimizer.param_groups[0]['momentum'])
 
             t_mat = torch.zeros(2, 2)
             total_pos, total_neg = torch.tensor(0), torch.tensor(0)
@@ -814,8 +812,6 @@ def net_ADAM2(device, fl, it, train_path, val_path):
         for series in train_loader:
             run[f"network_ADAM/learning_rate"].log(
                                                 optimizer.param_groups[0]['lr'])
-            run[f"network_ADAM/momentum"].log(
-                                          optimizer.param_groups[0]['momentum'])
 
             t_mat = torch.zeros(2, 2)
             total_pos, total_neg = torch.tensor(0), torch.tensor(0)
@@ -987,8 +983,6 @@ def net_ADAM3(device, fl, it, train_path, val_path):
         for series in train_loader:
             run[f"network_ADAM/learning_rate"].log(
                                                 optimizer.param_groups[0]['lr'])
-            run[f"network_ADAM/momentum"].log(
-                                          optimizer.param_groups[0]['momentum'])
 
             t_mat = torch.zeros(2, 2)
             total_pos, total_neg = torch.tensor(0), torch.tensor(0)
