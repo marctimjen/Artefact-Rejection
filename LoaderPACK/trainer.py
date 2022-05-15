@@ -34,18 +34,28 @@ def net_train(device,
         it = torch.cuda.LongTensor
 
     valid_loss, train_loss = [], []
+    smooth_valid_loss, smooth_train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
 
     avg_train_loss, avg_valid_loss = [], []
 
-    first_train = True
-    first_val = True
+    first_loss_save = True
+
+    try: # test if the optimizor contain momentum
+        moment = optimizer.param_groups[0]['momentum']
+        moment = True
+    except:
+        moment = False
 
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
 
         run[f"{net_name}/learning_rate"].log(optimizer.param_groups[0]['lr'])
+
+        if moment:
+            run[f"{net_name}/momentum"].log(
+                                          optimizer.param_groups[0]['momentum'])
 
         t_mat = torch.zeros(2, 2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)

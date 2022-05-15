@@ -6,12 +6,12 @@ import torchvision.models as models
 
 resnet18 = models.resnet18()
 
-samples = 500
+samples = 50
 b_size = 10
 epochs = 5
 
-end_lr = 1
-start_lr = 0.75
+end_lr = 0.006
+start_lr = 0.004
 
 # lam = lambda x: math.exp(x * math.log(end_lr / start_lr) \
 #                         / (epochs * samples / b_size))
@@ -19,7 +19,15 @@ start_lr = 0.75
 
 ls = []
 
-optimizer = SGD(resnet18.parameters(), lr=start_lr)
+optimizer = Adam(resnet18.parameters(), lr=start_lr)
+
+try:
+    mom = optimizer.param_groups[0]['momentum']
+    mom = True
+except:
+    mom = False
+
+print(mom)
 
 # scheduler = LambdaLR(optimizer, lam)
 
