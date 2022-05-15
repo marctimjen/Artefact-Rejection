@@ -27,16 +27,22 @@ if exp_mode:
     pos_pf_label_cont = 'upper left'
 else:
 
-    adam_model_run = "AR1-388"
+    adam_model_run = "AR1-390"
     sgd_model_run = "AR1-386"
 
-    adam_base = 0.015
-    adam_max = 0.027
+    adam_base = 0.01
+    adam_max = 0.0167
 
-    SGD_base = 0.76
-    SGD_max = 0.9
+    magenta = True
 
-    magenta = False
+    SGD_base_m = 0.475
+    SGD_max_m = 0.52
+
+
+    SGD_base_m = 0.76  # magenta values
+    SGD_max_m = 0.9  # magenta values
+
+
 
     log_x_scale = False
     pos_pf_label_cont = 'upper right'

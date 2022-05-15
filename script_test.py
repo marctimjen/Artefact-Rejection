@@ -10,18 +10,22 @@ samples = 500
 b_size = 10
 epochs = 5
 
-end_lr = 2.5
-start_lr = 0.0001
+end_lr = 1
+start_lr = 0.75
 
-lam = lambda x: math.exp(x * math.log(end_lr / start_lr) \
-                        / (epochs * samples / b_size))
+# lam = lambda x: math.exp(x * math.log(end_lr / start_lr) \
+#                         / (epochs * samples / b_size))
 
 
 ls = []
 
 optimizer = SGD(resnet18.parameters(), lr=start_lr)
 
-scheduler = LambdaLR(optimizer, lam)
+# scheduler = LambdaLR(optimizer, lam)
+
+scheduler = CyclicLR(optimizer, base_lr=start_lr, max_lr=end_lr,
+                     step_size_up=(epochs*(samples/b_size)/6),
+                     cycle_momentum=False)
 
 for i in range(epochs):
     for j in range(int(samples/b_size)):
@@ -30,6 +34,8 @@ for i in range(epochs):
 
 
 print(len(ls))
+
+print((epochs*(samples/b_size)/6))
 
 plt.plot(ls)
 plt.show()
