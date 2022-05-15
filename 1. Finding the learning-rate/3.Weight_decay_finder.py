@@ -260,7 +260,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
                          cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9, mode='triangular2')
+                         max_momentum=0.9)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -437,7 +437,7 @@ def net_SGD3(device, fl, it, train_path, val_path):
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
                          cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9, mode='triangular2')
+                         max_momentum=0.9)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
