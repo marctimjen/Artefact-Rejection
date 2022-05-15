@@ -1074,60 +1074,25 @@ def net_ADAM3(device, fl, it, train_path, val_path):
             scheduler.step()
     run.stop()
 
-
-def net_starter(nets, device, train_file_loader, val_file_loader):
+def net_starter(nets, device, fl, it, train_path, val_path):
     for net in nets:
-        pr1 = mp.Process(target=net, args = (device,
-                                             train_file_loader,
-                                             val_file_loader,))
+        pr1 = mp.Process(target=net, args = (device, fl, it,
+                                                train_path,
+                                                val_path,))
         pr1.start()
         pr1.join()
-
 
 if __name__ == '__main__':
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
 
-
-    # Set up the datasets
-    np.random.seed(42)
-
-
-
-    #val_set, train_set = torch.utils.data.random_split(
-    #                            random.sample(range(1, 226 + 1), 200), [26, 200],
-    #                            generator=torch.Generator().manual_seed(42))
-
-    val_set, train_set = torch.utils.data.random_split(
-                                random.sample(range(1, 226 + 1), 50), [10, 40],
-                                generator=torch.Generator().manual_seed(42))
-
-
-    train_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                      ind = train_set)
-
-    #train_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                  ind = train_set)
-
-
-    train_file_loader = torch.utils.data.DataLoader(train_load_file,
-                                                    batch_size=1,
-                                                    shuffle=True,
-                                                    num_workers=0)
-
-
-    val_load_file = load_whole_data(path = "/home/tyson/model_data",
-                                    ind = val_set)
-
-    #val_load_file = load_whole_data(path = "C:/Users/Marc/Desktop/model_data",
-    #                                ind = val_set)
-
-    val_file_loader = torch.utils.data.DataLoader(val_load_file,
-                                                  batch_size=1,
-                                                  shuffle=True,
-                                                  num_workers=0)
-
+    if device == "cpu":
+        fl = torch.FloatTensor
+        it = torch.LongTensor
+    else:
+        fl = torch.cuda.FloatTensor
+        it = torch.cuda.LongTensor
 
     core = torch.cuda.device_count()
 
@@ -1140,12 +1105,16 @@ if __name__ == '__main__':
     for i in range(len(networks)):
         cuda_dict[i % core].append(networks[i])
 
+    train_path = "/home/tyson/data_cutoff/train_model_data"
+    val_path = "/home/tyson/data_cutoff/val_model_data"
+
     pres = []
     for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
-                                                           train_file_loader,
-                                                           val_file_loader,)))
+                                                           fl, it,
+                                                           train_path,
+                                                           val_path,)))
 
     for process in pres:
         process.start()

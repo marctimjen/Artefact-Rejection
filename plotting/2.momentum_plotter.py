@@ -48,6 +48,8 @@ run3 = neptune.init(
 ) # SGD 3
 
 
+# maube 393, 394, 395
+
 sgd3_rate = run3['network_SGD/learning_rate'].fetch_values()
 sgd3_mom = run3['network_SGD/momentum'].fetch_values()
 sgd3_tp = run3['network_SGD/matrix/val_tp_pr_file'].fetch_values()
