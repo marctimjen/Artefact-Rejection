@@ -15,6 +15,8 @@ from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 
 
 def net_train(device,
+              fl,
+              it,
               net_name,
               model,
               optimizer,
@@ -26,19 +28,9 @@ def net_train(device,
               path,
               scheduler = None):
 
-    if device == "cpu":
-        fl = torch.FloatTensor
-        it = torch.LongTensor
-    else:
-        fl = torch.cuda.FloatTensor
-        it = torch.cuda.LongTensor
-
     valid_loss, train_loss = [], []
-    smooth_valid_loss, smooth_train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
-
-    avg_train_loss, avg_valid_loss = [], []
 
     first_loss_save = True
 
@@ -67,9 +59,16 @@ def net_train(device,
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
-            if first_train:
+            if first_loss_save:
                 run[f"{net_name}/train_loss_pr_file"].log(loss)
-                first_train = False
+                run[f"{net_name}/smooth_train_loss_pr_file"].log(loss)
+                t_sm_loss = loss.item()
+
+                run[f"{net_name}/validation_loss_pr_file"].log(loss)
+                run[f"{net_name}/smooth_val_loss_pr_file"].log(loss)
+                v_sm_loss = loss.item()
+                first_loss_save = False
+
             loss.backward()
             optimizer.step()
             train_loss.append(loss.item())
@@ -82,13 +81,21 @@ def net_train(device,
 
         run[f"{net_name}/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
+
+        sm_loss = np.mean(np.array(train_loss)) * smooth \
+                            + (1-smooth) * t_sm_loss
+
+        t_sm_loss = sm_loss
+        run[f"{net_name}/smooth_train_loss_pr_file"].log(sm_loss)
+
         train_loss = []
 
         run[f"{net_name}/train_acc_pr_file"].log(torch.mean(train_acc))
         train_acc = torch.tensor([]).to(device)
 
         run[f"{net_name}/matrix/train_confusion_matrix_pr_file"].log(t_mat)
-        Accuarcy_upload(run, t_mat, total_pos, total_neg, f"{net_name}", "train")
+        Accuarcy_upload(run, t_mat, total_pos, total_neg,
+                        f"{net_name}", "train")
 
         v_mat = torch.zeros(2,2)
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
@@ -100,9 +107,6 @@ def net_train(device,
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
-            if first_val:
-                run[f"{net_name}/validation_loss_pr_file"].log(loss)
-                first_val = False
             valid_loss.append(loss.item())
 
             acc, mat, tot_p_g, tot_n_g = Accuarcy_find(y_pred, tar, device)
@@ -113,6 +117,13 @@ def net_train(device,
 
         run[f"{net_name}/validation_loss_pr_file"].log(
                                                   np.mean(np.array(valid_loss)))
+
+        sm_loss = np.mean(np.array(valid_loss)) * smooth \
+                            + (1-smooth) * v_sm_loss
+
+        v_sm_loss = sm_loss
+
+        run[f"{net_name}/smooth_val_loss_pr_file"].log(sm_loss)
         valid_loss = []
 
         run[f"{net_name}/val_acc_pr_file"].log(torch.mean(valid_acc))

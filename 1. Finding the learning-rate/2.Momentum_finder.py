@@ -67,8 +67,6 @@ def net_SGD1(device, fl, it, train_path, val_path):
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
 
-    avg_train_loss, avg_valid_loss = [], []
-
     nEpoch = 5
     base_lr = 0.2 # where we start the learning rate
     max_lr = 0.5 # where the learning rate is supposed to end
@@ -237,8 +235,6 @@ def net_SGD2(device, fl, it, train_path, val_path):
     smooth_valid_loss, smooth_train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
-
-    avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
     base_lr = 0.2 # where we start the learning rate
@@ -411,8 +407,6 @@ def net_SGD3(device, fl, it, train_path, val_path):
     smooth_valid_loss, smooth_train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
-
-    avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
     base_lr = 0.2 # where we start the learning rate
