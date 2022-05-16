@@ -72,7 +72,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     nEpoch = 5
     base_lr = 0.01 # where we start the learning rate
-    max_lr = 4 # where the learning rate is supposed to end
+    max_lr = 1 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -242,7 +242,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
     nEpoch = 5
     base_lr = 0.01 # where we start the learning rate
-    max_lr = 4 # where the learning rate is supposed to end
+    max_lr = 1 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -724,17 +724,20 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    core = 1
+    #core = 1
 
-    networks = [net_ADAM1] # net_SGD2, net_ADAM2, net_SGD1,
+    #networks = [net_ADAM1] # net_SGD2, net_ADAM2, net_SGD1,
 
-    cuda_dict = dict()
-    cuda_dict[core] = networks
-    # for i in range(core):
-    #     cuda_dict[i] = []
-    #
-    # for i in range(len(networks)):
-    #     cuda_dict[i % core].append(networks[i]) # i % core
+    networks = [net_SGD1, net_SGD2]
+
+    # cuda_dict = dict()
+    # cuda_dict[core] = networks
+
+    for i in range(core):
+        cuda_dict[i] = []
+
+    for i in range(len(networks)):
+        cuda_dict[i % core].append(networks[i]) # i % core
 
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
@@ -743,7 +746,7 @@ if __name__ == '__main__':
     val_path = "/home/tyson/data_cutoff/val_model_data"
 
     pres = []
-    for i in range(1, core + 1):
+    for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
