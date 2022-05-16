@@ -730,7 +730,7 @@ if __name__ == '__main__':
 
     networks = [net_SGD1, net_SGD2]
 
-    # cuda_dict = dict()
+    cuda_dict = dict()
     # cuda_dict[core] = networks
 
     for i in range(core):
