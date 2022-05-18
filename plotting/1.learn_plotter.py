@@ -9,7 +9,7 @@ exp_mode = True
 if exp_mode:
 
     adam_model_run = "AR1-424"
-    sgd_model_run = "AR1-422" # 384
+    sgd_model_run = "AR1-425"
 
     adam_base = 0.0038
     adam_max = 0.0048
@@ -26,29 +26,28 @@ if exp_mode:
     SGD_base = 0.216
     SGD_max = 0.268
 
-
-    magenta = False
-    SGD_base_m = 0.8  # magenta values
-    SGD_max_m = 1.12  # magenta values
+    magenta = True
+    SGD_base_m = 0.06  # magenta values
+    SGD_max_m = 0.1  # magenta values
 
 
     log_x_scale = True
     pos_pf_label_cont = 'upper left'
 else:
 
-    adam_model_run = "AR1-423"
+    adam_model_run = "AR1-426"
     sgd_model_run = "AR1-421"
 
-    adam_base = 0.055
-    adam_max = 0.017
+    adam_base = 0.0089
+    adam_max = 0.013
 
 
     SGD_base = 0.216
     SGD_max = 0.268
 
     magenta = False
-    SGD_base_m = 0.76  # magenta values
-    SGD_max_m = 0.9  # magenta values
+    SGD_base_m = 0.06  # magenta values
+    SGD_max_m = 0.1  # magenta values
 
 
 
