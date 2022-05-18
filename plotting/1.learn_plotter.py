@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 
 
 
-exp_mode = False
+exp_mode = True
 
 if exp_mode:
 
-    adam_model_run = "AR1-385"
-    sgd_model_run = "AR1-417" # 384
+    adam_model_run = "AR1-424"
+    sgd_model_run = "AR1-422" # 384
 
-    adam_base = 0.004
-    adam_max = 0.006
+    adam_base = 0.0038
+    adam_max = 0.0048
 
 
     # SGD_base = 0.2
@@ -23,8 +23,9 @@ if exp_mode:
     # SGD_max_m = 1.12  # magenta values
 
 
-    SGD_base = 0.22
-    SGD_max = 0.265
+    SGD_base = 0.216
+    SGD_max = 0.268
+
 
     magenta = False
     SGD_base_m = 0.8  # magenta values
@@ -35,17 +36,17 @@ if exp_mode:
     pos_pf_label_cont = 'upper left'
 else:
 
-    adam_model_run = "AR1-390"
-    sgd_model_run = "AR1-418" # 386
+    adam_model_run = "AR1-423"
+    sgd_model_run = "AR1-421"
 
-    adam_base = 0.01
-    adam_max = 0.0167
+    adam_base = 0.055
+    adam_max = 0.017
 
 
-    SGD_base = 0.475
-    SGD_max = 0.52
+    SGD_base = 0.216
+    SGD_max = 0.268
 
-    magenta = True
+    magenta = False
     SGD_base_m = 0.76  # magenta values
     SGD_max_m = 0.9  # magenta values
 
