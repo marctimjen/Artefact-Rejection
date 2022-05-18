@@ -99,7 +99,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         for i in target: # i = [montage_channel, start, end, type_artifact]
             index = sorted_index.index(i[0]) # Find the correct index in the target
-            tar[index][250 * math.floor(i[1]): 250 * math.ceil(i[2])] = 1
+            tar[index][200 * math.floor(i[1]): 200 * math.ceil(i[2])] = 1
                 # Make the artifacts = 1
 
         ind = torch.tensor(df_new.values.T) # data-frame to tensor

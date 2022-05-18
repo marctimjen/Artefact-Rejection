@@ -8,6 +8,7 @@ from random import randint, seed
 
 seed(26) # 26
 
+#make the following directuries;
 
 src_path = r"C:\Users\Marc\Desktop\model_data\\"
 dst_train_path = r"C:\Users\Marc\Desktop\model_data\train_model_data\\"

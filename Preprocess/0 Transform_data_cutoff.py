@@ -71,7 +71,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
             col_names = montage.get(i) # data-frame using only the channels
                                        # that has been labeled
 
-            if (col_names[0] == "EKG"): # & first # special case that is removed
+            if col_names[0] == "EKG": # & first # special case that is removed
                 continue
         #        df_new = df[col_names[1]]
         #        df_new = df_new.rename(col_names[0])
@@ -104,7 +104,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         for i in target: # i = [montage_channel, start, end, type_artifact]
             index = sorted_index.index(i[0]) # Find the correct index in the target
-            tar[index][250 * math.floor(i[1]): 250 * math.ceil(i[2])] = 1
+            tar[index][200 * math.floor(i[1]): 200 * math.ceil(i[2])] = 1
                 # Make the artifacts = 1
 
         ind = torch.tensor(df_new.values.T) # data-frame to tensor
@@ -115,79 +115,80 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         with open(save_loc + "/data_encoding.csv", "a", newline='') as f:
             write = csv.writer(f) # save information that link the nr of the
                                   # .pt files with the .edf files.
-            write.writerow([edf_dir, csv_dir, nr])
+            write.writerow([edf_dir, csv_dir, nr, sorted_index])
 
         nr += 1
 
 montage1 = {
-0: ["FP1-F7", "EEG FP1-REF", "EEG F7-REF"],
-1: ["F7-T3", "EEG F7-REF", "EEG T3-REF"],
-2: ["T3-T5", "EEG T3-REF", "EEG T5-REF"],
-3: ["T5-O1", "EEG T5-REF", "EEG O1-REF"],
-4: ["FP2-F8", "EEG FP2-REF", "EEG F8-REF"],
-5: ["F8-T4", "EEG F8-REF", "EEG T4-REF"],
-6: ["T4-T6", "EEG T4-REF", "EEG T6-REF"],
-7: ["T6-O2", "EEG T6-REF", "EEG O2-REF"],
-8: ["A1-T3", "EEG A1-REF", "EEG T3-REF"],
-9: ["T3-C3", "EEG T3-REF", "EEG C3-REF"],
-10: ["C3-CZ", "EEG C3-REF", "EEG CZ-REF"],
-11: ["CZ-C4", "EEG CZ-REF", "EEG C4-REF"],
-12: ["C4-T4", "EEG C4-REF", "EEG T4-REF"],
-13: ["T4-A2", "EEG T4-REF", "EEG A2-REF"],
-14: ["FP1-F3", "EEG FP1-REF", "EEG F3-REF"],
-15: ["F3-C3", "EEG F3-REF", "EEG C3-REF"],
-16: ["C3-P3", "EEG C3-REF", "EEG P3-REF"],
-17: ["P3-O1", "EEG P3-REF", "EEG O1-REF"],
-18: ["FP2-F4", "EEG FP2-REF", "EEG F4-REF"],
-19: ["F4-C4", "EEG F4-REF", "EEG C4-REF"],
-20: ["C4-P4", "EEG C4-REF", "EEG P4-REF"],
-21: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]}
+    0: ["FP1-F7", "EEG FP1-REF", "EEG F7-REF"],
+    1: ["F7-T3", "EEG F7-REF", "EEG T3-REF"],
+    2: ["T3-T5", "EEG T3-REF", "EEG T5-REF"],
+    3: ["T5-O1", "EEG T5-REF", "EEG O1-REF"],
+    4: ["FP2-F8", "EEG FP2-REF", "EEG F8-REF"],
+    5: ["F8-T4", "EEG F8-REF", "EEG T4-REF"],
+    6: ["T4-T6", "EEG T4-REF", "EEG T6-REF"],
+    7: ["T6-O2", "EEG T6-REF", "EEG O2-REF"],
+    8: ["A1-T3", "EEG A1-REF", "EEG T3-REF"],
+    9: ["T3-C3", "EEG T3-REF", "EEG C3-REF"],
+    10: ["C3-CZ", "EEG C3-REF", "EEG CZ-REF"],
+    11: ["CZ-C4", "EEG CZ-REF", "EEG C4-REF"],
+    12: ["C4-T4", "EEG C4-REF", "EEG T4-REF"],
+    13: ["T4-A2", "EEG T4-REF", "EEG A2-REF"],
+    14: ["FP1-F3", "EEG FP1-REF", "EEG F3-REF"],
+    15: ["F3-C3", "EEG F3-REF", "EEG C3-REF"],
+    16: ["C3-P3", "EEG C3-REF", "EEG P3-REF"],
+    17: ["P3-O1", "EEG P3-REF", "EEG O1-REF"],
+    18: ["FP2-F4", "EEG FP2-REF", "EEG F4-REF"],
+    19: ["F4-C4", "EEG F4-REF", "EEG C4-REF"],
+    20: ["C4-P4", "EEG C4-REF", "EEG P4-REF"],
+    21: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]
+}
 montage2 = {
-0: ["FP1-F7", "EEG FP1-LE", "EEG F7-LE"],
-1: ["F7-T3", "EEG F7-LE", "EEG T3-LE"],
-2: ["T3-T5", "EEG T3-LE", "EEG T5-LE"],
-3: ["T5-O1", "EEG T5-LE", "EEG O1-LE"],
-4: ["FP2-F8", "EEG FP2-LE", "EEG F8-LE"],
-5: ["F8-T4", "EEG F8-LE", "EEG T4-LE"],
-6: ["T4-T6", "EEG T4-LE", "EEG T6-LE"],
-7: ["T6-O2", "EEG T6-LE", "EEG O2-LE"],
-8: ["A1-T3", "EEG A1-LE", "EEG T3-LE"],
-9: ["T3-C3", "EEG T3-LE", "EEG C3-LE"],
-10: ["C3-CZ", "EEG C3-LE", "EEG CZ-LE"],
-11: ["CZ-C4", "EEG CZ-LE", "EEG C4-LE"],
-12: ["C4-T4", "EEG C4-LE", "EEG T4-LE"],
-13: ["T4-A2", "EEG T4-LE", "EEG A2-LE"],
-14: ["FP1-F3", "EEG FP1-LE", "EEG F3-LE"],
-15: ["F3-C3", "EEG F3-LE", "EEG C3-LE"],
-16: ["C3-P3", "EEG C3-LE", "EEG P3-LE"],
-17: ["P3-O1", "EEG P3-LE", "EEG O1-LE"],
-18: ["FP2-F4", "EEG FP2-LE", "EEG F4-LE"],
-19: ["F4-C4", "EEG F4-LE", "EEG C4-LE"],
-20: ["C4-P4", "EEG C4-LE", "EEG P4-LE"],
-21: ["P4-O2", "EEG P4-LE", "EEG O2-LE"],
-22: ["EKG", "EEG EKG-LE", "None"]
+    0: ["FP1-F7", "EEG FP1-LE", "EEG F7-LE"],
+    1: ["F7-T3", "EEG F7-LE", "EEG T3-LE"],
+    2: ["T3-T5", "EEG T3-LE", "EEG T5-LE"],
+    3: ["T5-O1", "EEG T5-LE", "EEG O1-LE"],
+    4: ["FP2-F8", "EEG FP2-LE", "EEG F8-LE"],
+    5: ["F8-T4", "EEG F8-LE", "EEG T4-LE"],
+    6: ["T4-T6", "EEG T4-LE", "EEG T6-LE"],
+    7: ["T6-O2", "EEG T6-LE", "EEG O2-LE"],
+    8: ["A1-T3", "EEG A1-LE", "EEG T3-LE"],
+    9: ["T3-C3", "EEG T3-LE", "EEG C3-LE"],
+    10: ["C3-CZ", "EEG C3-LE", "EEG CZ-LE"],
+    11: ["CZ-C4", "EEG CZ-LE", "EEG C4-LE"],
+    12: ["C4-T4", "EEG C4-LE", "EEG T4-LE"],
+    13: ["T4-A2", "EEG T4-LE", "EEG A2-LE"],
+    14: ["FP1-F3", "EEG FP1-LE", "EEG F3-LE"],
+    15: ["F3-C3", "EEG F3-LE", "EEG C3-LE"],
+    16: ["C3-P3", "EEG C3-LE", "EEG P3-LE"],
+    17: ["P3-O1", "EEG P3-LE", "EEG O1-LE"],
+    18: ["FP2-F4", "EEG FP2-LE", "EEG F4-LE"],
+    19: ["F4-C4", "EEG F4-LE", "EEG C4-LE"],
+    20: ["C4-P4", "EEG C4-LE", "EEG P4-LE"],
+    21: ["P4-O2", "EEG P4-LE", "EEG O2-LE"],
+    22: ["EKG", "EEG EKG-LE", "None"]
 }
 montage3 = {
-0: ["FP1-F7", "EEG FP1-REF", "EEG F7-REF"],
-1: ["F7-T3", "EEG F7-REF", "EEG T3-REF"],
-2: ["T3-T5", "EEG T3-REF", "EEG T5-REF"],
-3: ["T5-O1", "EEG T5-REF", "EEG O1-REF"],
-4: ["FP2-F8", "EEG FP2-REF", "EEG F8-REF"],
-5: ["F8-T4", "EEG F8-REF", "EEG T4-REF"],
-6: ["T4-T6", "EEG T4-REF", "EEG T6-REF"],
-7: ["T6-O2", "EEG T6-REF", "EEG O2-REF"],
-8: ["T3-C3", "EEG T3-REF", "EEG C3-REF"],
-9: ["C3-CZ", "EEG C3-REF", "EEG CZ-REF"],
-10: ["CZ-C4", "EEG CZ-REF", "EEG C4-REF"],
-11: ["C4-T4", "EEG C4-REF", "EEG T4-REF"],
-12: ["FP1-F3", "EEG FP1-REF", "EEG F3-REF"],
-13: ["F3-C3", "EEG F3-REF", "EEG C3-REF"],
-14: ["C3-P3", "EEG C3-REF", "EEG P3-REF"],
-15: ["P3-O1", "EEG P3-REF", "EEG O1-REF"],
-16: ["FP2-F4", "EEG FP2-REF", "EEG F4-REF"],
-17: ["F4-C4", "EEG F4-REF", "EEG C4-REF"],
-18: ["C4-P4", "EEG C4-REF", "EEG P4-REF"],
-19: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]
+    0: ["FP1-F7", "EEG FP1-REF", "EEG F7-REF"],
+    1: ["F7-T3", "EEG F7-REF", "EEG T3-REF"],
+    2: ["T3-T5", "EEG T3-REF", "EEG T5-REF"],
+    3: ["T5-O1", "EEG T5-REF", "EEG O1-REF"],
+    4: ["FP2-F8", "EEG FP2-REF", "EEG F8-REF"],
+    5: ["F8-T4", "EEG F8-REF", "EEG T4-REF"],
+    6: ["T4-T6", "EEG T4-REF", "EEG T6-REF"],
+    7: ["T6-O2", "EEG T6-REF", "EEG O2-REF"],
+    8: ["T3-C3", "EEG T3-REF", "EEG C3-REF"],
+    9: ["C3-CZ", "EEG C3-REF", "EEG CZ-REF"],
+    10: ["CZ-C4", "EEG CZ-REF", "EEG C4-REF"],
+    11: ["C4-T4", "EEG C4-REF", "EEG T4-REF"],
+    12: ["FP1-F3", "EEG FP1-REF", "EEG F3-REF"],
+    13: ["F3-C3", "EEG F3-REF", "EEG C3-REF"],
+    14: ["C3-P3", "EEG C3-REF", "EEG P3-REF"],
+    15: ["P3-O1", "EEG P3-REF", "EEG O1-REF"],
+    16: ["FP2-F4", "EEG FP2-REF", "EEG F4-REF"],
+    17: ["F4-C4", "EEG F4-REF", "EEG C4-REF"],
+    18: ["C4-P4", "EEG C4-REF", "EEG P4-REF"],
+    19: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]
 }
 
 dir1_edf_list = "C:/Users/Marc/Desktop/data_series/v2.1.0/lists/edf_01_tcp_ar.list"
