@@ -70,8 +70,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.2 # where we start the learning rate
-    max_lr = 0.5 # where the learning rate is supposed to end
+    base_lr = 0.216 # where we start the learning rate
+    max_lr = 0.268 # where the learning rate is supposed to end
     weight_decay = 0
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -83,8 +83,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9, mode='triangular2')
+                         cycle_momentum=False, mode='triangular2')
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -97,8 +96,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":True,
-              "base_momentum":0.8, "max_momentum":0.9,
+              "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
               "scheduler_mode":'triangular2',
               "smooting_loss":smooth}
@@ -246,9 +244,9 @@ def net_SGD2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.2 # where we start the learning rate
-    max_lr = 0.5 # where the learning rate is supposed to end
-    weight_decay = 0.0001
+    base_lr = 0.216 # where we start the learning rate
+    max_lr = 0.268 # where the learning rate is supposed to end
+    weight_decay =  0.0001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -259,8 +257,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9)
+                         cycle_momentum=False)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -273,8 +270,7 @@ def net_SGD2(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":True,
-              "base_momentum":0.8, "max_momentum":0.9,
+              "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
               "scheduler_mode":'triangular2',
               "smooting_loss":smooth}
@@ -423,8 +419,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.2 # where we start the learning rate
-    max_lr = 0.5 # where the learning rate is supposed to end
+    base_lr = 0.216 # where we start the learning rate
+    max_lr = 0.268 # where the learning rate is supposed to end
     weight_decay = 0.00001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -436,8 +432,7 @@ def net_SGD3(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9)
+                         cycle_momentum=False)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -450,12 +445,10 @@ def net_SGD3(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":True,
-              "base_momentum":0.8, "max_momentum":0.9,
+              "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
               "scheduler_mode":'triangular2',
               "smooting_loss":smooth}
-
     run[f"network_SGD/parameters"] = params
 
 
@@ -600,8 +593,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.004 # where we start the learning rate
-    max_lr = 0.006 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate
+    max_lr = 0.013 # where the learning rate is supposed to end
     weight_decay = 0
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -771,8 +764,8 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.004 # where we start the learning rate
-    max_lr = 0.006 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate
+    max_lr = 0.013 # where the learning rate is supposed to end
     weight_decay = 0.0001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -942,8 +935,8 @@ def net_ADAM3(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.004 # where we start the learning rate
-    max_lr = 0.006 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate
+    max_lr = 0.013 # where the learning rate is supposed to end
     weight_decay = 0.00001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
