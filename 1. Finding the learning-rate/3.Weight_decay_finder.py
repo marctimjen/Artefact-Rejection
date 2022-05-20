@@ -83,7 +83,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=False, mode='triangular2')
+                         cycle_momentum=True, mode='triangular2',
+                         base_momentum=0.8, max_momentum=0.9)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -96,7 +97,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":False,
+              "scheduler_cycle_momentum":True,
+              "base_momentum":0.8, "max_momentum":0.9,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
               "scheduler_mode":'triangular2',
               "smooting_loss":smooth}
@@ -257,7 +259,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=False)
+                         cycle_momentum=True, base_momentum=0.8,
+                         max_momentum=0.9)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -270,9 +273,10 @@ def net_SGD2(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":False,
+              "scheduler_cycle_momentum":True,
+              "base_momentum":0.8, "max_momentum":0.9,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
-              "scheduler_mode":'triangular2',
+              "scheduler_mode":'triangular',
               "smooting_loss":smooth}
 
     run[f"network_SGD/parameters"] = params
@@ -432,7 +436,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=False)
+                         cycle_momentum=True, base_momentum=0.8,
+                         max_momentum=0.9)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -445,9 +450,10 @@ def net_SGD3(device, fl, it, train_path, val_path):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":False,
+              "scheduler_cycle_momentum":True,
+              "base_momentum":0.8, "max_momentum":0.9,
               "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
-              "scheduler_mode":'triangular2',
+              "scheduler_mode":'triangular',
               "smooting_loss":smooth}
     run[f"network_SGD/parameters"] = params
 
@@ -600,7 +606,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
     # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.004, weight_decay=weight_decay)
+    optimizer = Adam(model.parameters(), lr=base_lr, weight_decay=weight_decay)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
@@ -771,7 +777,7 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
     # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.004, weight_decay=weight_decay)
+    optimizer = Adam(model.parameters(), lr=base_lr, weight_decay=weight_decay)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
@@ -942,7 +948,7 @@ def net_ADAM3(device, fl, it, train_path, val_path):
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
     # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.004, weight_decay=weight_decay)
+    optimizer = Adam(model.parameters(), lr=base_lr, weight_decay=weight_decay)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
