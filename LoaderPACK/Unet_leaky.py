@@ -149,6 +149,7 @@ class OutConv_lstm(nn.Module): # light-blue arrow
         x = self.conv(x)
         stack_att = torch.stack((x, inp), dim = 3)
         stack_att = torch.squeeze(stack_att, 1)
+        print(stack_att.shape)
         out, _ = self.lstm(stack_att, (self.h, self.c))
 
         ss = torch.sum(out, 2)

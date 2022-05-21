@@ -38,7 +38,7 @@ def net_SGD(device, fl, it, train_path, val_path):
     net_name = "network_SGD"
 
     batch_size = 10
-    n_samples = 11141 - 1 # the defualt amount of samples minus 1
+    n_samples = 17 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -50,8 +50,7 @@ def net_SGD(device, fl, it, train_path, val_path):
     train_loader = torch.utils.data.DataLoader(train_load_file,
                                                batch_size=batch_size,
                                                shuffle=True,
-                                               num_workers=0,
-                                               drop_last=True)
+                                               num_workers=0)
 
     val_load_file = shuffle_5min(path = val_path,
                                  series_dict = 'val_series_length.pickle',
@@ -112,7 +111,7 @@ def net_SGD(device, fl, it, train_path, val_path):
               train_loader = train_loader,
               val_loader = val_loader,
               run = run,
-              path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+              path = "C:/Users/Marc/Desktop/network/",
               scheduler = scheduler)
 
 
@@ -227,30 +226,29 @@ if __name__ == '__main__':
         fl = torch.cuda.FloatTensor
         it = torch.cuda.LongTensor
 
-    # core = torch.cuda.device_count()
-    core = 1
+    core = torch.cuda.device_count()
 
-    networks = [net_ADAM] # net_SGD
+    networks = [net_SGD] #
 
     cuda_dict = dict()
-    cuda_dict[core] = networks
+    # cuda_dict[core] = networks
 
-    # for i in range(core):
-    #     cuda_dict[i] = []
+    for i in range(core):
+        cuda_dict[i] = []
 
-    # for i in range(len(networks)):
-    #     cuda_dict[i % core].append(networks[i]) # i % core
+    for i in range(len(networks)):
+        cuda_dict[i % core].append(networks[i]) # i % core
 
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
 
-    train_path = "/home/tyson/data_cutoff/train_model_data"
-    val_path = "/home/tyson/data_cutoff/val_model_data"
-    # train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
-    # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
+    # train_path = "/home/tyson/data_cutoff/train_model_data"
+    # val_path = "/home/tyson/data_cutoff/val_model_data"
+    train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
+    val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(core, 2):
+    for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
