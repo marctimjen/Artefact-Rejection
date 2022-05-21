@@ -110,6 +110,8 @@ class OutConv_lstm(nn.Module): # light-blue arrow
         super(OutConv_lstm, self).__init__()
         self.conv = nn.Conv1d(in_channels, 1, kernel_size=1)
 
+        self.batch_size = batch_size
+
         input_size = 2 # the number of series
         hidden_size = 5 # hyper para
 
@@ -121,7 +123,7 @@ class OutConv_lstm(nn.Module): # light-blue arrow
         hout = proj_size # since proj_size > 0
 
 
-        seq_len = 200*5*60 # length of the sequence
+        self.seq_len = 200*5*60 # length of the sequence
 
 
         self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True, \
@@ -151,15 +153,15 @@ class OutConv_lstm(nn.Module): # light-blue arrow
         stack_att = torch.squeeze(stack_att, 1)
         out, _ = self.lstm(stack_att, (self.h, self.c))
 
-        print("first", out.shape)
+        # print("first", out.shape)
+        #
+        # ss = torch.sum(out, 2)
+        # minusss = 1 - ss
+        #
+        # out = torch.stack((ss, minusss), dim = 1)
+        # print(out.shape)
 
-        ss = torch.sum(out, 2)
-        minusss = 1 - ss
-
-        out = torch.stack((ss, minusss), dim = 1)
-        print(out.shape)
-
-        return self.soft(out)
+        return self.soft(out.transpose(1, 2))
 
 
 class OutConv(nn.Module): # light-blue arrow
