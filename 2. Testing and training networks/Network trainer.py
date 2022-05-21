@@ -50,7 +50,8 @@ def net_SGD(device, fl, it, train_path, val_path):
     train_loader = torch.utils.data.DataLoader(train_load_file,
                                                batch_size=batch_size,
                                                shuffle=True,
-                                               num_workers=0)
+                                               num_workers=0
+                                               drop_last=True)
 
     val_load_file = shuffle_5min(path = val_path,
                                  series_dict = 'val_series_length.pickle',
@@ -62,7 +63,8 @@ def net_SGD(device, fl, it, train_path, val_path):
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                              batch_size=batch_size,
                                              shuffle=False,
-                                             num_workers=0)
+                                             num_workers=0,
+                                             drop_last=True)
 
 
     nEpoch = 100
@@ -137,7 +139,8 @@ def net_ADAM(device, fl, it, train_path, val_path):
     train_loader = torch.utils.data.DataLoader(train_load_file,
                                                batch_size=batch_size,
                                                shuffle=True,
-                                               num_workers=0)
+                                               num_workers=0,
+                                               drop_last=True)
 
     val_load_file = shuffle_5min(path = val_path,
                                  series_dict = 'val_series_length.pickle',
@@ -149,7 +152,8 @@ def net_ADAM(device, fl, it, train_path, val_path):
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                              batch_size=batch_size,
                                              shuffle=False,
-                                             num_workers=0)
+                                             num_workers=0,
+                                             drop_last=True)
 
 
     nEpoch = 100

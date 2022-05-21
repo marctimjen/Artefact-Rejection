@@ -32,13 +32,13 @@ print(mom)
 # scheduler = LambdaLR(optimizer, lam)
 
 scheduler = CyclicLR(optimizer, base_lr=start_lr, max_lr=end_lr,
-                     step_size_up=(samples/b_size)*5,
+                     step_size_up=(samples/b_size)*5 + 1,
                      cycle_momentum=False)
 
 for i in range(epochs):
     for j in range(int(samples/b_size)):
         ls.append(optimizer.param_groups[0]['lr'])
-        scheduler.step()
+    scheduler.step()
 
 
 # print(len(ls))
