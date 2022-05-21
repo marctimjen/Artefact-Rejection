@@ -38,11 +38,13 @@ def net_SGD(device, fl, it, train_path, val_path):
     net_name = "network_SGD"
 
     batch_size = 10
+    n_samples = 11141 - 1 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
-                                   device = device)
+                                   device = device,
+                                   length = n_samples)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -63,10 +65,11 @@ def net_SGD(device, fl, it, train_path, val_path):
                                              num_workers=0)
 
 
-    nEpoch = 5
+    nEpoch = 100
     base_lr = 0.216 # where we start the learning rate (min point)
     max_lr = 0.268 # where the learning rate is at the max point
     weight_decay = 0
+    step_size_up = (n_samples/batch_size)*5
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -76,7 +79,7 @@ def net_SGD(device, fl, it, train_path, val_path):
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
-                         step_size_up=nEpoch*(n_samples/batch_size)-1,
+                         step_size_up=step_size_up,
                          cycle_momentum=True, base_momentum=0.8,
                          max_momentum=0.9)
 
@@ -91,23 +94,24 @@ def net_SGD(device, fl, it, train_path, val_path):
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
               "scheduler_cycle_momentum":True,
               "base_momentum":0.8, "max_momentum":0.9,
-              "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1,
+              "scheduler_step_size_up":step_size_up,
               "smooting_loss":smooth}
 
     run[f"{net_name}/parameters"] = params
 
     net_train(device = device,
+              fl = fl, it = it,
               net_name = net_name,
               model = model,
               optimizer = optimizer,
               lossFunc = lossFunc,
               nEpoch = nEpoch,
-              batch_size = batch_size,
-              train_file_loader = train_file_loader,
-              val_file_loader = val_file_loader,
+              smooth = smooth,
+              train_loader = train_loader,
+              val_loader = val_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
-              scheduler = None)
+              path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+              scheduler = scheduler)
 
 
 def net_ADAM(device, fl, it, train_path, val_path):
@@ -121,7 +125,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
     net_name = "network_ADAM"
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
+    n_samples = 11141 - 1 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -139,8 +143,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                  series_dict = 'val_series_length.pickle',
                                  size = (28, 22, 549200),
                                  device = device,
-                                 seed = 42,
-                                 length = 50)
+                                 seed = 42)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -149,10 +152,11 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                              num_workers=0)
 
 
-    nEpoch = 5
+    nEpoch = 100
     base_lr = 0.0089 # where we start the learning rate (min point)
     max_lr = 0.013 # where the learning rate is at the max point
     weight_decay = 0.0001
+    step_size_up = (n_samples/batch_size)*5
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -162,7 +166,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
-                         step_size_up=(nEpoch*(n_samples/batch_size)/6),
+                         step_size_up=step_size_up,
                          cycle_momentum=False)
     # step_size_up is set so the learning rate is updated linearly
 
@@ -177,7 +181,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
               "scheduler_cycle_momentum":False,
-              "scheduler_step_size_up":(nEpoch*(n_samples/batch_size)/6),
+              "scheduler_step_size_up":step_size_up,
               "smooting_loss":smooth}
 
     run[f"{net_name}/parameters"] = params
@@ -190,12 +194,12 @@ def net_ADAM(device, fl, it, train_path, val_path):
               optimizer = optimizer,
               lossFunc = lossFunc,
               nEpoch = nEpoch,
-              batch_size = batch_size,
+              smooth = smooth,
               train_loader = train_loader,
               val_loader = val_loader,
               run = run,
-              path = "C:/Users/Marc/Desktop/network/",
-              scheduler = None)
+              path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+              scheduler = scheduler)
 
 
 
@@ -221,11 +225,7 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    #core = 1
-
-    #networks = [net_ADAM1] # net_SGD2, net_ADAM2, net_SGD1,
-
-    networks = [net_SGD1, net_SGD2]
+    networks = [net_SGD] # net_ADAM
 
     cuda_dict = dict()
     # cuda_dict[core] = networks
@@ -241,6 +241,8 @@ if __name__ == '__main__':
 
     train_path = "/home/tyson/data_cutoff/train_model_data"
     val_path = "/home/tyson/data_cutoff/val_model_data"
+    # train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
+    # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
     for i in range(core):

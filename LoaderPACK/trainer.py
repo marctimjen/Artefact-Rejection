@@ -81,6 +81,9 @@ def net_train(device,
             total_pos = total_pos + tot_p_g
             total_neg = total_neg + tot_n_g
 
+            if scheduler: # update the value of the scheduler
+                scheduler.step()
+
         run[f"{net_name}/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
 
@@ -133,11 +136,9 @@ def net_train(device,
 
         run[f"{net_name}/matrix/val_confusion_matrix_pr_file"].log(v_mat)
         Accuarcy_upload(run, v_mat, total_pos, total_neg, f"{net_name}", "val")
-        if scheduler:
-            scheduler.step()
 
     str_run = run.get_run_url()
-    m = re.match(r".+-(\d+)", st) # this correlates the name of the network
+    m = re.match(r".+-(\d+)", str_run) # this correlates the name of the network
                                   # with the neptune ai name.
 
     torch.save(model.state_dict(), path + f"{net_name}-{(m.group(1))}.pt")
