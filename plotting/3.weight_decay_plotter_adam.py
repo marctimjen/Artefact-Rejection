@@ -10,8 +10,8 @@ token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-433"
-) # SGD 1
+    run="AR1-439"
+) # adam 1
 
 adam1_rate = run1['network_ADAM/learning_rate'].fetch_values()
 adam1_weight = run1['network_ADAM/parameters/optimizer_weight_decay'].fetch()
@@ -28,8 +28,8 @@ token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-434"
-) # SGD 2
+    run="AR1-440"
+) # adam 2
 
 
 adam2_rate = run2['network_ADAM/learning_rate'].fetch_values()
@@ -47,8 +47,8 @@ token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-435"
-) # SGD 3
+    run="AR1-441"
+) # adam 3
 
 
 

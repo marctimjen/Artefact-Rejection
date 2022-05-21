@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, random_split
 import torch.multiprocessing as mp
 import numpy as np
+import re
 
 import sys
 sys.path.append("..") # adds higher directory to python modules path
@@ -22,6 +23,7 @@ def net_train(device,
               optimizer,
               lossFunc,
               nEpoch,
+              smooth,
               train_loader,
               val_loader,
               run,
@@ -134,5 +136,9 @@ def net_train(device,
         if scheduler:
             scheduler.step()
 
-    torch.save(model.state_dict(), path + f"{net_name}.pt")
+    str_run = run.get_run_url()
+    m = re.match(r".+-(\d+)", st) # this correlates the name of the network
+                                  # with the neptune ai name.
+
+    torch.save(model.state_dict(), path + f"{net_name}-{(m.group(1))}.pt")
     run.stop()

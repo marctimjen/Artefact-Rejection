@@ -1,0 +1,4 @@
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 31.4, "step": null, "ts": 1653124620.267886}]}, "version": 1}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 6.368961334228516, "step": null, "ts": 1653124620.267886}]}, "version": 2}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 8.0, "step": null, "ts": 1653124620.267886}]}, "version": 3}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.7162208557128906, "step": null, "ts": 1653124620.267886}]}, "version": 4}

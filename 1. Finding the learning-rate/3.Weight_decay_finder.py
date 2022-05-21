@@ -70,8 +70,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate
-    max_lr = 0.268 # where the learning rate is supposed to end
+    base_lr = 0.216 # where we start the learning rate (min point)
+    max_lr = 0.268 # where the learning rate is at the max point
     weight_decay = 0
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -246,13 +246,13 @@ def net_SGD2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate
-    max_lr = 0.268 # where the learning rate is supposed to end
+    base_lr = 0.216 # where we start the learning rate (min point)
+    max_lr = 0.268 # where the learning rate is at the max point
     weight_decay =  0.0001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
-    # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+
     optimizer = SGD(model.parameters(), lr=base_lr, weight_decay=weight_decay)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
@@ -423,8 +423,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate
-    max_lr = 0.268 # where the learning rate is supposed to end
+    base_lr = 0.216 # where we start the learning rate (min point)
+    max_lr = 0.268 # where the learning rate is at the max point
     weight_decay = 0.00001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -599,8 +599,8 @@ def net_ADAM1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.0089 # where we start the learning rate
-    max_lr = 0.013 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate (min point)
+    max_lr = 0.013 # where the learning rate is at the max point
     weight_decay = 0
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -770,8 +770,8 @@ def net_ADAM2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.0089 # where we start the learning rate
-    max_lr = 0.013 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate (min point)
+    max_lr = 0.013 # where the learning rate is at the max point
     weight_decay = 0.0001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -941,8 +941,8 @@ def net_ADAM3(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.0089 # where we start the learning rate
-    max_lr = 0.013 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate (min point)
+    max_lr = 0.013 # where the learning rate is at the max point
     weight_decay = 0.00001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \

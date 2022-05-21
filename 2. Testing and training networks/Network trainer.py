@@ -27,7 +27,7 @@ except RuntimeError:
     pass
 
 
-def net_SGD(device, train_file_loader, val_file_loader):
+def net_SGD(device, fl, it, train_path, val_path):
 
     token = os.getenv('Neptune_api')
     run = neptune.init(
@@ -35,17 +35,14 @@ def net_SGD(device, train_file_loader, val_file_loader):
         api_token=token,
     )
 
-
     net_name = "network_SGD"
 
     batch_size = 10
-    n_samples = 500 # how many samples do we collect
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
-                                   device = device,
-                                   length = n_samples)
+                                   device = device)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -57,8 +54,7 @@ def net_SGD(device, train_file_loader, val_file_loader):
                                  series_dict = 'val_series_length.pickle',
                                  size = (28, 22, 549200),
                                  device = device,
-                                 seed = 42,
-                                 length = 50)
+                                 seed = 42)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -67,16 +63,10 @@ def net_SGD(device, train_file_loader, val_file_loader):
                                              num_workers=0)
 
 
-    valid_loss, train_loss = [], []
-    smooth_valid_loss, smooth_train_loss = [], []
-    valid_acc = torch.tensor([]).to(device)
-    train_acc = torch.tensor([]).to(device)
-
-    avg_train_loss, avg_valid_loss = [], []
-
     nEpoch = 5
-    base_lr = 0.01 # where we start the learning rate
-    max_lr = 1 # where the learning rate is supposed to end
+    base_lr = 0.216 # where we start the learning rate (min point)
+    max_lr = 0.268 # where the learning rate is at the max point
+    weight_decay = 0
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -87,8 +77,8 @@ def net_SGD(device, train_file_loader, val_file_loader):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=nEpoch*(n_samples/batch_size)-1,
-                         cycle_momentum=False)
-    # step_size_up is set so the learning rate is updated linearly
+                         cycle_momentum=True, base_momentum=0.8,
+                         max_momentum=0.9)
 
     smooth = 0.05
 
@@ -99,7 +89,8 @@ def net_SGD(device, train_file_loader, val_file_loader):
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":False,
+              "scheduler_cycle_momentum":True,
+              "base_momentum":0.8, "max_momentum":0.9,
               "scheduler_step_size_up":nEpoch*(n_samples/batch_size)-1,
               "smooting_loss":smooth}
 
@@ -159,8 +150,8 @@ def net_ADAM(device, fl, it, train_path, val_path):
 
 
     nEpoch = 5
-    base_lr = 0.004 # where we start the learning rate
-    max_lr = 0.006 # where the learning rate is supposed to end
+    base_lr = 0.0089 # where we start the learning rate (min point)
+    max_lr = 0.013 # where the learning rate is at the max point
     weight_decay = 0.0001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
