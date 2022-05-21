@@ -228,7 +228,7 @@ if __name__ == '__main__':
 
     networks = [net_ADAM] # net_SGD
 
-    # cuda_dict = dict()
+    cuda_dict = dict()
     cuda_dict[core] = networks
 
     # for i in range(core):
