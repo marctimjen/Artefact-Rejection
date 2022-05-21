@@ -43,8 +43,7 @@ def net_SGD(device, fl, it, train_path, val_path):
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
-                                   device = device,
-                                   length = n_samples)
+                                   device = device)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -132,9 +131,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
-                                   device = device,
-                                   length = n_samples)
-
+                                   device = device)
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
                                                batch_size=batch_size,
