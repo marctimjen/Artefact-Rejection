@@ -70,7 +70,7 @@ def net_SGD(device, fl, it, train_path, val_path):
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
-    # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
+
     optimizer = SGD(model.parameters(), lr=base_lr)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")

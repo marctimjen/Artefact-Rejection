@@ -720,7 +720,7 @@ if __name__ == '__main__':
 
     #networks = [net_ADAM1] # net_SGD2, net_ADAM2, net_SGD1,
 
-    networks = [net_SGD2, net_ADAM1]
+    networks = [net_SGD1, net_ADAM1, net_SGD2, net_ADAM2]
 
     cuda_dict = dict()
     # cuda_dict[core] = networks
