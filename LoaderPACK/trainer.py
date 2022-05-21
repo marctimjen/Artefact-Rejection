@@ -56,8 +56,8 @@ def net_train(device,
 
         for series in train_loader:
             ind, tar, chan = series
+            model.zero_grad()  # clear the gradients before each instance
             y_pred = model(ind)
-            model.zero_grad()
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
