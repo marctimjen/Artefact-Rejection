@@ -27,8 +27,8 @@ if exp_mode:
     SGD_max = 0.268
 
     magenta = True
-    SGD_base_m = 0.06  # magenta values
-    SGD_max_m = 0.1  # magenta values
+    SGD_base_m = 0.07  # magenta values
+    SGD_max_m = 0.103  # magenta values
 
 
     log_x_scale = True
@@ -45,9 +45,9 @@ else:
     SGD_base = 0.216
     SGD_max = 0.268
 
-    magenta = False
-    SGD_base_m = 0.06  # magenta values
-    SGD_max_m = 0.1  # magenta values
+    magenta = True
+    SGD_base_m = 0.07  # magenta values
+    SGD_max_m = 0.103  # magenta values
 
 
 

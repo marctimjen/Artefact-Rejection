@@ -70,8 +70,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate (min point)
-    max_lr = 0.268 # where the learning rate is at the max point
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
     weight_decay = 0
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -84,7 +84,7 @@ def net_SGD1(device, fl, it, train_path, val_path):
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
                          cycle_momentum=True, mode='triangular2',
-                         base_momentum=0.8, max_momentum=0.9)
+                         base_momentum=0.9, max_momentum=0.99)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -246,8 +246,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate (min point)
-    max_lr = 0.268 # where the learning rate is at the max point
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
     weight_decay =  0.0001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -259,8 +259,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9)
+                         cycle_momentum=True, base_momentum=0.9,
+                         max_momentum=0.99)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -423,8 +423,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
     avg_train_loss, avg_valid_loss = [], []
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate (min point)
-    max_lr = 0.268 # where the learning rate is at the max point
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
     weight_decay = 0.00001
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
@@ -436,8 +436,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=(nEpoch*(n_samples/batch_size)/6),
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9)
+                         cycle_momentum=True, base_momentum=0.9,
+                         max_momentum=0.99)
     # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
@@ -1089,7 +1089,7 @@ if __name__ == '__main__':
 
     core = torch.cuda.device_count()
 
-    networks = [net_SGD1, net_SGD2, net_SGD3, net_ADAM1, net_ADAM2, net_ADAM3]
+    networks = [net_SGD1, net_SGD2, net_SGD3] #, net_ADAM1, net_ADAM2, net_ADAM3]
 
     cuda_dict = dict()
     for i in range(core):
@@ -1098,8 +1098,11 @@ if __name__ == '__main__':
     for i in range(len(networks)):
         cuda_dict[i % core].append(networks[i])
 
-    train_path = "/home/tyson/data_cutoff/train_model_data"
-    val_path = "/home/tyson/data_cutoff/val_model_data"
+    # train_path = "/home/tyson/data_cutoff/train_model_data"
+    # val_path = "/home/tyson/data_cutoff/val_model_data"
+
+    train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
+    val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
     for i in range(core):

@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 from torch.optim import SGD, Adam
 from torch.utils.data import DataLoader, random_split
-from torch.optim.lr_scheduler import CyclicLR
+from torch.optim.lr_scheduler import LambdaLR
 import torch.multiprocessing as mp
 import numpy as np
 import random
@@ -37,14 +37,14 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
     net_name = "network_LSTM"
 
-    batch_size = 5
-    n_samples = 200 # the defualt amount of samples minus 1
+    batch_size = 10
+    n_samples = 20 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
                                    device = device,
-                                   length = n_samples)
+                                   length = 10)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -69,14 +69,13 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
 
     nEpoch = 100
-    base_lr = 0.001
+    base_lr = 0.05 # where we start the learning rate
 
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 
     optimizer = Adam(model.parameters(), lr=base_lr)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
-
 
     smooth = 0.05
 
@@ -119,7 +118,7 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
 
-    if device == "cpu":
+    if str(device) == "cpu":
         fl = torch.FloatTensor
         it = torch.LongTensor
     else:

@@ -68,8 +68,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
     train_acc = torch.tensor([]).to(device)
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate
-    max_lr = 0.268 # where the learning rate is supposed to end
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -237,8 +237,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
     train_acc = torch.tensor([]).to(device)
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate
-    max_lr = 0.268 # where the learning rate is supposed to end
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -409,8 +409,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
     train_acc = torch.tensor([]).to(device)
 
     nEpoch = 5
-    base_lr = 0.216 # where we start the learning rate
-    max_lr = 0.268 # where the learning rate is supposed to end
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -550,7 +550,7 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
 
-    if device == "cpu":
+    if str(device) == "cpu":
         fl = torch.FloatTensor
         it = torch.LongTensor
     else:
@@ -568,8 +568,11 @@ if __name__ == '__main__':
     for i in range(len(networks)):
         cuda_dict[i % core].append(networks[i])
 
-    train_path = "/home/tyson/data_cutoff/train_model_data"
-    val_path = "/home/tyson/data_cutoff/val_model_data"
+    # train_path = "/home/tyson/data_cutoff/train_model_data"
+    # val_path = "/home/tyson/data_cutoff/val_model_data"
+
+    train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
+    val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
     for i in range(core):

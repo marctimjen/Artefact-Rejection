@@ -353,7 +353,8 @@ class testload_5min(Dataset):
     """
     This dataloader loads random 5 minute intervals from a random patient.
     """
-    def __init__(self, path: str, series_dict: str, size: tuple, device):
+    def __init__(self, path: str, series_dict: str, size: tuple, device,
+                 length = None):
         """
         Args:
             path (str): path to the input & target folder.
@@ -378,7 +379,10 @@ class testload_5min(Dataset):
             jj = val[3][0]*math.ceil((val[3][1]-20*300) / (5*60*200))
             ss += jj
 
-        self.length = ss
+        if length:
+            self.length = length
+        else:
+            self.length = ss
 
         self.gen = self.load_data(self.s_dict)
 
@@ -406,13 +410,18 @@ class testload_5min(Dataset):
                         # generated from the experiment. Thus the range:
                         # tar[clear_point:] should not be used for evalutaing
                         # the model, since this is not "true" data
+                        
+                        yield inp, tar, (exp_nr, chan, cut_point, clear_point, w)
+
                     else:
                         inp = self.input_data[exp_nr, chan, cut_point:cut_point+60*5*200]
                         inp = torch.tensor(inp).view(1, 60*5*200).clone().detach()
                         tar = self.target_data[exp_nr, chan, cut_point:cut_point+60*5*200]
                         tar = torch.tensor(tar).view(1, 60*5*200).clone().detach()
 
-                    yield inp, tar, (exp_nr, chan, cut_point, clear_point)
+                        yield inp, tar, (exp_nr, chan, cut_point, clear_point)
+
+
 
 
     def clear_ram(self, index):

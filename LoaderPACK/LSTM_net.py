@@ -19,7 +19,7 @@ class LSTM_net(nn.Module):
         hidden_size = 5 # hyper para
 
         D = 2 # bc. bi = True
-        num_layers = 50 # default (how many cells)
+        num_layers = 2 # default (how many cells)
 
 
         proj_size = 1 # This allows us to rechive two values
@@ -45,7 +45,8 @@ class LSTM_net(nn.Module):
         # Kig på batch_first - den kørrer anden konvention, bidirectional = True
 
         #self.soft = F.log_softmax(dim=1) # Using sigmoid instead of softmax
-        #self.sig = nn.Sigmoid()
+        self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
+        # self.sig = nn.Sigmoid()
 
     def forward(self, x):
         ind = x.view(self.batch_size, -1, self.input_size)
@@ -56,4 +57,4 @@ class LSTM_net(nn.Module):
 
         out = torch.stack((ss, minusss), dim = 1)
 
-        return F.log_softmax(out, dim=1)#self.soft(out)
+        return self.soft(out)

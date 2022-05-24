@@ -42,6 +42,22 @@ def net_train(device,
     except:
         moment = False
 
+    # Make dir to save the networks in
+    str_run = run.get_run_url()
+    m = re.match(r".+-(\d+)", str_run) # this correlates the name of the network
+                                  # with the neptune ai name.
+    run_nr = m.group(1)
+
+    new_path = os.path.join(path, f"networks_{run_nr}")
+    os.mkdir(new_path)
+
+    path = path + f"networks_{run_nr}/"
+
+
+
+    lowest_val_loss = float("inf") # the best loss obtained during training
+    best_acc = -float("inf") # the best accuarcy during training
+
     for iEpoch in range(nEpoch):
         print(f"Training epoch {iEpoch}")
 
@@ -120,8 +136,8 @@ def net_train(device,
             total_pos = total_pos + tot_p_g
             total_neg = total_neg + tot_n_g
 
-        run[f"{net_name}/validation_loss_pr_file"].log(
-                                                  np.mean(np.array(valid_loss)))
+        avg_val_loss = np.mean(np.array(valid_loss))
+        run[f"{net_name}/validation_loss_pr_file"].log(avg_val_loss)
 
         sm_loss = np.mean(np.array(valid_loss)) * smooth \
                             + (1-smooth) * v_sm_loss
@@ -131,15 +147,35 @@ def net_train(device,
         run[f"{net_name}/smooth_val_loss_pr_file"].log(sm_loss)
         valid_loss = []
 
-        run[f"{net_name}/val_acc_pr_file"].log(torch.mean(valid_acc))
+
+        avg_val_acc = torch.mean(valid_acc)
+        run[f"{net_name}/val_acc_pr_file"].log(avg_val_acc)
         valid_acc = torch.tensor([]).to(device)
+
+        if avg_val_loss < lowest_val_loss and best_acc < avg_val_acc \
+            and iEpoch >= 5:
+            # scenario when both the loss and accuarcy is better
+            torch.save(model.state_dict(),
+                       path + f"{net_name}-epk-{iEpoch}.pt")
+            lowest_val_loss = avg_val_loss
+            best_acc = avg_val_acc
+
+        elif avg_val_loss < lowest_val_loss and iEpoch >= 5:
+            # when only the loss is decreased
+            torch.save(model.state_dict(),
+                       path + f"{net_name}-loss-epk-{iEpoch}.pt")
+            lowest_val_loss = avg_val_loss
+        elif best_acc < avg_val_acc and iEpoch >= 5:
+            # when only the accuracy is increased
+            torch.save(model.state_dict(),
+                       path + f"{net_name}-acc-epk-{iEpoch}.pt")
+            best_acc = avg_val_acc
+
+
 
         run[f"{net_name}/matrix/val_confusion_matrix_pr_file"].log(v_mat)
         Accuarcy_upload(run, v_mat, total_pos, total_neg, f"{net_name}", "val")
 
-    str_run = run.get_run_url()
-    m = re.match(r".+-(\d+)", str_run) # this correlates the name of the network
-                                  # with the neptune ai name.
 
-    torch.save(model.state_dict(), path + f"{net_name}-{(m.group(1))}.pt")
+    torch.save(model.state_dict(), path + f"final-{net_name}-{run_nr}.pt")
     run.stop()
