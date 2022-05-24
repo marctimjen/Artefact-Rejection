@@ -23,11 +23,14 @@ def val_tester(run, network, model, lossFunc, device):
         fl = torch.cuda.FloatTensor
         it = torch.cuda.LongTensor
 
+        # "C:/Users/Marc/Desktop/data/val_model_data"
+        # "C:/Users/Marc/Desktop/data/train_model_data"
+
     load_file = testload_5min(path = "C:/Users/Marc/Desktop/data/val_model_data",
                               series_dict = 'val_series_length.pickle',
-                              size = (28, 22, 549200),
-                              device = device,
-                              length = 600)
+                              size = (28, 22, 549200), #size = (195, 22, 2060000),
+                              device = device) # total val series = 2642
+                                               # total train series = 18497
 
     loader = torch.utils.data.DataLoader(load_file,
                                          batch_size=1,
@@ -35,9 +38,12 @@ def val_tester(run, network, model, lossFunc, device):
                                          num_workers=0)
     valid_loss = []
     valid_acc = torch.tensor([]).to(device)
+
+    t_p_rate = torch.tensor([]).to(device)
+    t_n_rate = torch.tensor([]).to(device)
+
     tot_sr_nr = 0
     for series in loader:
-        print(tot_sr_nr)
         ind, tar, meta = series
 
         with torch.no_grad():
@@ -54,7 +60,6 @@ def val_tester(run, network, model, lossFunc, device):
             b = y_pred[0][1][:meta[4]].view(1, -1)
             y_pred = torch.stack((a, b), dim = 1)
 
-
         pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
         target = tar.view(-1).type(it)
         loss = lossFunc(pred, target)
@@ -64,16 +69,20 @@ def val_tester(run, network, model, lossFunc, device):
         valid_loss.append(loss.item())
         valid_acc = torch.cat((valid_acc, acc.view(1)))
 
-        if acc < 0.05: # or acc > 0.95:
+        t_p_rate = torch.cat((t_p_rate, (mat[0][0]/tot_p_g).view(1)))
+        t_n_rate = torch.cat((t_n_rate, (mat[1][1]/tot_n_g).view(1)))
+
+
+        if acc < -0.05: # or acc > 0.95:
             figure, axis = plt.subplots(2, 1)
 
             # The artifacts on channel: FP1-F7
-            axis[0].plot(ind[0][0].cpu()) # true target = red
+            axis[0].plot(ind[0][0].cpu())
             axis[0].axes.xaxis.set_visible(False) # remove digits on x-axis
 
             # The artifacts on channel: F7-T3
             axis[1].plot(1*art_pred[0].cpu(), "b") # prediction is blue
-            axis[1].plot(tar[0][0].cpu(), "r", markersize=1)
+            axis[1].plot(tar[0][0].cpu(), "r", markersize=1) # true target = red
             axis[1].set_title(f"Nr:{meta[0]} with channel: {meta[1]} at {meta[2]}")
             axis[1].axes.xaxis.set_visible(False) # remove digits on x-axis
 
@@ -81,5 +90,7 @@ def val_tester(run, network, model, lossFunc, device):
             plt.close()
             tot_sr_nr += 1
 
-    print("mean accuarcy:", torch.mean(valid_acc))
+    print("mean accuarcy:", torch.nanmean(valid_acc))
+    print("mean true positive rate:", torch.nanmean(t_p_rate))
+    print("mean true negative rate:", torch.nanmean(t_n_rate))
     print("mean loss:",  np.mean(valid_loss))

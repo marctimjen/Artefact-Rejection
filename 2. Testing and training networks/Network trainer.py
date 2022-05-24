@@ -67,34 +67,35 @@ def net_SGD(device, fl, it, train_path, val_path):
 
 
     nEpoch = 100
-    base_lr = 0.216 # where we start the learning rate (min point)
-    max_lr = 0.268 # where the learning rate is at the max point
+    base_lr = 0.07 # where we start the learning rate
+    max_lr = 0.103 # where the learning rate is supposed to end
     weight_decay = 0
     step_size_up = (n_samples/batch_size)*5
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
 
-    optimizer = SGD(model.parameters(), lr=base_lr)
+    optimizer = SGD(model.parameters(), lr=base_lr, weight_decay=weight_decay)
     lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=step_size_up,
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9)
+                         cycle_momentum=True, base_momentum=0.9,
+                         max_momentum=0.99)
 
     smooth = 0.05
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
+              "optimizor_weight_decay":weight_decay,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1, 5],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
               "scheduler_cycle_momentum":True,
-              "base_momentum":0.8, "max_momentum":0.9,
+              "base_momentum":0.9, "max_momentum":0.99,
               "scheduler_step_size_up":step_size_up,
               "smooting_loss":smooth}
 
