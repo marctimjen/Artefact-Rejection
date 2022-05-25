@@ -49,13 +49,11 @@ class load_whole_data(Dataset): # Dataset
         return inp, tar, s_len_ls
 
 
-
-
 class load_shuffle_5_min(Dataset):
     """
     This dataloader loads the tensor input and target in whole
     """
-    def __init__(self, ls: list, device):
+    def __init__(self, ls: list, device, ex = None):
         """
         Args:
             path (str): path to the input & target folder.
@@ -72,16 +70,15 @@ class load_shuffle_5_min(Dataset):
         self.s_len = ls[2][0]
         self.s_num = ls[2][1]
 
-        length = math.floor((self.size[1]/(200*60*5)))*self.size[0]
+        length = math.floor(((self.size[1]- 30*200)/(200*60*5)))*self.size[0]
             # the amount of total possible cuts
 
-        self.length = int(min(torch.div(110, self.s_num,
-                                        rounding_mode='trunc'), length))
-
-        # self.length = int(min(torch.div((130 - self.s_len % 130), self.s_num,
-        #                                 rounding_mode='trunc'), length))
-            # make sure that no more than 75 samples is taken from the same
-            # individual
+        if ex:
+            self.length = int(min(torch.div(10, self.s_num,
+                                            rounding_mode='trunc'), length))
+        else:
+            self.length = int(min(torch.div(110, self.s_num,
+                                            rounding_mode='trunc'), length))
 
         self.gen = iter(self.create_data(self.length))
 
@@ -98,11 +95,7 @@ class load_shuffle_5_min(Dataset):
             chan = int(i//cuts_pr_chan) # the given channel
             inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*200].view(1, 60*5*200)
             tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*200].view(1, 60*5*200)
-            #inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*200]
-            #tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*200]
 
-
-            #tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*200)
             yield (inp, tar, chan)
 
     def __len__(self):
@@ -113,7 +106,6 @@ class load_shuffle_5_min(Dataset):
         inp = inp.to(self.device)
         tar = tar.to(self.device)
         return inp, tar, chan
-
 
 
 class load_5_min_intervals(Dataset):
@@ -275,8 +267,10 @@ class shuffle_5min(Dataset):
         with open(path + "/" + series_dict, 'rb') as handle:
             self.s_dict = pickle.load(handle)
 
-        self.input_data = np.memmap(self.path + "/model_input.dat", dtype='float32', mode='r', shape=self.size)
-        self.target_data = np.memmap(self.path + "/model_target.dat", dtype='float32', mode='r', shape=self.size)
+        self.input_data = np.memmap(self.path + "/model_input.dat",
+                                    dtype='float32', mode='r', shape=self.size)
+        self.target_data = np.memmap(self.path + "/model_target.dat",
+                                     dtype='float32', mode='r', shape=self.size)
 
         prop = [] # list with probabilities
 
@@ -297,28 +291,25 @@ class shuffle_5min(Dataset):
             self.rng = np.random.default_rng(self.seed)
             self.gen = iter(self.create_data(self.s_dict, self.rng))
 
-
-
-
     def create_data(self, s_dict, rng):
         while True:
             ind = rng.choice(self.size[0], 1, p = self.prop)
             shp = s_dict[ind[0] + 1][3] # shape of experiment
+            # shp = (which_channels, length of recording)
 
             cut_point = rng.integers(low = 200*30, #remove the first 30 secs
                                 high = shp[1] - 5*200*60, size = 1)
                                 # choose the place to cut
 
-            chan = rng.choice(shp[0], 1)
+            chan = rng.choice(shp[0], 1) # select which channel at random
 
-            inp = self.input_data[ind[0], chan[0], cut_point[0]:cut_point[0]+60*5*200]
+            inp = self.input_data[ind[0], chan[0],
+                                  cut_point[0]:cut_point[0]+60*5*200]
             inp = torch.tensor(inp).view(1, 60*5*200)
-            tar = self.target_data[ind[0], chan[0], cut_point[0]:cut_point[0]+60*5*200]
+            tar = self.target_data[ind[0], chan[0],
+                                   cut_point[0]:cut_point[0]+60*5*200]
             tar = torch.tensor(tar).view(1, 60*5*200)
-            # #inp = self.ls[0][0][chan][cut_point[i]:cut_point[i]+60*5*200]
-            # #tar = self.ls[1][0][chan][cut_point[i]:cut_point[i]+60*5*200]
 
-            #tar = torch.cat((tar[0], -1*(tar[0] - 1))).view(2, 60*5*200)
             yield inp, tar, (ind[0], chan[0], cut_point[0])
 
 
@@ -410,7 +401,7 @@ class testload_5min(Dataset):
                         # generated from the experiment. Thus the range:
                         # tar[clear_point:] should not be used for evalutaing
                         # the model, since this is not "true" data
-                        
+
                         yield inp, tar, (exp_nr, chan, cut_point, clear_point, w)
 
                     else:
