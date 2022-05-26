@@ -38,13 +38,13 @@ def net_LSTM(device, fl, it, train_path, val_path):
     net_name = "network_LSTM"
 
     batch_size = 10
-    n_samples = 11141-1 # the defualt amount of samples minus 1
+    n_samples = 1800 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
                                    device = device,
-                                   length = 10)
+                                   length = n_samples)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -58,7 +58,7 @@ def net_LSTM(device, fl, it, train_path, val_path):
                                  size = (28, 22, 549200),
                                  device = device,
                                  seed = 42,
-                                 length = n_samples)
+                                 length = 200)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -143,8 +143,8 @@ if __name__ == '__main__':
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
 
-    train_path = "/home/tyson/data_cutoff/train_model_data"
-    val_path = "/home/tyson/data_cutoff/val_model_data"
+    train_path = "/home/tyson/data_new/train_model_data"
+    val_path = "/home/tyson/data_new/val_model_data"
     # train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
