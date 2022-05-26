@@ -44,6 +44,8 @@ def val_tester(run, network, model, lossFunc, device):
     roc_pred = np.array([])
     roc_tar = np.array([])
 
+    roc_s = []
+
     t_p_rate = torch.tensor([]).to(device)
     t_n_rate = torch.tensor([]).to(device)
 
@@ -80,27 +82,11 @@ def val_tester(run, network, model, lossFunc, device):
         roc_tar = np.concatenate((roc_tar, target.numpy()))
         roc_pred = np.concatenate((roc_pred, y_pred.view(2, -1)[1].numpy()))
 
-
-        # try:
-        #     roc_s.append(roc_auc_score(target.numpy(),
-        #                                y_pred.view(2, -1)[1].numpy()))
-        # except:
-        #     print(y_pred.sum())
-        #     print(y_pred.view(2, -1)[1])
-        #     if not(mat[0][0]):
-        #         sens = 0
-        #
-        #     f_p_r = mat[0][1]/(mat[0][1]+mat[1][1])
-        #
-        #     roc_s.append(acc.numpy())
-        #
-        #     print("tp:", mat[0][0], "fn:", mat[1][0])
-        #     print(f"{mat[0][0]}/{mat[0][0]}+{mat[1][0]}=", sens)
-        #
-        #     print(f"{mat[0][1]}/{mat[0][1]}+{mat[1][1]}=", f_p_r)
-        #
-        #     print(mat)
-        #     sys.exit()
+        if len(roc_pred) >= 6000000:
+            print("yo")
+            roc_s.append(roc_auc_score(roc_tar, roc_pred))
+            roc_pred = np.array([])
+            roc_tar = np.array([])
 
 
         if acc < -0.05: # or acc > 0.95:
@@ -124,4 +110,4 @@ def val_tester(run, network, model, lossFunc, device):
     print("mean true positive rate:", torch.nanmean(t_p_rate))
     print("mean true negative rate:", torch.nanmean(t_n_rate))
     print("mean loss:",  np.mean(valid_loss))
-    print("roc", roc_auc_score(roc_tar, roc_pred))
+    print("roc", np.mean(np.array(roc_s)))
