@@ -3,8 +3,6 @@ import os
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from torch.utils.data import DataLoader, random_split
-import torch.multiprocessing as mp
 import numpy as np
 import re
 
@@ -29,12 +27,42 @@ def net_train(device,
               run,
               path,
               scheduler = None):
+    """
+    This function is used for training the hyper-optimized networks.
+
+    Args:
+        device (torch device): whihc device to train the network on.
+        fl (tensor type): which type of tensor is used
+                                                (differes depending on device)
+        it (tensor type): which type of tensor is used
+                                                (differes depending on device)
+        net_name (str): the name of the network
+        model (torch model): the network model used
+        optimizer (torch optimizor): the optimizor used for the training
+        lossFunc (torch loss funciton): the loss function used
+        nEpoch (int): amount of epochs used for training
+        smooth (float): amount of smoothing used for the recorded loss
+        train_loader (torch loader): data loader for training
+        val_loader (torch loader): data loader for validation
+        run (neptune run instance): to log the information duing training and
+                                    validation
+        path (str): path for saving networks
+        scheduler = None (torch scheduler): if given the scheduler will be used
+                                            to update the learning rate
+
+    Produced files:
+        This function creates a folder at path, using the number of the neptune
+        run instance. In this folder networks will be saved when new better
+        accuracy or loss is achived. Also the final network will be saved in
+        this folder.
+    """
 
     valid_loss, train_loss = [], []
     valid_acc = torch.tensor([]).to(device)
     train_acc = torch.tensor([]).to(device)
 
     first_loss_save = True
+    # save the loss of the network before training
 
     try: # test if the optimizor contain momentum
         moment = optimizer.param_groups[0]['momentum']
@@ -42,7 +70,7 @@ def net_train(device,
     except:
         moment = False
 
-    # Make dir to save the networks in
+    # make dir to save the networks in
     str_run = run.get_run_url()
     m = re.match(r".+-(\d+)", str_run) # this correlates the name of the network
                                   # with the neptune ai name.
@@ -67,7 +95,7 @@ def net_train(device,
             run[f"{net_name}/momentum"].log(
                                           optimizer.param_groups[0]['momentum'])
 
-        t_mat = torch.zeros(2, 2)
+        t_mat = torch.zeros(2, 2) # save confusion matrix
         total_pos, total_neg = torch.tensor(0), torch.tensor(0)
 
         for series in train_loader:
@@ -77,7 +105,8 @@ def net_train(device,
             pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
-            if first_loss_save:
+
+            if first_loss_save: # save loss before training
                 run[f"{net_name}/train_loss_pr_file"].log(loss)
                 run[f"{net_name}/smooth_train_loss_pr_file"].log(loss)
                 t_sm_loss = loss.item()
@@ -100,6 +129,7 @@ def net_train(device,
             if scheduler: # update the value of the scheduler
                 scheduler.step()
 
+        # log the mean training loss
         run[f"{net_name}/train_loss_pr_file"].log(
                                                 np.mean(np.array(train_loss)))
 
@@ -107,6 +137,7 @@ def net_train(device,
                             + (1-smooth) * t_sm_loss
 
         t_sm_loss = sm_loss
+        # log the smoothed loss
         run[f"{net_name}/smooth_train_loss_pr_file"].log(sm_loss)
 
         train_loss = []
@@ -147,7 +178,6 @@ def net_train(device,
         run[f"{net_name}/smooth_val_loss_pr_file"].log(sm_loss)
         valid_loss = []
 
-
         avg_val_acc = torch.mean(valid_acc)
         run[f"{net_name}/val_acc_pr_file"].log(avg_val_acc)
         valid_acc = torch.tensor([]).to(device)
@@ -171,11 +201,9 @@ def net_train(device,
                        path + f"{net_name}-acc-epk-{iEpoch}.pt")
             best_acc = avg_val_acc
 
-
-
         run[f"{net_name}/matrix/val_confusion_matrix_pr_file"].log(v_mat)
         Accuarcy_upload(run, v_mat, total_pos, total_neg, f"{net_name}", "val")
 
-
+    # save the final network
     torch.save(model.state_dict(), path + f"final-{net_name}-{run_nr}.pt")
     run.stop()

@@ -1,13 +1,24 @@
 import csv
 import mne
 import pandas as pd
-import matplotlib.pyplot as plt
 import torch
 import math
 import numpy as np
 
 
 def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
+    """
+    This function is used to make two lists with directories to the edf files
+    and to the files with the target annotations.
+
+    Args:
+        edf_list (str): path to a file containing directories to the edf files.
+        csv_list (Str): path to a file containing directories to the csv files.
+        data_dir (str): first part of the path.
+
+    Return:
+        file_list: list with paths to the edf files and target annotation files.
+    """
     file_list = []
     file1 = open(edf_list)
     file2 = open(csv_list)
@@ -27,6 +38,19 @@ def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
 
 
 def read_and_export_files(file_list: list, montage: dict, save_loc: str):
+    """
+    This function creates .pt (torch files) for the input (eeg-recordings) and
+    target (annotaion) data.
+
+    Args:
+        file_list (list): list with paths to the edf and annotation files.
+        montage (dict): montage for derivation used.
+        save_loc (str): directory in which the data is saved.
+
+    Produced files:
+        This function creates input and target files from the edf and annotaion
+        data. The file format is .pt used in pytorch.
+    """
     global nr
     for direct in file_list:
         edf_dir = direct[0]
@@ -44,7 +68,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         df = data.to_data_frame() # make pandas dataframe
 
-        inv_map = {v[0]: k for k, v in montage1.items()}
+        inv_map = {v[0]: k for k, v in montage.items()}
         # to make sure, that the correct targets are given to the right
         # channels, the index order is used.
 
@@ -55,9 +79,9 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
             skip = 0
             flag = True
             for rows in ls:
-                if rows[0][0] == "#":
+                if rows[0][0] == "#": # if the row starts with "#" then move on
                     continue
-                elif flag:
+                elif flag:            # jump over the header (name of columns)
                     flag = False
                     continue
                 target.append([inv_map.get(str(rows[0])), float(rows[1]),
@@ -68,18 +92,11 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
 
         first = True
         for i in sorted_index: # using the montage information we make the new
-            col_names = montage.get(i) # data-frame using only the channels
+            col_names = montage1.get(i) # data-frame using only the channels
                                        # that has been labeled
 
             if (col_names[0] == "EKG"): # & first # special case that is removed
                 continue
-        #        df_new = df[col_names[1]]
-        #        df_new = df_new.rename(col_names[0])
-        #        first = False
-        #    elif (col_names[0] == "EKG"): # special case for montage 2
-        #        list1 = df[col_names[1]]
-        #        list1 = list1.rename(col_names[0])
-        #        df_new = pd.concat([df_new, diff], axis=1, join='inner')
 
             if first:
                 list1 = df[col_names[1]] # get the first series
@@ -98,7 +115,8 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
         tar = torch.zeros(df_new.shape[1], df_new.shape[0]) # make target data
 
         for i in target: # i = [montage_channel, start, end, type_artifact]
-            index = sorted_index.index(i[0]) # Find the correct index in the target
+            index = sorted_index.index(i[0])
+            # Find the correct index in the target
             tar[index][200 * math.floor(i[1]): 200 * math.ceil(i[2])] = 1
                 # Make the artifacts = 1
 
@@ -136,7 +154,8 @@ montage1 = {
 18: ["FP2-F4", "EEG FP2-REF", "EEG F4-REF"],
 19: ["F4-C4", "EEG F4-REF", "EEG C4-REF"],
 20: ["C4-P4", "EEG C4-REF", "EEG P4-REF"],
-21: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]}
+21: ["P4-O2", "EEG P4-REF", "EEG O2-REF"]
+}
 montage2 = {
 0: ["FP1-F7", "EEG FP1-LE", "EEG F7-LE"],
 1: ["F7-T3", "EEG F7-LE", "EEG T3-LE"],

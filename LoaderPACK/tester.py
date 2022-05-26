@@ -9,7 +9,9 @@ sys.path.append("..") # adds higher directory to python modules path
 from LoaderPACK.Loader import testload_5min
 from LoaderPACK.Accuarcy_finder import Accuarcy_find_tester
 import torch
+import torch.nn.functional as F
 import matplotlib.pyplot as plt
+from sklearn.metrics import roc_auc_score
 
 def val_tester(run, network, model, lossFunc, device):
     """
@@ -38,6 +40,9 @@ def val_tester(run, network, model, lossFunc, device):
                                          num_workers=0)
     valid_loss = []
     valid_acc = torch.tensor([]).to(device)
+
+    roc_pred = np.array([])
+    roc_tar = np.array([])
 
     t_p_rate = torch.tensor([]).to(device)
     t_n_rate = torch.tensor([]).to(device)
@@ -72,6 +77,31 @@ def val_tester(run, network, model, lossFunc, device):
         t_p_rate = torch.cat((t_p_rate, (mat[0][0]/tot_p_g).view(1)))
         t_n_rate = torch.cat((t_n_rate, (mat[1][1]/tot_n_g).view(1)))
 
+        roc_tar = np.concatenate((roc_tar, target.numpy()))
+        roc_pred = np.concatenate((roc_pred, y_pred.view(2, -1)[1].numpy()))
+
+
+        # try:
+        #     roc_s.append(roc_auc_score(target.numpy(),
+        #                                y_pred.view(2, -1)[1].numpy()))
+        # except:
+        #     print(y_pred.sum())
+        #     print(y_pred.view(2, -1)[1])
+        #     if not(mat[0][0]):
+        #         sens = 0
+        #
+        #     f_p_r = mat[0][1]/(mat[0][1]+mat[1][1])
+        #
+        #     roc_s.append(acc.numpy())
+        #
+        #     print("tp:", mat[0][0], "fn:", mat[1][0])
+        #     print(f"{mat[0][0]}/{mat[0][0]}+{mat[1][0]}=", sens)
+        #
+        #     print(f"{mat[0][1]}/{mat[0][1]}+{mat[1][1]}=", f_p_r)
+        #
+        #     print(mat)
+        #     sys.exit()
+
 
         if acc < -0.05: # or acc > 0.95:
             figure, axis = plt.subplots(2, 1)
@@ -94,3 +124,4 @@ def val_tester(run, network, model, lossFunc, device):
     print("mean true positive rate:", torch.nanmean(t_p_rate))
     print("mean true negative rate:", torch.nanmean(t_n_rate))
     print("mean loss:",  np.mean(valid_loss))
+    print("roc", roc_auc_score(roc_tar, roc_pred))

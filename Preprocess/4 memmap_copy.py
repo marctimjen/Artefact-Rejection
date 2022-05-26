@@ -1,13 +1,14 @@
-# This script is for copying some files to another folder.
+# This script is for copying some files to another folder
 
 import shutil
 
+def mover(path_from: str, path_to: str, file: str):
+    """
+    This function moves the file from the directory of path_from to the
+    directory of path_to.
+    """
 
-
-def mover(path_from, path_to, file):
     shutil.copyfile(path_from + "/" + file, path_to + "/" + file)
-
-
 
 
 if __name__ == "__main__":
