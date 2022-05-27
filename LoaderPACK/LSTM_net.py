@@ -19,7 +19,7 @@ class LSTM_net(nn.Module):
         hidden_size = 5 # hyper para
 
         D = 2 # bc. bi = True
-        num_layers = 50 # default (how many cells)
+        num_layers = 5 # default (how many cells)
 
 
         proj_size = 1 # This allows us to rechive two values
