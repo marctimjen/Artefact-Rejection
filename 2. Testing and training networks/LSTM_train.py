@@ -132,13 +132,13 @@ if __name__ == '__main__':
     cuda_dict = dict()
     # cuda_dict[core] = networks
 
-    cuda_dict[1] = networks
+    # cuda_dict[1] = networks
 
-    # for i in range(core):
-    #     cuda_dict[i] = []
+    for i in range(core):
+        cuda_dict[i] = []
 
-    # for i in range(len(networks)):
-    #     cuda_dict[i % core].append(networks[i]) # i % core
+    for i in range(len(networks)):
+        cuda_dict[i % core].append(networks[i]) # i % core
 
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(1, core):
+    for i in range(core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
