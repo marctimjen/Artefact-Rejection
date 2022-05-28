@@ -50,7 +50,12 @@ def val_tester(run, network, model, lossFunc, device):
     t_n_rate = torch.tensor([]).to(device)
 
     tot_sr_nr = 0
+    counter = -1
     for series in loader:
+        counter += 1
+        if not(counter % 100):
+            print(counter)
+
         ind, tar, meta = series
 
         with torch.no_grad():
@@ -82,11 +87,11 @@ def val_tester(run, network, model, lossFunc, device):
         roc_tar = np.concatenate((roc_tar, target.numpy()))
         roc_pred = np.concatenate((roc_pred, y_pred.view(2, -1)[1].numpy()))
 
-        if len(roc_pred) >= 6000000:
-            print("yo")
-            roc_s.append(roc_auc_score(roc_tar, roc_pred))
-            roc_pred = np.array([])
-            roc_tar = np.array([])
+        # if len(roc_pred) >= 6000000:
+        #     print("yo")
+        #     roc_s.append(roc_auc_score(roc_tar, roc_pred))
+        #     roc_pred = np.array([])
+        #     roc_tar = np.array([])
 
 
         if acc < -0.05: # or acc > 0.95:
@@ -110,4 +115,4 @@ def val_tester(run, network, model, lossFunc, device):
     print("mean true positive rate:", torch.nanmean(t_p_rate))
     print("mean true negative rate:", torch.nanmean(t_n_rate))
     print("mean loss:",  np.mean(valid_loss))
-    print("roc", np.mean(np.array(roc_s)))
+    # print("roc", np.mean(np.array(roc_s)))

@@ -69,7 +69,7 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
 
     nEpoch = 100
-    base_lr = 0.05 # where we start the learning rate
+    base_lr = 0.025 # where we start the learning rate
 
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 

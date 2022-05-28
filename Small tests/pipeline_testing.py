@@ -14,6 +14,7 @@ from LoaderPACK.Unet import Unet
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
+from LoaderPACK.Unet_leaky import Unet_leaky, Unet_leaky_lstm
 
 import os
 import torch.nn as nn
@@ -49,7 +50,9 @@ import random
 
 
 
-# batch_size = 1
+batch_size = 1
+
+device = "cpu"
 #
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #
@@ -69,8 +72,18 @@ import random
 
 device = "cpu"
 
+model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
+                        device=device).to(device)
+
+x = torch.load(f"C:/Users/Marc/Desktop/network/network_SGD-acc-epk-21.pt")
+model.load_state_dict(x)
+model.to(device)
+
 lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
                                reduction = "mean")
 
 
-val_tester(run = "1", network = "2", model = linear_model, lossFunc = lossFunc, device = device)
+
+# thenos, linear_model
+
+val_tester(run = "1", network = "2", model = model, lossFunc = lossFunc, device = device)
