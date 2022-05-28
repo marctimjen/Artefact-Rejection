@@ -37,7 +37,7 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
     net_name = "network_LSTM"
 
-    batch_size = 20
+    batch_size = 10
     n_samples = 1800 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
