@@ -16,7 +16,7 @@ class LSTM_net(nn.Module):
 
         self.batch_size = batch_size
         self.input_size = 1 # the number of series
-        hidden_size = 5 # hyper para
+        hidden_size = 2 # hyper para
 
         D = 2 # bc. bi = True
         num_layers = 5 # default (how many cells)

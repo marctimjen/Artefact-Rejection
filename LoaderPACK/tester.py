@@ -58,6 +58,7 @@ def val_tester(run, network, model, lossFunc, device):
 
         ind, tar, meta = series
 
+
         with torch.no_grad():
             y_pred = model(ind)
 
@@ -72,20 +73,20 @@ def val_tester(run, network, model, lossFunc, device):
             b = y_pred[0][1][:meta[4]].view(1, -1)
             y_pred = torch.stack((a, b), dim = 1)
 
-        pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
+        # pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
         target = tar.view(-1).type(it)
-        loss = lossFunc(pred, target)
+        # loss = lossFunc(pred, target)
 
         acc, mat, tot_p_g, tot_n_g, art_pred = Accuarcy_find_tester(y_pred, tar, device)
 
-        valid_loss.append(loss.item())
+        # valid_loss.append(loss.item())
         valid_acc = torch.cat((valid_acc, acc.view(1)))
 
         t_p_rate = torch.cat((t_p_rate, (mat[0][0]/tot_p_g).view(1)))
         t_n_rate = torch.cat((t_n_rate, (mat[1][1]/tot_n_g).view(1)))
 
-        roc_tar = np.concatenate((roc_tar, target.numpy()))
-        roc_pred = np.concatenate((roc_pred, y_pred.view(2, -1)[1].numpy()))
+        # roc_tar = np.concatenate((roc_tar, target.numpy()))
+        # roc_pred = np.concatenate((roc_pred, y_pred.view(2, -1)[1].numpy()))
 
         # if len(roc_pred) >= 6000000:
         #     print("yo")
@@ -114,5 +115,5 @@ def val_tester(run, network, model, lossFunc, device):
     print("mean accuarcy:", torch.nanmean(valid_acc))
     print("mean true positive rate:", torch.nanmean(t_p_rate))
     print("mean true negative rate:", torch.nanmean(t_n_rate))
-    print("mean loss:",  np.mean(valid_loss))
+    # print("mean loss:",  np.mean(valid_loss))
     # print("roc", np.mean(np.array(roc_s)))
