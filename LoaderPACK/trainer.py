@@ -299,8 +299,6 @@ def net_train_combo(device,
             model.zero_grad()  # clear the gradients before each instance
             y_pred = model(ind)
             pred = y_pred[:, 1].type(fl)
-            if pred.isnan().any():
-                print("uo")
             target = tar.view(-1).type(it)
             loss = lossFunc(pred, target)
 

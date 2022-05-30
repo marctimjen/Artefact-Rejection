@@ -52,10 +52,6 @@ class ComboLoss(nn.Module):
         weighted_ce = out.mean(-1)
         combo = (cd_ratio * weighted_ce) - ((1 - cd_ratio) * dice)
 
-        if combo.isnan():
-            print("oy")
-            return combo
-
         return combo
 
 
@@ -69,8 +65,8 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
     net_name = "network_LSTM"
 
-    batch_size = 10
-    n_samples = 10 # the defualt amount of samples minus 1
+    batch_size = 30
+    n_samples =  3600 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -90,7 +86,83 @@ def net_LSTM(device, fl, it, train_path, val_path):
                                  size = (28, 22, 549200),
                                  device = device,
                                  seed = 42,
-                                 length = 10)
+                                 length = 420)
+
+
+    val_loader = torch.utils.data.DataLoader(val_load_file,
+                                             batch_size=batch_size,
+                                             shuffle=False,
+                                             num_workers=0,
+                                             drop_last=True)
+
+
+    nEpoch = 100
+    base_lr = 0.075 # The base lr
+
+    model = LSTM_net(batch_size=batch_size, device=device).to(device)
+
+    optimizer = Adam(model.parameters(), lr=base_lr)
+    #lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+    #                               reduction = "mean")
+
+    lossFunc = ComboLoss()
+
+    smooth = 0.05
+
+    params = {"optimizer":"Adam", "batch_size":batch_size,
+              "optimizer_learning_rate": base_lr,
+              "loss_function":"combo",
+              "model":"LSTM_net", "smooting_loss":smooth}
+
+    run[f"{net_name}/parameters"] = params
+
+    net_train_combo(device = device,
+                    fl = fl, it = it,
+                    net_name = net_name,
+                    model = model,
+                    optimizer = optimizer,
+                    lossFunc = lossFunc,
+                    nEpoch = nEpoch,
+                    smooth = smooth,
+                    train_loader = train_loader,
+                    val_loader = val_loader,
+                    run = run,
+                    path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    scheduler = None)
+
+
+def net_LSTM_lr(device, fl, it, train_path, val_path):
+
+    token = os.getenv('Neptune_api')
+    run = neptune.init(
+        project="NTLAB/artifact-rej-scalp",
+        api_token=token,
+    )
+
+    net_name = "network_LSTM"
+
+    batch_size = 30
+    n_samples = 30 # the defualt amount of samples minus 1
+
+    train_load_file = shuffle_5min(path = train_path,
+                                   series_dict = 'train_series_length.pickle',
+                                   size = (195, 22, 2060000),
+                                   device = device,
+                                   length = n_samples)
+
+
+    train_loader = torch.utils.data.DataLoader(train_load_file,
+                                               batch_size=batch_size,
+                                               shuffle=True,
+                                               num_workers=0,
+                                               drop_last=True)
+
+    val_load_file = shuffle_5min(path = val_path,
+                                 series_dict = 'val_series_length.pickle',
+                                 size = (28, 22, 549200),
+                                 device = device,
+                                 seed = 42,
+                                 length = 30)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -185,10 +257,10 @@ if __name__ == '__main__':
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
 
-    # train_path = "/home/tyson/data_new/train_model_data"
-    # val_path = "/home/tyson/data_new/val_model_data"
-    train_path = r"C:\Users\Marc\Desktop\data_new\train_model_data"
-    val_path = r"C:\Users\Marc\Desktop\data_new\val_model_data"
+    train_path = "/home/tyson/data_new/train_model_data"
+    val_path = "/home/tyson/data_new/val_model_data"
+    # train_path = r"C:\Users\Marc\Desktop\data_new\train_model_data"
+    # val_path = r"C:\Users\Marc\Desktop\data_new\val_model_data"
 
     pres = []
     for i in range(core):
