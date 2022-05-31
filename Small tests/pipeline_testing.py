@@ -35,7 +35,10 @@ device = "cpu"
 model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                         device=device).to(device)
 
-x = torch.load(f"C:/Users/Marc/Desktop/network/network/network_ADAM-470.pt", map_location='cpu')
+# x = torch.load(f"C:/Users/Marc/Desktop/network/network/network_ADAM-470.pt", map_location='cpu')
+
+x = torch.load(r"C:\Users\Marc\Desktop\network\network\networks_525\network_SGD-acc-epk-21.pt", map_location='cpu')
+
 model.load_state_dict(x)
 model.to(device)
 
