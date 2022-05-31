@@ -6,8 +6,10 @@ import re
 from random import randint, seed
 
 
-seed(26) # 26
+# this scrip does the train/validation/test splitting
+# the directories has to be created by hand
 
+seed(26) # 26
 #make the following directuries;
 
 src_path = r"C:\Users\Marc\Desktop\model_data\\"

@@ -1,19 +1,15 @@
-import csv
-import re
-import math
-import matplotlib.pyplot as plt
 import numpy as np
 import sys
 sys.path.append("..") # adds higher directory to python modules path
 
 from LoaderPACK.Loader import testload_5min
-from LoaderPACK.Accuarcy_finder import Accuarcy_find_tester
+from LoaderPACK.Accuarcy_finder import Accuarcy_find_tester, recall_find_tester, histogram_find_tester
 import torch
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score
 
-def val_tester(run, network, model, lossFunc, device):
+def val_tester(run, network, model, lossFunc, path, device):
     """
     This function is used to test the accuarcy of the network..
     """
@@ -28,9 +24,9 @@ def val_tester(run, network, model, lossFunc, device):
         # "C:/Users/Marc/Desktop/data/val_model_data"
         # "C:/Users/Marc/Desktop/data/train_model_data"
 
-    load_file = testload_5min(path = "C:/Users/Marc/Desktop/data/val_model_data",
+    load_file = testload_5min(path = path,
                               series_dict = 'val_series_length.pickle',
-                              size = (28, 22, 549200), #size = (195, 22, 2060000),
+                              size = (28, 22, 549200), # size = (195, 22, 2060000),
                               device = device) # total val series = 2642
                                                # total train series = 18497
 
@@ -43,11 +39,17 @@ def val_tester(run, network, model, lossFunc, device):
 
     roc_pred = np.array([])
     roc_tar = np.array([])
-
     roc_s = []
 
-    t_p_rate = torch.tensor([]).to(device)
-    t_n_rate = torch.tensor([]).to(device)
+    number_bins = 1000
+    hist_p_guess = np.zeros(number_bins)
+    hist_n_guess = np.zeros(number_bins)
+
+    precision_tp = torch.tensor([]).to(device)
+    precision_tn = torch.tensor([]).to(device)
+
+    recall_tp = torch.tensor([]).to(device)
+    recall_tn = torch.tensor([]).to(device)
 
     tot_sr_nr = 0
     counter = -1
@@ -57,7 +59,6 @@ def val_tester(run, network, model, lossFunc, device):
             print(counter)
 
         ind, tar, meta = series
-
 
         with torch.no_grad():
             y_pred = model(ind)
@@ -82,8 +83,15 @@ def val_tester(run, network, model, lossFunc, device):
         # valid_loss.append(loss.item())
         valid_acc = torch.cat((valid_acc, acc.view(1)))
 
-        t_p_rate = torch.cat((t_p_rate, (mat[0][0]/tot_p_g).view(1)))
-        t_n_rate = torch.cat((t_n_rate, (mat[1][1]/tot_n_g).view(1)))
+        precision_tp = torch.cat((precision_tp, (mat[0][0]/tot_p_g).view(1)))
+        precision_tn = torch.cat((precision_tn, (mat[1][1]/tot_n_g).view(1)))
+
+        r_tp, r_tn = recall_find_tester(mat)
+
+        recall_tp = torch.cat((recall_tp, r_tp.view(1)))
+        recall_tn = torch.cat((recall_tn, r_tn.view(1)))
+
+        p_guess, n_guess = histogram_find_tester(y_pred, tar)
 
         # roc_tar = np.concatenate((roc_tar, target.numpy()))
         # roc_pred = np.concatenate((roc_pred, y_pred.view(2, -1)[1].numpy()))
@@ -93,6 +101,15 @@ def val_tester(run, network, model, lossFunc, device):
         #     roc_s.append(roc_auc_score(roc_tar, roc_pred))
         #     roc_pred = np.array([])
         #     roc_tar = np.array([])
+
+
+        if p_guess.nelement():
+            first, second = np.histogram(p_guess.numpy(), bins=np.arange(number_bins + 1) / number_bins)
+            hist_p_guess += first
+
+        if n_guess.nelement():
+            first, second = np.histogram(n_guess.numpy(), bins=np.arange(number_bins + 1) / number_bins)
+            hist_n_guess += first
 
 
         if acc < -0.05: # or acc > 0.95:
@@ -113,7 +130,53 @@ def val_tester(run, network, model, lossFunc, device):
             tot_sr_nr += 1
 
     print("mean accuarcy:", torch.nanmean(valid_acc))
-    print("mean true positive rate:", torch.nanmean(t_p_rate))
-    print("mean true negative rate:", torch.nanmean(t_n_rate))
+    print("mean true positive precision:", torch.nanmean(precision_tp))
+    print("mean true negative precision:", torch.nanmean(precision_tn))
+    print("mean true positive recall:", torch.nanmean(recall_tp))
+    print("mean true negative recall:", torch.nanmean(recall_tn))
+
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+
+    thrs = 0.5
+
+    ax1.set_title('Models prediction when no artefact is present (target == 0)')
+    ax1.bar(np.arange(number_bins) / number_bins, hist_n_guess, width=1/1000, color=['green' if i < int(thrs * 1000)
+                                                                                     else "red" for i in
+                                                                                     range(number_bins)])
+    ax1.set_xlim([0, 1])
+    ax1.axvline(x=thrs, color='m', linestyle="--", label=f'Threshold = {thrs}')
+    ax1.text(0.25, 0.5, 'True negative (TN)', horizontalalignment='center', verticalalignment='center',
+             transform=ax1.transAxes, color="g",
+             bbox=dict(boxstyle="round",
+                       facecolor="gray",
+                       alpha=0.3))
+
+    ax1.text(0.75, 0.5, 'False negative (FN)', horizontalalignment='center', verticalalignment='center',
+             transform=ax1.transAxes, color="r",
+             bbox=dict(boxstyle="round",
+                       facecolor="gray",
+                       alpha=0.3))
+
+    ax2.set_title('Models prediction when an artefact is present (target != 0)')
+    ax2.bar(np.arange(number_bins) / number_bins, hist_p_guess, width=1/1000, color=['red' if i < int(thrs * 1000)
+                                                                                     else "green" for i in
+                                                                                     range(number_bins)])
+    ax2.set_xlim([0, 1])
+    ax2.axvline(x=thrs, color='m', linestyle="--", label=f'Threshold = {thrs}')
+    ax2.text(0.25, 0.5, 'False positive (FP)', horizontalalignment='center', verticalalignment='center',
+             transform=ax2.transAxes, color="r",
+             bbox=dict(boxstyle="round",
+                       facecolor="gray",
+                       alpha=0.3))
+
+    ax2.text(0.75, 0.5, 'True positive (TP)', horizontalalignment='center', verticalalignment='center',
+             transform=ax2.transAxes, color="g",
+             bbox=dict(boxstyle="round",
+                       facecolor="gray",
+                       alpha=0.3))
+    plt.show()
+
+
+
     # print("mean loss:",  np.mean(valid_loss))
     # print("roc", np.mean(np.array(roc_s)))
