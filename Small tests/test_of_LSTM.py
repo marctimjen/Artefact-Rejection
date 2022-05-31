@@ -33,17 +33,17 @@ input = input.view(batch_size, -1, input_size)
 
 
 
-h0 = torch.randn(D*num_layers, batch_size, hout) # (D * num_layers, batch_size, hidden)
-c0 = torch.randn(D*num_layers, batch_size, hidden_size) # (D * num_layers, batch_size, hidden)
+# h0 = torch.randn(D*num_layers, batch_size, hout) # (D * num_layers, batch_size, hidden)
+# c0 = torch.randn(D*num_layers, batch_size, hidden_size) # (D * num_layers, batch_size, hidden)
 
 
-output, (hn, cn) = rnn(input, (h0, c0))
+output, (hn, cn) = rnn(input)
 
-print(input)
+print(input.shape)
 
 print()
 
-print(output)
+print(output.shape) #(batch_size, seq_len, D*H_out)
 
 print()
 
@@ -51,7 +51,7 @@ ss = torch.sum(output, 2)
 minusss = ss - 1
 
 # print(ss)
-# print(minusss)
+print(minusss)
 #
 # print()
 # print(torch.stack((ss, minusss), dim = 2))
