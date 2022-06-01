@@ -7,19 +7,36 @@ import pickle
 
 class load_whole_data(Dataset): # Dataset
     """
-    This dataloader loads the tensor input and target in whole
+    This dataset can load a whole EEG recording associated with targets. Both
+    files need to be on the tensor (.pt) format.
+    This loader can also be used to load both an target file and an annotated
+    file.
     """
-    def __init__(self, path: str, ind: list, series_dict = None):
+    def __init__(self, ind: list, input_path: str , input_name = "model_input ",
+                 target_path = None, target_name = "model_target ",
+                 input_only = False, series_dict = None):
         """
         Args:
-            path (str): path to the input & target folder.
             ind (list): list of indices for which pictures to load.
-            device (class 'torch.device'): which pytorch device the data should
-            be sent to.
+            input_path (str): path to folder of input data.
+            input_name (str): name of the input files.
+
+            target_path (str (optional)): if given, the path to the target
+                                          files. If not given, the input_path is
+                                          used.
+            target_name (str): name of target files.
+            input_only (bool): to load both an input and target file
+            series_dict (dict (optinal)): if given, additional information can
+                                          be returned with the data loaded.
         """
 
         self.device = "cpu"
-        self.imgs_path = path
+
+        if target_path:
+            self.ind_p = input_path
+            self.tar_p = target_path
+        else:
+            self.ind_p = self.tar_p = input_path
 
         if series_dict:
             with open(path + "/" + series_dict, 'rb') as handle:
@@ -28,9 +45,10 @@ class load_whole_data(Dataset): # Dataset
             self.s_dict = False
 
         self.data = []
+
         for i in ind:
-            self.data.append([self.imgs_path + f"/model_input ({i}).pt",
-                        self.imgs_path + f"/model_target ({i}).pt",
+            self.data.append([self.ind_p + f"/{input_name}({i}).pt",
+                        self.tar_p + f"/{target_name}({i}).pt" if not input_only else 0,
                         self.s_dict[i] if self.s_dict else 0])
 
     def __len__(self):
@@ -43,10 +61,90 @@ class load_whole_data(Dataset): # Dataset
         inp = torch.load(input_path) # load the input data
         inp = inp.type(torch.float).to(self.device)
 
-        tar = torch.load(target_path) # load the target data
-        tar = tar.type(torch.float).to(self.device)
+        if target_path:
+            tar = torch.load(target_path) # load the target data
+            tar = tar.type(torch.float).to(self.device)
+        else:
+            tar = torch.Tensor([]).to(self.device)
 
         return inp, tar, s_len_ls
+
+
+class load_5_min_intervals(Dataset):
+    """
+    This dataloader loads the tensor input and target in whole
+    """
+    def __init__(self, ls: list, device, start=30*200):
+        """
+        Args:
+            ind (list): list of indices for which pictures to load.
+            device (class 'torch.device'): which pytorch device the data should
+            be sent to.
+            start (int): tells the loader how much data to remove from the beginning
+            of the EEG-recording.
+        """
+
+        self.start = start
+        self.device = device
+
+
+        self.ls = ls # list with the input and target data
+        self.size = [ls[0][0].shape[0], ls[0][0].shape[1]]
+            # size of target and input
+
+        # zero-pad the result if it can't be in only 5 mins intervals.
+        extra = 200*60*5 - (w := (ls[0][0].shape[1]-self.start) % (200*60*5))
+
+
+        if w and ls[1].nelement():
+            # if w is not equal to 0, then zero-pad is needed:
+            # also there need to be a target for the target to be padded
+
+            # zero pad:
+            self.ls[0] = F.pad(self.ls[0], (0, extra), "constant", 0.0)
+            self.ls[1] = F.pad(self.ls[1], (0, extra), "constant", 0.0)
+
+            self.size[1] = self.size[1] + extra
+        elif w:
+            # if only the input is given and zero-padding is needed_
+
+            # zero pad:
+            self.ls[0] = F.pad(self.ls[0], (0, extra), "constant", 0.0)
+
+            self.size[1] = self.size[1] + extra
+
+
+        self.length = math.ceil((self.size[1]-self.start)/(200*60*5))*self.size[0]
+            # the amount of total possible cuts
+
+        if ls[1].nelement(): # if no target is given:
+            self.gen = iter(self.cut_data_with_target())
+        else:
+            self.gen = iter(self.cut_data_only_input())
+
+
+    def cut_data_with_target(self):
+        for chan in range(self.size[0]):
+            for cut_point in range(self.start, self.size[1], 200*5*60):
+                inp = self.ls[0][0][chan][cut_point:cut_point+60*5*200].view(1, 60*5*200)
+                tar = self.ls[1][0][chan][cut_point:cut_point+60*5*200].view(1, 60*5*200)
+                yield (inp, tar, chan, cut_point)
+
+    def cut_data_only_input(self):
+        for chan in range(self.size[0]):
+            for cut_point in range(self.start, self.size[1], 200*5*60):
+                inp = self.ls[0][0][chan][cut_point:cut_point+60*5*200].view(1, 60*5*200)
+                tar = torch.Tensor([])
+                yield (inp, tar, chan, cut_point)
+
+    def __len__(self):
+        return self.length
+
+    def __getitem__(self, idx):
+        inp, tar, chan, cut = next(self.gen)
+        inp = inp.to(self.device)
+        tar = tar.to(self.device)
+        return inp, tar, chan, cut
 
 
 class load_shuffle_5_min(Dataset):
@@ -63,6 +161,7 @@ class load_shuffle_5_min(Dataset):
         """
 
         self.device = device
+
         self.ls = ls # list with the input and target data
         self.size = (ls[0][0].shape[0], ls[0][0].shape[1])
             # size of target and input
@@ -106,60 +205,6 @@ class load_shuffle_5_min(Dataset):
         inp = inp.to(self.device)
         tar = tar.to(self.device)
         return inp, tar, chan
-
-
-class load_5_min_intervals(Dataset):
-    """
-    This dataloader loads the tensor input and target in whole
-    """
-    def __init__(self, ls: list, device):
-        """
-        Args:
-            path (str): path to the input & target folder.
-            ind (list): list of indices for which pictures to load.
-            device (class 'torch.device'): which pytorch device the data should
-            be sent to.
-        """
-
-        self.device = device
-        self.ls = ls # list with the input and target data
-        self.size = [ls[0][0].shape[0], ls[0][0].shape[1]]
-            # size of target and input
-
-        # zero-pad the result if it can't be in only 5 mins intervals.
-        extra = 200*60*5 - (w := (ls[0][0].shape[1]-30*200) % (200*60*5))
-
-
-        if w: # if w is not equal to 0, then zero-pad is needed:
-            # zero pad:
-            self.ls[0] = F.pad(self.ls[0], (0, extra), "constant", 0.0)
-            self.ls[1] = F.pad(self.ls[1], (0, extra), "constant", 0.0)
-
-            self.size[1] = self.size[1] + extra
-
-
-        self.length = math.floor((self.size[1]-30*200)/(200*60*5))*self.size[0]
-            # the amount of total possible cuts
-
-        self.gen = iter(self.cut_data())
-
-
-
-    def cut_data(self):
-        for chan in range(self.size[1]):
-            for cut_point in range(30*200, self.size[1], 200*5*60):
-                inp = self.ls[0][0][chan][cut_point:cut_point+60*5*200].view(1, 60*5*200)
-                tar = self.ls[1][0][chan][cut_point:cut_point+60*5*200].view(1, 60*5*200)
-                yield (inp, tar, chan, cut_point)
-
-    def __len__(self):
-        return self.length
-
-    def __getitem__(self, idx):
-        inp, tar, chan, cut = next(self.gen)
-        inp = inp.to(self.device)
-        tar = tar.to(self.device)
-        return inp, tar, chan, cut
 
 
 

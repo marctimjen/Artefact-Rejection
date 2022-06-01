@@ -63,7 +63,7 @@ class LSTM_net_old(nn.Module):
         Args:
             out_channels (int): The amount of channels the output tensor gets.
         """
-        super(LSTM_net, self).__init__()
+        super(LSTM_net_old, self).__init__()
 
 
         self.batch_size = batch_size
