@@ -12,15 +12,14 @@ class load_whole_data(Dataset): # Dataset
     This loader can also be used to load both an target file and an annotated
     file.
     """
-    def __init__(self, ind: list, input_path: str , input_name = "model_input ",
+    def __init__(self, ind: list, input_path: str, input_name = "model_input ",
                  target_path = None, target_name = "model_target ",
-                 input_only = False, series_dict = None):
+                 input_only = False, series_dict = None, series_dict_path = ""):
         """
         Args:
             ind (list): list of indices for which pictures to load.
             input_path (str): path to folder of input data.
             input_name (str): name of the input files.
-
             target_path (str (optional)): if given, the path to the target
                                           files. If not given, the input_path is
                                           used.
@@ -28,6 +27,8 @@ class load_whole_data(Dataset): # Dataset
             input_only (bool): to load both an input and target file
             series_dict (dict (optinal)): if given, additional information can
                                           be returned with the data loaded.
+            series_dict_path (str, (optional)): if a series_dict is given,
+                                                then the given path should be present.
         """
 
         self.device = "cpu"
@@ -39,7 +40,7 @@ class load_whole_data(Dataset): # Dataset
             self.ind_p = self.tar_p = input_path
 
         if series_dict:
-            with open(path + "/" + series_dict, 'rb') as handle:
+            with open(series_dict_path + "/" + series_dict, 'rb') as handle:
                 self.s_dict = pickle.load(handle)
         else:
             self.s_dict = False

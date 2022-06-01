@@ -67,3 +67,26 @@ def histogram_find_tester(pred, tar):
     n_guess = pred[:, 1][tar == 0]
 
     return p_guess, n_guess
+
+
+def mclass_acc_recal_fidner(pred, tar, classes=5):
+    """
+    This function calculates the the accuarcy and confussion matrix
+    """
+
+    tar = tar.reshape(-1)
+    art_pred = pred.reshape(-1)
+
+    for i in range(0, classes):
+
+        fp = torch.sum(art_pred[tar != i] == i) # false positive, tar = 0 and pred = 1
+        fn = torch.sum(art_pred[tar == i] != i) # false negative, tar = 1 and pred = 0
+
+        tp = torch.sum(art_pred[tar == i] == i) # true positive
+        tn = torch.sum(art_pred[tar != i] != i) # true negative
+
+        acc = (tp + tn)/(fp + fn + tp + tn)
+
+        tot_p_g = tp + fp # total postive
+        tot_n_g = tn + fn # total negative
+        yield (acc, torch.tensor([[tp, fp], [fn, tn]]), tot_p_g, tot_n_g, art_pred)

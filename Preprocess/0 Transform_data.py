@@ -13,7 +13,7 @@ def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
 
     Args:
         edf_list (str): path to a file containing directories to the edf files.
-        csv_list (Str): path to a file containing directories to the csv files.
+        csv_list (str): path to a file containing directories to the csv files.
         data_dir (str): first part of the path.
 
     Return:
