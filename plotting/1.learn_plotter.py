@@ -11,8 +11,13 @@ if exp_mode:
     adam_model_run = "AR1-424"
     sgd_model_run = "AR1-425"
 
-    adam_base = 0.0038
-    adam_max = 0.0048
+
+    adam_low = 0.02
+    adam_max = adam_low/10
+    adam_base = round(adam_max/6, 5)
+
+    # adam_base = 0.0038
+    # adam_max = 0.0048
 
 
     # SGD_base = 0.2
@@ -22,9 +27,11 @@ if exp_mode:
     # SGD_base_m = 0.8  # magenta values
     # SGD_max_m = 1.12  # magenta values
 
+    sgd_low = 1
 
-    SGD_base = 0.216
-    SGD_max = 0.268
+    SGD_max = sgd_low/10
+    SGD_base = round(SGD_max/6, 5)
+
 
     magenta = True
     SGD_base_m = 0.07  # magenta values
@@ -89,6 +96,20 @@ sgd_fn = run2['network_SGD/matrix/val_fn_pr_file'].fetch_values()
 sgd_acc = run2['network_SGD/val_acc_pr_file'].fetch_values() #62
 sgd_loss = run2['network_SGD/validation_loss_pr_file'].fetch_values() #62
 sgd_smloss = run2['network_SGD/smooth_val_loss_pr_file'].fetch_values() #62
+
+new_sgd_smloss = []
+
+first = True
+for i in sgd_loss["value"]:
+    if first:
+        new_sgd_smloss.append(i)
+        first = False
+    else:
+        new = 0.05*i + (1-0.05)*new_sgd_smloss[-1]
+        new_sgd_smloss.append(new)
+
+print(sgd_loss["value"][0])
+print(new_sgd_smloss[0])
 
 run.stop()
 run2.stop()
@@ -170,7 +191,7 @@ if magenta:
 
 
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"], label = "loss")
-ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_smloss["value"])
+ax4.plot([0]+ [i for i in sgd_rate["value"]], new_sgd_smloss) #sgd_smloss["value"])
 ax4.set_xlabel('learning_rate')
 ax4.set_ylabel('loss')
 

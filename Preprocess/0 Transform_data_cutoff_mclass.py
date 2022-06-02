@@ -14,7 +14,7 @@ def make_file_list(edf_list: str, csv_list: str, data_dir: str) -> list:
 
     Args:
         edf_list (str): path to a file containing directories to the edf files.
-        csv_list (Str): path to a file containing directories to the csv files.
+        csv_list (str): path to a file containing directories to the csv files.
         data_dir (str): first part of the path.
 
     Return:
@@ -90,11 +90,11 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
                 elec_flag = re.search("elec", rows[3].lower()) or re.search("elpp", rows[3].lower())
 
                 if elec_flag: # test if string in elec class
-                    tar_anno = 4
-                elif rows[3].lower() == "musc":
-                    tar_anno = 3
-                elif rows[3].lower() == "eyem":
-                    tar_anno = 2
+                    tar_anno = 2 # normally = 4
+                # elif rows[3].lower() == "musc":
+                #     tar_anno = 3
+                # elif rows[3].lower() == "eyem":
+                #     tar_anno = 2
                 else:
                     tar_anno = 1
 
@@ -102,7 +102,7 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
                 # class 4 (all with electrode artifacts)
                 # class 3 only muscle artifacts ALONE
                 # class 2 eye movement artifact alone
-                # class 1 cathc all (shiv and chew)
+                # class 1 catch all (shiv and chew)
                 # class 0 no artefact.
 
                 target.append([inv_map.get(str(rows[0])), float(rows[1]),

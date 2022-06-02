@@ -1,0 +1,92 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SH3J0RM"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "LSTM_train.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\2. Testing and training networks\\LSTM_train.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.747394561767578, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 8.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 35.3, "step": null, "ts": 1653578099.0886972}]}, "version": 17}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 9.472454071044922, "step": null, "ts": 1653578099.0886972}]}, "version": 18}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 5.0, "step": null, "ts": 1653578099.0886972}]}, "version": 19}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 1.1931495666503906, "step": null, "ts": 1653578099.0886972}]}, "version": 20}
+{"obj": {"type": "AssignString", "path": ["network_LSTM", "parameters", "optimizer"], "value": "Adam"}, "version": 21}
+{"obj": {"type": "AssignInt", "path": ["network_LSTM", "parameters", "batch_size"], "value": 10}, "version": 22}
+{"obj": {"type": "AssignFloat", "path": ["network_LSTM", "parameters", "optimizer_learning_rate"], "value": 0.05}, "version": 23}
+{"obj": {"type": "AssignString", "path": ["network_LSTM", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 24}
+{"obj": {"type": "AssignString", "path": ["network_LSTM", "parameters", "loss_function_weights"], "value": "[1, 5]"}, "version": 25}
+{"obj": {"type": "AssignString", "path": ["network_LSTM", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 26}
+{"obj": {"type": "AssignString", "path": ["network_LSTM", "parameters", "model"], "value": "LSTM_net"}, "version": 27}
+{"obj": {"type": "AssignFloat", "path": ["network_LSTM", "parameters", "smooting_loss"], "value": 0.05}, "version": 28}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1653578100.4479244}]}, "version": 29}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1653578100.4479244}]}, "version": 30}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "learning_rate"], "values": [{"value": 0.05, "step": null, "ts": 1653578100.4479244}]}, "version": 31}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 24.2, "step": null, "ts": 1653578109.1047482}]}, "version": 32}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 11.212516784667969, "step": null, "ts": 1653578109.1047482}]}, "version": 33}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 79.0, "step": null, "ts": 1653578109.1047482}]}, "version": 34}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.062496185302734, "step": null, "ts": 1653578109.1047482}]}, "version": 35}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 27.5, "step": null, "ts": 1653578119.1196022}]}, "version": 36}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 11.3685302734375, "step": null, "ts": 1653578119.1196022}]}, "version": 37}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 80.0, "step": null, "ts": 1653578119.1196022}]}, "version": 38}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.069377899169922, "step": null, "ts": 1653578119.1196022}]}, "version": 39}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "train_loss_pr_file"], "values": [{"value": 0.7204033732414246, "step": null, "ts": 1653578121.9017951}]}, "version": 40}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "smooth_train_loss_pr_file"], "values": [{"value": 0.7204033732414246, "step": null, "ts": 1653578121.9017951}]}, "version": 41}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "validation_loss_pr_file"], "values": [{"value": 0.7204033732414246, "step": null, "ts": 1653578121.902795}]}, "version": 42}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "smooth_val_loss_pr_file"], "values": [{"value": 0.7204033732414246, "step": null, "ts": 1653578121.902795}]}, "version": 43}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 25.1, "step": null, "ts": 1653578129.1301386}]}, "version": 44}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 13.616191864013672, "step": null, "ts": 1653578129.1301386}]}, "version": 45}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 74.0, "step": null, "ts": 1653578129.1301386}]}, "version": 46}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.261791229248047, "step": null, "ts": 1653578129.1301386}]}, "version": 47}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 24.5, "step": null, "ts": 1653578139.136279}]}, "version": 48}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 13.477558135986328, "step": null, "ts": 1653578139.136279}]}, "version": 49}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 74.0, "step": null, "ts": 1653578139.136279}]}, "version": 50}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.261791229248047, "step": null, "ts": 1653578139.136279}]}, "version": 51}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 23.8, "step": null, "ts": 1653578149.150826}]}, "version": 52}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 13.402099609375, "step": null, "ts": 1653578149.150826}]}, "version": 53}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 74.0, "step": null, "ts": 1653578149.150826}]}, "version": 54}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.261791229248047, "step": null, "ts": 1653578149.150826}]}, "version": 55}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "train_loss_pr_file"], "values": [{"value": 0.7204033732414246, "step": null, "ts": 1653578153.1873791}]}, "version": 56}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "smooth_train_loss_pr_file"], "values": [{"value": 0.7204033732414246, "step": null, "ts": 1653578153.1873791}]}, "version": 57}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "train_acc_pr_file"], "values": [{"value": 0.1612749993801117, "step": null, "ts": 1653578153.1873791}]}, "version": 58}
+{"obj": {"type": "LogStrings", "path": ["network_LSTM", "matrix", "train_confusion_matrix_pr_file"], "values": [{"value": "tensor([[ 96765., 503235.],\n        [     0.,      0.]])", "step": null, "ts": 1653578153.1873791}]}, "version": 59}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "matrix", "train_tp_pr_file"], "values": [{"value": 0.1612749993801117, "step": null, "ts": 1653578153.2030022}]}, "version": 60}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "matrix", "train_fp_pr_file"], "values": [{"value": 0.8387249708175659, "step": null, "ts": 1653578153.2030022}]}, "version": 61}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "matrix", "train_fn_pr_file"], "values": [{"value": 1.0, "step": null, "ts": 1653578153.2030022}]}, "version": 62}
+{"obj": {"type": "LogFloats", "path": ["network_LSTM", "matrix", "train_tn_pr_file"], "values": [{"value": 1.0, "step": null, "ts": 1653578153.2030022}]}, "version": 63}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 30.6, "step": null, "ts": 1653578159.1603625}]}, "version": 64}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 11.166255950927734, "step": null, "ts": 1653578159.1603625}]}, "version": 65}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 74.0, "step": null, "ts": 1653578159.1603625}]}, "version": 66}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.244396209716797, "step": null, "ts": 1653578159.1603625}]}, "version": 67}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 27.6, "step": null, "ts": 1653578169.1713834}]}, "version": 68}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 11.409805297851562, "step": null, "ts": 1653578169.1713834}]}, "version": 69}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 73.0, "step": null, "ts": 1653578169.1713834}]}, "version": 70}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 6.272411346435547, "step": null, "ts": 1653578169.1713834}]}, "version": 71}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Process Process-1:1:\n", "step": null, "ts": 1653578175.721319}]}, "version": 72}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "Traceback (most recent call last):\n", "step": null, "ts": 1653578175.7369416}]}, "version": 73}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 74}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\multiprocessing\\process.py\", line 315, in _bootstrap\n    self.run()\n", "step": null, "ts": 1653578175.7369416}]}, "version": 75}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 76}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\multiprocessing\\process.py\", line 108, in run\n    self._target(*self._args, **self._kwargs)\n", "step": null, "ts": 1653578175.7369416}]}, "version": 77}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 78}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\2. Testing and training networks\\LSTM_train.py\", line 91, in net_LSTM\n    net_train(device = device,\n", "step": null, "ts": 1653578175.7369416}]}, "version": 79}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 80}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\2. Testing and training networks\\..\\LoaderPACK\\trainer.py\", line 158, in net_train\n    y_pred = model(ind)\n", "step": null, "ts": 1653578175.7369416}]}, "version": 81}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 82}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\site-packages\\torch\\nn\\modules\\module.py\", line 1110, in _call_impl\n    return forward_call(*input, **kwargs)\n", "step": null, "ts": 1653578175.7369416}]}, "version": 83}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 84}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\2. Testing and training networks\\..\\LoaderPACK\\LSTM_net.py\", line 53, in forward\n    out, _ = self.lstm(ind)\n", "step": null, "ts": 1653578175.7369416}]}, "version": 85}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 86}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\site-packages\\torch\\nn\\modules\\module.py\", line 1110, in _call_impl\n    return forward_call(*input, **kwargs)\n", "step": null, "ts": 1653578175.7369416}]}, "version": 87}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 88}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "  File \"C:\\Users\\Marc\\anaconda3\\envs\\deep\\lib\\site-packages\\torch\\nn\\modules\\rnn.py\", line 761, in forward\n    result = _VF.lstm(input, hx, self._flat_weights, self.bias, self.num_layers,\n", "step": null, "ts": 1653578175.7369416}]}, "version": 89}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 90}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "RuntimeError: CUDA out of memory. Tried to allocate 4.00 GiB (GPU 0; 8.00 GiB total capacity; 4.20 GiB already allocated; 2.02 GiB free; 4.34 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF\n", "step": null, "ts": 1653578175.7369416}]}, "version": 91}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stderr"], "values": [{"value": "", "step": null, "ts": 1653578175.7369416}]}, "version": 92}

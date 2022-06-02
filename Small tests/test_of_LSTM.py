@@ -12,7 +12,7 @@ num_layers = 1 # default
 batch_size = 2 # hyper para
 
 
-proj_size = 1 # This allows us to rechive two values
+proj_size = 2 # This allows us to rechive two values
 hout = proj_size # since proj_size > 0
 
 
@@ -43,15 +43,28 @@ print(input.shape)
 
 print()
 
+print(output)
+
 print(output.shape) #(batch_size, seq_len, D*H_out)
 
-print()
 
-ss = torch.sum(output, 2)
-minusss = ss - 1
 
-# print(ss)
-print(minusss)
+soft = nn.Softmax(dim=2)
+
+out = soft(output)
+
+print(out)
+print(out.shape)
+
+# print(output)
+# print(sum(i.nelement() for i in rnn.parameters()))
+
 #
+# ss = torch.sum(output, 2)
+# minusss = ss - 1
+#
+# # print(ss)
+# # print(minusss)
+# #
 # print()
-# print(torch.stack((ss, minusss), dim = 2))
+# print(torch.stack((ss, minusss), dim = 2).shape)
