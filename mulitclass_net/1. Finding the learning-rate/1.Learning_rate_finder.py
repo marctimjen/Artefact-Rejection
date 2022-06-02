@@ -746,11 +746,11 @@ if __name__ == '__main__':
     # train_path = r"D:\Alt fra desk\data_1\train_model_data"
     # val_path = r"D:\Alt fra desk\data_1\val_model_data"
 
-    # train_path = "C:/Users/Marc/Desktop/model_data/train_model_data"
-    # val_path = "C:/Users/Marc/Desktop/model_data/val_model_data"
+    train_path = "C:/Users/Marc/Desktop/model_data/train_model_data"
+    val_path = "C:/Users/Marc/Desktop/model_data/val_model_data"
 
-    train_path = "/home/tyson/data_cutoff/train_model_data"
-    val_path = "/home/tyson/data_cutoff/val_model_data"
+    # train_path = "/home/tyson/data_cutoff/train_model_data"
+    # val_path = "/home/tyson/data_cutoff/val_model_data"
 
     pres = []
     for i in range(core):
