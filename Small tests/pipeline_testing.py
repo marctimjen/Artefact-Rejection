@@ -14,14 +14,14 @@ device = "cpu"
 
 batch_size = 1
 
-model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
+# model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, device=device).to(device)
+#
+# x = torch.load(f"C:/Users/Marc/Desktop/network/network/network_ADAM-470.pt", map_location='cpu')
+#
+# model.load_state_dict(x)
+# model.to(device)
 
-x = torch.load(f"C:/Users/Marc/Desktop/network/network/network_ADAM-470.pt", map_location='cpu')
-
-model.load_state_dict(x)
-model.to(device)
-
-pipeline(input_path=r"C:\Users\Marc\Desktop\model_data\val_model_data",
+pipeline(input_path=r"C:\Users\Marc\Desktop\model_data_mclass\val_model_data",
          input_name="model_input ",
-         save_loc=r"C:\Users\Marc\Desktop\val_res_adam",
-         ind=[i for i in range(1, 28+1)], model=model)
+         save_loc=r"C:\Users\Marc\Desktop\val_res_linear",
+         ind=[i for i in range(1, 28+1)], model=linear_model)

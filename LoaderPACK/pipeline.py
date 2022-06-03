@@ -52,7 +52,7 @@ def pipeline(input_path: str, input_name: str, save_loc: str, ind: list, model, 
 
         series_loader = torch.utils.data.DataLoader(load_series,
                                                     batch_size=batch_size,
-                                                    shuffle=True,
+                                                    shuffle=False,
                                                     num_workers=0)
         for series in series_loader:
             ind, tar, chan, cut = series
@@ -62,7 +62,7 @@ def pipeline(input_path: str, input_name: str, save_loc: str, ind: list, model, 
 
             y_pred = (pred[:, 1] >= 0.5).view(-1)
 
-            cut_end = min(cut + 60 * 5 *200, result.shape[1])
+            cut_end = min(cut + 60 * 5 * 200, result.shape[1])
             result[int(chan)][cut:cut_end] = y_pred[:cut_end-cut]
 
         torch.save(result, save_loc + f'/model_annotation ({nr}).pt') # save the annotations

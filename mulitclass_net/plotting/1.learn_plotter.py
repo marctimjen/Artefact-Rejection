@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 
 
 
-exp_mode = True
+exp_mode = False
 
 if exp_mode:
 
     adam_model_run = "AR1-578"
-    sgd_model_run = "AR1-577"
+    sgd_model_run = "AR1-588" # 577
 
 
-    adam_low = 0.02
+    adam_low = 0.05
     adam_max = adam_low/10
     adam_base = round(adam_max/6, 5)
 
@@ -27,18 +27,18 @@ if exp_mode:
     # SGD_base_m = 0.8  # magenta values
     # SGD_max_m = 1.12  # magenta values
 
-    sgd_low = 1
+    sgd_low = 8
 
     SGD_max = sgd_low/10
     SGD_base = round(SGD_max/6, 5)
 
 
 
-    magenta = True
+    magenta = False
     SGD_base_m = 0.07  # magenta values
     SGD_max_m = 0.103  # magenta values
 
-    magenta_adam = True
+    magenta_adam = False
     adam_max_m = 0.003
     adam_base_m = 0.0048
 
@@ -47,16 +47,16 @@ if exp_mode:
 else:
 
     adam_model_run = "AR1-576"
-    sgd_model_run = "AR1-575"
+    sgd_model_run = "AR1-585" # 575
 
-    adam_base = 0.0089
-    adam_max = 0.013
+    adam_base = 0.007
+    adam_max = 0.0138
 
 
-    SGD_base = 0.216
-    SGD_max = 0.268
+    SGD_base = 1.2
+    SGD_max = 1.3
 
-    magenta = True
+    magenta = False
     SGD_base_m = 0.07  # magenta values
     SGD_max_m = 0.103  # magenta values
 

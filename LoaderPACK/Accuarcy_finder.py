@@ -58,13 +58,13 @@ def Accuarcy_find_elec(pred, tar):
     return (acc, mat, tot_p_g, tot_n_g)
 
 
-def Accuarcy_find_tester(pred, tar, device):
+def Accuarcy_find_tester(pred, tar, ths):
     """
     This function calculates the the accuarcy and confussion matrix
     """
 
     tar = tar.view(-1, tar.shape[-1])
-    art_pred = pred[:, 1] >= 0.5 # what the model predicts as artefacts
+    art_pred = pred[:, 1] >= ths # what the model predicts as artefacts
 
     fp = torch.sum(art_pred[tar == 0] == True) # false positive, tar = 0 and pred = 1
     fn = torch.sum(art_pred[tar != 0] == False) # false negative, tar = 1 and pred = 0

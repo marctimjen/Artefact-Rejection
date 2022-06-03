@@ -41,6 +41,12 @@ def val_tester(run, network, model, lossFunc, path, device):
     roc_tar = np.array([])
     roc_s = []
 
+    samples = torch.tensor([]).to(device)
+
+    matrix = torch.zeros(2, 2)
+
+    thrs =.5
+
     number_bins = 1000
     hist_p_guess = np.zeros(number_bins)
     hist_n_guess = np.zeros(number_bins)
@@ -65,7 +71,6 @@ def val_tester(run, network, model, lossFunc, path, device):
 
         if meta[3]:
 
-
             tar = tar[0][0][:meta[4]].view(1, 1, -1)
 
             ind = ind[0][0][:meta[4]].view(1, 1, -1)
@@ -74,22 +79,26 @@ def val_tester(run, network, model, lossFunc, path, device):
             b = y_pred[0][1][:meta[4]].view(1, -1)
             y_pred = torch.stack((a, b), dim = 1)
 
+        # samples = torch.cat((samples, torch.Tensor([y_pred.shape[2]])))
+
         # pred = y_pred.transpose(1, 2).reshape(-1, 2).type(fl)
-        target = tar.view(-1).type(it)
+        # target = tar.view(-1).type(it)
         # loss = lossFunc(pred, target)
 
-        acc, mat, tot_p_g, tot_n_g, art_pred = Accuarcy_find_tester(y_pred, tar, device)
+        acc, mat, tot_p_g, tot_n_g, art_pred = Accuarcy_find_tester(y_pred, tar, thrs)
+
+        matrix = matrix + mat
 
         # valid_loss.append(loss.item())
-        valid_acc = torch.cat((valid_acc, acc.view(1)))
+        # valid_acc = torch.cat((valid_acc, acc.view(1)))
 
-        precision_tp = torch.cat((precision_tp, (mat[0][0]/tot_p_g).view(1)))
-        precision_tn = torch.cat((precision_tn, (mat[1][1]/tot_n_g).view(1)))
+        # precision_tp = torch.cat((precision_tp, (mat[0][0]/tot_p_g).view(1)))
+        # precision_tn = torch.cat((precision_tn, (mat[1][1]/tot_n_g).view(1)))
 
-        r_tp, r_tn = recall_find_tester(mat)
+        # r_tp, r_tn = recall_find_tester(mat)
 
-        recall_tp = torch.cat((recall_tp, r_tp.view(1)))
-        recall_tn = torch.cat((recall_tn, r_tn.view(1)))
+        # recall_tp = torch.cat((recall_tp, r_tp.view(1)))
+        # recall_tn = torch.cat((recall_tn, r_tn.view(1)))
 
         p_guess, n_guess = histogram_find_tester(y_pred, tar)
 
@@ -109,6 +118,11 @@ def val_tester(run, network, model, lossFunc, path, device):
 
         if n_guess.nelement():
             first, second = np.histogram(n_guess.numpy(), bins=np.arange(number_bins + 1) / number_bins)
+
+            # for i in first:
+            #     if first[-1] > 100:
+            #         pass
+
             hist_n_guess += first
 
 
@@ -129,21 +143,26 @@ def val_tester(run, network, model, lossFunc, path, device):
             plt.close()
             tot_sr_nr += 1
 
-    print("mean accuarcy:", torch.nanmean(valid_acc))
-    print("mean true positive precision:", torch.nanmean(precision_tp))
-    print("mean true negative precision:", torch.nanmean(precision_tn))
-    print("mean true positive recall:", torch.nanmean(recall_tp))
-    print("mean true negative recall:", torch.nanmean(recall_tn))
+    # print("mean accuarcy:", (valid_acc * samples).nansum()/samples.sum())
+    # print("mean true positive precision:", (precision_tp * samples).nansum()/samples.sum())
+    # print("mean true negative precision:", (precision_tn * samples).nansum()/samples.sum())
+    # print("mean true positive recall:", (recall_tp * samples).nansum()/samples.sum())
+    # print("mean true negative recall:", (recall_tn * samples).nansum()/samples.sum())
+
+    print("mean accuarcy:", (matrix[0][0]+matrix[1][1])/matrix.sum())
+    print("mean true positive precision:", matrix[0][0]/(matrix[0][0]+matrix[0][1]))
+    print("mean true negative precision:", matrix[1][1]/(matrix[1][1]+matrix[1][0]))
+    print("mean true positive recall:", matrix[0][0]/(matrix[0][0]+matrix[1][0]))
+    print("mean true negative recall:", matrix[1][1]/(matrix[1][1]+matrix[0][1]))
+
 
     fig, (ax1, ax2) = plt.subplots(2, 1)
-
-    thrs = 0.5
 
     ax1.set_title('Models prediction when no artefact is present (target == 0)')
     ax1.bar(np.arange(number_bins) / number_bins, hist_n_guess, width=1/1000, color=['green' if i < int(thrs * 1000)
                                                                                      else "red" for i in
                                                                                      range(number_bins)])
-    ax1.set_xlim([0, 1])
+    ax1.set_xlim([-0.01, 1.01])
     ax1.axvline(x=thrs, color='m', linestyle="--", label=f'Threshold = {thrs}')
     ax1.text(0.25, 0.5, 'True negative (TN)', horizontalalignment='center', verticalalignment='center',
              transform=ax1.transAxes, color="g",
@@ -161,7 +180,7 @@ def val_tester(run, network, model, lossFunc, path, device):
     ax2.bar(np.arange(number_bins) / number_bins, hist_p_guess, width=1/1000, color=['red' if i < int(thrs * 1000)
                                                                                      else "green" for i in
                                                                                      range(number_bins)])
-    ax2.set_xlim([0, 1])
+    ax2.set_xlim([-0.01, 1.01])
     ax2.axvline(x=thrs, color='m', linestyle="--", label=f'Threshold = {thrs}')
     ax2.text(0.25, 0.5, 'False positive (FP)', horizontalalignment='center', verticalalignment='center',
              transform=ax2.transAxes, color="r",

@@ -69,16 +69,18 @@ run3.stop()
 loss_y_range = [0.54, 0.85]
 momentum_y_range = [0.55, 1]
 acc_y_range = [-0.1, 1.1]
-lr_range = [0.1, 1]
+lr_range = [0.01, 0.3]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
 
 
 l1, = ax1.plot(sgd1_rate["value"])
 ax1.set_ylim(lr_range)
-t1 = ax1.twinx()
-t1.set_ylim(momentum_y_range)
-l2, = t1.plot(sgd1_mom["value"], color = "orange")
+# t1 = ax1.twinx()
+# t1.set_ylim(momentum_y_range)
+# l2, = t1.plot(sgd1_mom["value"], color = "orange", label = "mom.")
+ax1.set_ylabel('Learning rate')
+ax1.yaxis.label.set_color('blue')
 
 ax4.plot(sgd1_tp["value"], label = "tp", color = "blue")
 ax4.plot(sgd1_fp["value"], label = "fp", color = "gray")
@@ -86,18 +88,25 @@ ax4.plot(sgd1_tn["value"], label = "tn", color = "green")
 ax4.plot(sgd1_fn["value"], label = "fn", color = "black")
 ax4.plot(sgd1_acc["value"], label = "acc", color = "orange")
 ax4.set_ylim(acc_y_range)
+ax4.set_ylabel('Pct.')
+ax4.legend()
 
-ax7.plot(sgd1_loss["value"])
-ax7.plot(sgd1_smloss["value"])
+ax7.plot(sgd1_loss["value"], label = "loss")
+ax7.plot(sgd1_smloss["value"], label = "sm_loss")
 ax7.set_ylim(loss_y_range)
+ax7.set_ylabel('Loss')
+ax7.legend()
 
 
 l3, = ax2.plot(sgd2_rate["value"])
 ax2.set_ylim(lr_range)
 t2 = ax2.twinx()
 t2.set_ylim(momentum_y_range)
-l4, = t2.plot(sgd2_mom["value"], color = "orange")
-
+l4, = t2.plot(sgd2_mom["value"], color = "orange", label = "mom.")
+t2.set_ylabel('Momentum')
+ax2.set_ylabel('Learning rate')
+ax2.yaxis.label.set_color('blue')
+t2.yaxis.label.set_color('orange')
 
 ax5.plot(sgd2_tp["value"], label = "tp", color = "blue")
 ax5.plot(sgd2_fp["value"], label = "fp", color = "gray")
@@ -105,17 +114,25 @@ ax5.plot(sgd2_tn["value"], label = "tn", color = "green")
 ax5.plot(sgd2_fn["value"], label = "fn", color = "black")
 ax5.plot(sgd2_acc["value"], label = "acc", color = "orange")
 ax5.set_ylim(acc_y_range)
+ax5.set_ylabel('Pct.')
+ax5.legend()
 
-ax8.plot(sgd2_loss["value"])
-ax8.plot(sgd2_smloss["value"])
+ax8.plot(sgd2_loss["value"], label = "loss")
+ax8.plot(sgd2_smloss["value"], label = "sm_loss")
 ax8.set_ylim(loss_y_range)
+ax8.set_ylabel('Loss')
+ax8.legend()
+
 
 l5, = ax3.plot(sgd3_rate["value"])
 ax3.set_ylim(lr_range)
 t3 = ax3.twinx()
 t3.set_ylim(momentum_y_range)
-l6, = t3.plot(sgd3_mom["value"], color = "orange")
-
+l6, = t3.plot(sgd3_mom["value"], color = "orange", label = "mom.")
+t3.set_ylabel('Momentum')
+ax3.set_ylabel('Learning rate')
+ax3.yaxis.label.set_color('blue')
+t3.yaxis.label.set_color('orange')
 
 ax6.plot(sgd3_tp["value"], label = "tp", color = "blue")
 ax6.plot(sgd3_fp["value"], label = "fp", color = "gray")
@@ -123,10 +140,16 @@ ax6.plot(sgd3_tn["value"], label = "tn", color = "green")
 ax6.plot(sgd3_fn["value"], label = "fn", color = "black")
 ax6.plot(sgd3_acc["value"], label = "acc", color = "orange")
 ax6.set_ylim(acc_y_range)
+ax6.set_ylabel('Pct.')
+ax6.legend()
 
-ax9.plot(sgd3_loss["value"])
-ax9.plot(sgd3_smloss["value"])
+ax9.plot(sgd3_loss["value"], label = "loss")
+ax9.plot(sgd3_smloss["value"], label = "sm_loss")
 ax9.set_ylim(loss_y_range)
+ax9.set_ylabel('Loss')
+ax9.legend()
+
 
 fig.tight_layout(pad=2.0)
+
 plt.show()
