@@ -220,7 +220,7 @@ if __name__ == '__main__':
     # core = torch.cuda.device_count()
     core = 1
 
-    networks = [net_SGD] # net_ADAM
+    networks = [net_ADAM] #, net_SGD
 
     cuda_dict = dict()
     cuda_dict[0] = networks
