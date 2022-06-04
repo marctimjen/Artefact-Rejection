@@ -1,0 +1,9 @@
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 10.5, "step": null, "ts": 1654330830.4803805}]}, "version": 1}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 6.356494903564453, "step": null, "ts": 1654330830.4803805}]}, "version": 2}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.5440444946289062, "step": null, "ts": 1654330830.4803805}]}, "version": 3}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "", "step": null, "ts": 1654330831.2457929}]}, "version": 4}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "https://app.neptune.ai/NTLAB/artifact-rej-scalp/e/AR1-601\n", "step": null, "ts": 1654330831.2457929}]}, "version": 5}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "", "step": null, "ts": 1654330831.8551059}]}, "version": 6}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "https://app.neptune.ai/NTLAB/artifact-rej-scalp/e/AR1-600\n", "step": null, "ts": 1654330831.8551059}]}, "version": 7}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "", "step": null, "ts": 1654330832.2613132}]}, "version": 8}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Shutting down background jobs, please wait a moment...\n", "step": null, "ts": 1654330832.2613132}]}, "version": 9}

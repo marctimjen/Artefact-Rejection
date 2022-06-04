@@ -78,6 +78,7 @@ fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
 
 ax1.set_title(f'ADAM optimizor with weight_decay of {adam1_weight}')
 ax1.plot(adam1_rate["value"])
+ax1.set_ylabel('Learning rate')
 ax1.set_ylim(lr_range)
 
 
@@ -86,14 +87,17 @@ ax4.plot(adam1_fp["value"], label = "fp", color = "gray")
 ax4.plot(adam1_tn["value"], label = "tn", color = "green")
 ax4.plot(adam1_fn["value"], label = "fn", color = "black")
 ax4.plot(adam1_acc["value"], label = "acc", color = "orange")
+ax4.set_ylabel('Pct.')
 ax4.set_ylim(acc_y_range)
 
 ax7.plot(adam1_loss["value"])
 ax7.plot(adam1_smloss["value"])
+ax7.set_ylabel('Loss')
 ax7.set_ylim(loss_y_range)
 
 ax2.set_title(f'ADAM optimizor with weight_decay of {adam2_weight}')
 ax2.plot(adam2_rate["value"])
+ax2.set_ylabel('Learning rate')
 ax2.set_ylim(lr_range)
 
 
@@ -102,14 +106,17 @@ ax5.plot(adam2_fp["value"], label = "fp", color = "gray")
 ax5.plot(adam2_tn["value"], label = "tn", color = "green")
 ax5.plot(adam2_fn["value"], label = "fn", color = "black")
 ax5.plot(adam2_acc["value"], label = "acc", color = "orange")
+ax5.set_ylabel('Pct.')
 ax5.set_ylim(acc_y_range)
 
 ax8.plot(adam2_loss["value"])
 ax8.plot(adam2_smloss["value"])
+ax8.set_ylabel('Loss')
 ax8.set_ylim(loss_y_range)
 
 ax3.set_title(f'ADAM optimizor with weight_decay of {adam3_weight}')
 ax3.plot(adam3_rate["value"])
+ax3.set_ylabel('Learning rate')
 ax3.set_ylim(lr_range)
 
 
@@ -119,10 +126,12 @@ ax6.plot(adam3_fp["value"], label = "fp", color = "gray")
 ax6.plot(adam3_tn["value"], label = "tn", color = "green")
 ax6.plot(adam3_fn["value"], label = "fn", color = "black")
 ax6.plot(adam3_acc["value"], label = "acc", color = "orange")
+ax6.set_ylabel('Pct.')
 ax6.set_ylim(acc_y_range)
 
 ax9.plot(adam3_loss["value"])
 ax9.plot(adam3_smloss["value"])
+ax9.set_ylabel('Loss')
 ax9.set_ylim(loss_y_range)
 
 fig.tight_layout(pad=2.0)

@@ -60,7 +60,7 @@ file
 data = file.filter(0.1, 100)
 
 
-%matplotlib
+# %matplotlib
 data.plot(block=True)
 
 
