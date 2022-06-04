@@ -1,0 +1,45 @@
+{"obj": {"type": "AssignString", "path": ["sys", "name"], "value": "Untitled"}, "version": 1}
+{"obj": {"type": "AssignString", "path": ["sys", "description"], "value": ""}, "version": 2}
+{"obj": {"type": "AssignString", "path": ["sys", "hostname"], "value": "DESKTOP-SH3J0RM"}, "version": 3}
+{"obj": {"type": "AssignBool", "path": ["sys", "failed"], "value": false}, "version": 4}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stdout"]}, "version": 5}
+{"obj": {"type": "ClearStringLog", "path": ["monitoring", "stderr"]}, "version": 6}
+{"obj": {"type": "AssignString", "path": ["source_code", "entrypoint"], "value": "train_test.py"}, "version": 7}
+{"obj": {"type": "UploadFileSet", "path": ["source_code", "files"], "file_globs": ["C:\\Users\\Marc\\Documents\\GitHub\\Artefact-Rejection\\mulitclass_net\\2. Testing and training networks\\train_test.py"], "reset": "False"}, "version": 8}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "cpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 9}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "cpu"]}, "version": 10}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "memory"], "min": 0.0, "max": 15.747394561767578, "unit": "GB"}, "version": 11}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "memory"]}, "version": 12}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu"], "min": 0.0, "max": 100.0, "unit": "%"}, "version": 13}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu"]}, "version": 14}
+{"obj": {"type": "ConfigFloatSeries", "path": ["monitoring", "gpu_memory"], "min": 0.0, "max": 8.0, "unit": "GB"}, "version": 15}
+{"obj": {"type": "ClearFloatLog", "path": ["monitoring", "gpu_memory"]}, "version": 16}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 9.2, "step": null, "ts": 1654340022.1257093}]}, "version": 17}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 8.262702941894531, "step": null, "ts": 1654340022.1257093}]}, "version": 18}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 0.8396720886230469, "step": null, "ts": 1654340022.1257093}]}, "version": 19}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "optimizer"], "value": "SGD"}, "version": 20}
+{"obj": {"type": "AssignInt", "path": ["network_SGD", "parameters", "batch_size"], "value": 10}, "version": 21}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "optimizer_learning_rate"], "value": 1.2}, "version": 22}
+{"obj": {"type": "AssignInt", "path": ["network_SGD", "parameters", "optimizor_weight_decay"], "value": 0}, "version": 23}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "loss_function"], "value": "CrossEntropyLoss"}, "version": 24}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "loss_function_weights"], "value": "[1.25, 6.67, 16.67, 1.0]"}, "version": 25}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "loss_function_reduction"], "value": "mean"}, "version": 26}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "model"], "value": "Unet_leaky_lstm_elec"}, "version": 27}
+{"obj": {"type": "AssignString", "path": ["network_SGD", "parameters", "scheduler"], "value": "CyclicLR"}, "version": 28}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "scheduler_base_lr"], "value": 1.2}, "version": 29}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "scheduler_max_lr"], "value": 1.3}, "version": 30}
+{"obj": {"type": "AssignBool", "path": ["network_SGD", "parameters", "scheduler_cycle_momentum"], "value": false}, "version": 31}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "scheduler_step_size_up"], "value": 5571.0}, "version": 32}
+{"obj": {"type": "AssignFloat", "path": ["network_SGD", "parameters", "smooting_loss"], "value": 0.05}, "version": 33}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "Training epoch 0", "step": null, "ts": 1654340023.406868}]}, "version": 34}
+{"obj": {"type": "LogStrings", "path": ["monitoring", "stdout"], "values": [{"value": "\n", "step": null, "ts": 1654340023.406868}]}, "version": 35}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "learning_rate"], "values": [{"value": 1.2, "step": null, "ts": 1654340023.406868}]}, "version": 36}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "momentum"], "values": [{"value": 0.0, "step": null, "ts": 1654340023.406868}]}, "version": 37}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "train_loss_pr_file"], "values": [{"value": 1.3618842363357544, "step": null, "ts": 1654340024.969159}]}, "version": 38}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "smooth_train_loss_pr_file"], "values": [{"value": 1.3618842363357544, "step": null, "ts": 1654340024.969159}]}, "version": 39}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "validation_loss_pr_file"], "values": [{"value": 1.3618842363357544, "step": null, "ts": 1654340024.969159}]}, "version": 40}
+{"obj": {"type": "LogFloats", "path": ["network_SGD", "smooth_val_loss_pr_file"], "values": [{"value": 1.3618842363357544, "step": null, "ts": 1654340024.969159}]}, "version": 41}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "cpu"], "values": [{"value": 12.0, "step": null, "ts": 1654340032.1469471}]}, "version": 42}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "memory"], "values": [{"value": 10.345748901367188, "step": null, "ts": 1654340032.1469471}]}, "version": 43}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu"], "values": [{"value": 84.0, "step": null, "ts": 1654340032.1469471}]}, "version": 44}
+{"obj": {"type": "LogFloats", "path": ["monitoring", "gpu_memory"], "values": [{"value": 4.840793609619141, "step": null, "ts": 1654340032.1469471}]}, "version": 45}

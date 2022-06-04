@@ -217,19 +217,19 @@ if __name__ == '__main__':
         fl = torch.cuda.FloatTensor
         it = torch.cuda.LongTensor
 
-    core = torch.cuda.device_count()
-    # core = 1
+    # core = torch.cuda.device_count()
+    core = 1
 
     networks = [net_SGD, net_ADAM] # net_ADAM
 
     cuda_dict = dict()
-    # cuda_dict[core] = networks
+    cuda_dict[0] = networks
 
-    for i in range(core):
-        cuda_dict[i] = []
-
-    for i in range(len(networks)):
-        cuda_dict[i % core].append(networks[i]) # i % core
+    # for i in range(core):
+    #     cuda_dict[i] = []
+    #
+    # for i in range(len(networks)):
+    #     cuda_dict[i % core].append(networks[i]) # i % core
 
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"

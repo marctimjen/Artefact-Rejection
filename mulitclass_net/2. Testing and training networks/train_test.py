@@ -14,9 +14,9 @@ import math
 import sys
 sys.path.append("../..") # adds higher directory to python modules path
 
-from LoaderPACK.Unet_leaky import Unet_leaky, Unet_leaky_lstm
+from LoaderPACK.Unet_leaky import Unet_leaky_lstm_elec
 from LoaderPACK.Loader import shuffle_5min
-from LoaderPACK.trainer import net_train
+from LoaderPACK.trainer import net_multi_train
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
@@ -38,19 +38,19 @@ def net_SGD(device, fl, it, train_path, val_path):
     net_name = "network_SGD"
 
     batch_size = 10
-    n_samples = 17 # the defualt amount of samples minus 1
+    n_samples = 11141 - 1 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
                                    device = device,
-                                   length = n_samples)
-
+                                   length=n_samples)
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
                                                batch_size=batch_size,
                                                shuffle=True,
-                                               num_workers=0)
+                                               num_workers=0,
+                                               drop_last=True)
 
     val_load_file = shuffle_5min(path = val_path,
                                  series_dict = 'val_series_length.pickle',
@@ -58,61 +58,58 @@ def net_SGD(device, fl, it, train_path, val_path):
                                  device = device,
                                  seed = 42)
 
-
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                              batch_size=batch_size,
                                              shuffle=False,
                                              num_workers=0,
                                              drop_last=True)
 
-
-    nEpoch = 100
-    base_lr = 0.216 # where we start the learning rate (min point)
-    max_lr = 0.268 # where the learning rate is at the max point
+    nEpoch = 50
+    base_lr = 1.2 # where we start the learning rate
+    max_lr = 1.3 # where the learning rate is supposed to end
     weight_decay = 0
-    step_size_up = (n_samples/batch_size)*5
+    step_size_up = (n_samples/batch_size)*5 + 1
 
-    model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
+    model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
 
-    optimizer = SGD(model.parameters(), lr=base_lr)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+    optimizer = SGD(model.parameters(), lr=base_lr, weight_decay=weight_decay)
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1.25, 6.67, 16.67, 1.]).to(device),
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=step_size_up,
-                         cycle_momentum=True, base_momentum=0.8,
-                         max_momentum=0.9)
+                         cycle_momentum=False)
 
     smooth = 0.05
 
     params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
+              "optimizor_weight_decay":weight_decay,
               "loss_function":"CrossEntropyLoss",
-              "loss_function_weights":[1, 5],
+              "loss_function_weights":[1.25, 6.67, 16.67, 1.],
               "loss_function_reduction":"mean",
-              "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
+              "model":"Unet_leaky_lstm_elec", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
-              "scheduler_cycle_momentum":True,
-              "base_momentum":0.8, "max_momentum":0.9,
+              "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":step_size_up,
               "smooting_loss":smooth}
 
     run[f"{net_name}/parameters"] = params
 
-    net_train(device = device,
-              fl = fl, it = it,
-              net_name = net_name,
-              model = model,
-              optimizer = optimizer,
-              lossFunc = lossFunc,
-              nEpoch = nEpoch,
-              smooth = smooth,
-              train_loader = train_loader,
-              val_loader = val_loader,
-              run = run,
-              path = "C:/Users/Marc/Desktop/network/",
-              scheduler = scheduler)
+    net_multi_train(device = device,
+                    fl = fl, it = it,
+                    net_name = net_name,
+                    model = model,
+                    optimizer = optimizer,
+                    lossFunc = lossFunc,
+                    nEpoch = nEpoch,
+                    smooth = smooth,
+                    train_loader = train_loader,
+                    val_loader = val_loader,
+                    run = run,
+                    path = "C:/Users/Marc/Desktop/network/", #"/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    scheduler = scheduler)
 
 
 def net_ADAM(device, fl, it, train_path, val_path):
@@ -132,8 +129,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
                                    device = device,
-                                   length = n_samples)
-
+                                   length=n_samples)
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
                                                batch_size=batch_size,
@@ -147,41 +143,38 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                  device = device,
                                  seed = 42)
 
-
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                              batch_size=batch_size,
                                              shuffle=False,
                                              num_workers=0,
                                              drop_last=True)
 
+    nEpoch = 50
+    base_lr = 0.007 # where we start the learning rate
+    max_lr = 0.013 # where the learning rate is supposed to end
+    weight_decay = 0
+    step_size_up = (n_samples/batch_size)*5 + 1
 
-    nEpoch = 100
-    base_lr = 0.0089 # where we start the learning rate (min point)
-    max_lr = 0.013 # where the learning rate is at the max point
-    weight_decay = 0.0001
-    step_size_up = (n_samples/batch_size)*5
-
-    model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
+    model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
-    # model = Unet_leaky(n_channels=1, n_classes=2).to(device)
-    optimizer = Adam(model.parameters(), lr=0.004, weight_decay=weight_decay)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+
+    optimizer = Adam(model.parameters(), lr=base_lr, weight_decay=weight_decay)
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1.25, 6.67, 16.67, 1.]).to(device),
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
                          step_size_up=step_size_up,
                          cycle_momentum=False)
-    # step_size_up is set so the learning rate is updated linearly
 
     smooth = 0.05
 
-    params = {"optimizer":"ADAM", "batch_size":batch_size,
+    params = {"optimizer":"SGD", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
-              "optimizer_weight_decay": weight_decay,
+              "optimizor_weight_decay":weight_decay,
               "loss_function":"CrossEntropyLoss",
-              "loss_function_weights":[1, 5],
+              "loss_function_weights":[1.25, 6.67, 16.67, 1.],
               "loss_function_reduction":"mean",
-              "model":"Unet_leaky_lstm", "scheduler":"CyclicLR",
+              "model":"Unet_leaky_lstm_elec", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
               "scheduler_cycle_momentum":False,
               "scheduler_step_size_up":step_size_up,
@@ -189,21 +182,19 @@ def net_ADAM(device, fl, it, train_path, val_path):
 
     run[f"{net_name}/parameters"] = params
 
-
-    net_train(device = device,
-              fl = fl, it = it,
-              net_name = net_name,
-              model = model,
-              optimizer = optimizer,
-              lossFunc = lossFunc,
-              nEpoch = nEpoch,
-              smooth = smooth,
-              train_loader = train_loader,
-              val_loader = val_loader,
-              run = run,
-              path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
-              scheduler = scheduler)
-
+    net_multi_train(device = device,
+                    fl = fl, it = it,
+                    net_name = net_name,
+                    model = model,
+                    optimizer = optimizer,
+                    lossFunc = lossFunc,
+                    nEpoch = nEpoch,
+                    smooth = smooth,
+                    train_loader = train_loader,
+                    val_loader = val_loader,
+                    run = run,
+                    path = "C:/Users/Marc/Desktop/network/", #"/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    scheduler = scheduler)
 
 
 def net_starter(nets, device, fl, it, train_path, val_path):
@@ -227,8 +218,9 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     core = torch.cuda.device_count()
+    # core = 1
 
-    networks = [net_SGD] #
+    networks = [net_SGD, net_ADAM] # net_ADAM
 
     cuda_dict = dict()
     # cuda_dict[core] = networks
