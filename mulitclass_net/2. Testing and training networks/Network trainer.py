@@ -108,7 +108,7 @@ def net_SGD(device, fl, it, train_path, val_path):
                     train_loader = train_loader,
                     val_loader = val_loader,
                     run = run,
-                    path = "C:/Users/Marc/Desktop/network/", #"/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
                     scheduler = scheduler)
 
 
@@ -193,7 +193,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                     train_loader = train_loader,
                     val_loader = val_loader,
                     run = run,
-                    path = "C:/Users/Marc/Desktop/network/", #"/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
                     scheduler = scheduler)
 
 
@@ -234,10 +234,10 @@ if __name__ == '__main__':
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
 
-    # train_path = "/home/tyson/data_cutoff/train_model_data"
-    # val_path = "/home/tyson/data_cutoff/val_model_data"
-    train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
-    val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
+    train_path = "/home/tyson/data_cutoff/train_model_data"
+    val_path = "/home/tyson/data_cutoff/val_model_data"
+    # train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
+    # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
     for i in range(core):
