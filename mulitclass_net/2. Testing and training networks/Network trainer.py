@@ -234,8 +234,8 @@ if __name__ == '__main__':
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
 
-    train_path = "/home/tyson/data_cutoff/train_model_data"
-    val_path = "/home/tyson/data_cutoff/val_model_data"
+    train_path = "/home/tyson/data/train_model_data"
+    val_path = "/home/tyson/data/val_model_data"
     # train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
