@@ -68,8 +68,8 @@ def net_SGD1(device, fl, it, train_path, val_path):
     train_acc = torch.tensor([]).to(device)
 
     nEpoch = 5
-    base_lr = 1.2 # where we start the learning rate
-    max_lr = 1.3 # where the learning rate is supposed to end
+    base_lr = 0.133 # where we start the learning rate
+    max_lr = 0.8 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
                                  device=device).to(device)
@@ -242,8 +242,8 @@ def net_SGD2(device, fl, it, train_path, val_path):
     train_acc = torch.tensor([]).to(device)
 
     nEpoch = 5
-    base_lr = 1.2 # where we start the learning rate
-    max_lr = 1.3 # where the learning rate is supposed to end
+    base_lr = 0.133 # where we start the learning rate
+    max_lr = 0.8 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
                                  device=device).to(device)
@@ -418,8 +418,8 @@ def net_SGD3(device, fl, it, train_path, val_path):
     train_acc = torch.tensor([]).to(device)
 
     nEpoch = 5
-    base_lr = 1.2 # where we start the learning rate
-    max_lr = 1.3 # where the learning rate is supposed to end
+    base_lr = 0.133 # where we start the learning rate
+    max_lr = 0.8 # where the learning rate is supposed to end
 
     model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
                                  device=device).to(device)
@@ -583,14 +583,14 @@ if __name__ == '__main__':
     for i in range(len(networks)):
         cuda_dict[i % core].append(networks[i])
 
-    # train_path = "/home/tyson/data_cutoff/train_model_data"
-    # val_path = "/home/tyson/data_cutoff/val_model_data"
+    train_path = "/home/tyson/data_cutoff/train_model_data"
+    val_path = "/home/tyson/data_cutoff/val_model_data"
 
-    train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
-    val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
+    # train_path = r"C:\Users\Marc\Desktop\data\train_model_data"
+    # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(core):
+    for i in range(core-1):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,

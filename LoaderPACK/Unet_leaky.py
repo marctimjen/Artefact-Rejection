@@ -349,10 +349,20 @@ class Unet_leaky_lstm_elec(nn.Module):
         x2 = self.down1(x1)
         x3 = self.down2(x2)
         x4 = self.down3(x3)
+        print(inp.shape)
+        print("x1", x1.shape)
+        print("x2", x2.shape)
+        print("x3", x3.shape)
+        print("x4", x4.shape)
+
         x = self.up1(x4, x3)
+        print(x.shape)
         x = self.up2(x, x2)
+        print(x.shape)
         x = self.up3(x, x1)
+        print(x.shape)
         output = self.outc(x, inp).view(-1, 4)
+        print("out", output.shape)
 
         return output
 
