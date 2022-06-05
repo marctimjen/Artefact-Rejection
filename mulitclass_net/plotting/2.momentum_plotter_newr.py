@@ -7,7 +7,7 @@ token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-594"
+    run="AR1-629"
 ) # SGD 1
 
 sgd1_rate = run1['network_SGD/learning_rate'].fetch_values()
@@ -23,7 +23,7 @@ token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-593"
+    run="AR1-630"
 ) # SGD 2
 
 
@@ -40,7 +40,7 @@ token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-592"
+    run="AR1-628"
 ) # SGD 3
 
 
@@ -61,7 +61,7 @@ run3.stop()
 loss_y_range = [1, 1.5]
 momentum_y_range = [0.55, 1]
 acc_y_range = [-0.1, 1.1]
-lr_range = [1, 1.5]
+lr_range = [0.01, 1.3]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
 
