@@ -65,16 +65,16 @@ def net_SGD(device, fl, it, train_path, val_path):
                                              drop_last=True)
 
     nEpoch = 50
-    base_lr = 1.2 # where we start the learning rate
-    max_lr = 1.3 # where the learning rate is supposed to end
-    weight_decay = 0
+    base_lr = 0.007 # where we start the learning rate
+    max_lr = 0.013 # where the learning rate is supposed to end
+    weight_decay = 0.00001
     step_size_up = (n_samples/batch_size)*5 + 1
 
     model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
 
     optimizer = SGD(model.parameters(), lr=base_lr, weight_decay=weight_decay)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1.25, 6.67, 16.67, 1.]).to(device),
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1.25, 6.67, 16.67, 100.0]).to(device),
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
@@ -87,7 +87,7 @@ def net_SGD(device, fl, it, train_path, val_path):
               "optimizer_learning_rate": base_lr,
               "optimizor_weight_decay":weight_decay,
               "loss_function":"CrossEntropyLoss",
-              "loss_function_weights":[1.25, 6.67, 16.67, 1.],
+              "loss_function_weights":[1.25, 6.67, 16.67, 100.0],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm_elec", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
@@ -150,9 +150,9 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                              drop_last=True)
 
     nEpoch = 50
-    base_lr = 0.007 # where we start the learning rate
-    max_lr = 0.013 # where the learning rate is supposed to end
-    weight_decay = 0
+    base_lr = 0.133 # where we start the learning rate
+    max_lr = 0.8 # where the learning rate is supposed to end
+    weight_decay = 0.00001
     step_size_up = (n_samples/batch_size)*5 + 1
 
     model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, \
@@ -218,12 +218,12 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     # core = torch.cuda.device_count()
-    core = 1
+    core = 4
 
-    networks = [net_ADAM] #, net_SGD
+    networks = [net_SGD] #, net_ADAM
 
     cuda_dict = dict()
-    cuda_dict[0] = networks
+    cuda_dict[3] = networks
 
     # for i in range(core):
     #     cuda_dict[i] = []
@@ -240,7 +240,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(core):
+    for i in range(3, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,

@@ -3,14 +3,12 @@ import neptune.new as neptune
 import os
 import matplotlib.pyplot as plt
 
-# sgd 411, 412, 413
-# adam 414, 415, 416
 
 token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-596"
+    run="AR1-633" # 596
 )
 
 sgd1_rate = run1['network_SGD/learning_rate'].fetch_values()
@@ -26,7 +24,7 @@ token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-595"
+    run="AR1-632" # 595
 )
 
 
@@ -43,7 +41,7 @@ token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-592"
+    run="AR1-629" # 592
 )
 
 
