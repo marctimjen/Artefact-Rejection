@@ -214,7 +214,8 @@ dir3_csv_list = "C:/Users/Marc/Desktop/data/v2.1.0/lists/rec_03_tcp_ar_a.list"
 
 
 if __name__ == "__main__":
-    montage_list = [montage1, montage2, montage3]
+    montage_list = [montage1, montage2, montage1]
+    # the channels in montage 3 is also represented in montage 1
     dir_edf_list = [dir1_edf_list, dir2_edf_list, dir3_edf_list]
     dir_csv_list = [dir1_csv_list, dir2_csv_list, dir3_csv_list]
 

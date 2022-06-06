@@ -159,7 +159,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                             device=device).to(device)
 
     optimizer = Adam(model.parameters(), lr=base_lr, weight_decay=weight_decay)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1.25, 6.67, 16.67, 1.]).to(device),
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1.25, 6.67, 16.67, 100.]).to(device),
                                    reduction = "mean")
 
     scheduler = CyclicLR(optimizer, base_lr=base_lr, max_lr=max_lr,
@@ -168,11 +168,11 @@ def net_ADAM(device, fl, it, train_path, val_path):
 
     smooth = 0.05
 
-    params = {"optimizer":"SGD", "batch_size":batch_size,
+    params = {"optimizer":"ADAM", "batch_size":batch_size,
               "optimizer_learning_rate": base_lr,
               "optimizor_weight_decay":weight_decay,
               "loss_function":"CrossEntropyLoss",
-              "loss_function_weights":[1.25, 6.67, 16.67, 1.],
+              "loss_function_weights":[1.25, 6.67, 16.67, 100.],
               "loss_function_reduction":"mean",
               "model":"Unet_leaky_lstm_elec", "scheduler":"CyclicLR",
               "scheduler_base_lr":base_lr, "scheduler_max_lr":max_lr,
@@ -194,6 +194,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                     val_loader = val_loader,
                     run = run,
                     path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    clip = True,
                     scheduler = scheduler)
 
 
@@ -220,7 +221,7 @@ if __name__ == '__main__':
     # core = torch.cuda.device_count()
     core = 4
 
-    networks = [net_SGD] #, net_ADAM
+    networks = [net_ADAM] #, net_SGD
 
     cuda_dict = dict()
     cuda_dict[3] = networks
