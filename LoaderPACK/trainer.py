@@ -423,6 +423,7 @@ def net_train_combo(device,
                     val_loader,
                     run,
                     path,
+                    clip=False,
                     scheduler = None):
     """
     This function is used for training the hyper-optimized networks.
@@ -514,6 +515,11 @@ def net_train_combo(device,
                 first_loss_save = False
 
             loss.backward()
+
+            if clip:
+                # Gradient Value Clipping
+                nn.utils.clip_grad_value_(model.parameters(), clip_value=1.0)
+
             optimizer.step()
             train_loss.append(loss.item())
 
