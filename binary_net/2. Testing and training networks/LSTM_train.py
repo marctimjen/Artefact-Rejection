@@ -240,8 +240,8 @@ if __name__ == '__main__':
         fl = torch.cuda.FloatTensor
         it = torch.cuda.LongTensor
 
-    core = torch.cuda.device_count()
-
+    # core = torch.cuda.device_count()
+    core = 2
     networks = [net_LSTM]
 
     cuda_dict = dict()
