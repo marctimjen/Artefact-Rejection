@@ -3,12 +3,12 @@ sys.path.append("..") # adds higher directory to python modules path
 
 import torch
 from LoaderPACK.Loader import load_whole_data, load_5_min_intervals
-from LoaderPACK.Accuarcy_finder import mclass_acc_recal_fidner, recall_find_tester, single_mclass_acc_recal_finder
+from LoaderPACK.Accuarcy_finder import recall_find_tester, single_mclass_acc_recal_finder, elec_mclass_acc_recal_finder
 
 
 
 def val_files_test(ind: list, input_path: str, input_name:str, target_path: str,
-                   target_name: str, lab_enc: dict, device):
+                   target_name: str, lab_enc: dict, elec = False):
 
     train_load_file = load_whole_data(ind=ind,
                                       input_path=input_path,
@@ -31,7 +31,10 @@ def val_files_test(ind: list, input_path: str, input_name:str, target_path: str,
     for file in train_file_loader:
         anno = file[0][0, :, 30*200:]
         target = file[1][0, :, 30*200:]
-        it = iter(single_mclass_acc_recal_finder(anno, target))
+        if elec:
+            it = iter(elec_mclass_acc_recal_finder(anno, target))
+        else:
+            it = iter(single_mclass_acc_recal_finder(anno, target))
 
         for (acc, mat, tot_p_g, tot_n_g, art_pred, i) in it:
 

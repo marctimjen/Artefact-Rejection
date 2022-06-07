@@ -7,7 +7,7 @@ from LoaderPACK.Loader import load_whole_data, load_5_min_intervals
 
 
 
-def pipeline(input_path: str, input_name: str, save_loc: str, ind: list, model, start=200*30):
+def pipeline(input_path: str, input_name: str, save_loc: str, ind: list, model, start=200*30, onehot=False):
     """
     This function is used to create annotations for the input EEG files. 
     Note: The EEG files should be on a .pt format 
@@ -41,9 +41,11 @@ def pipeline(input_path: str, input_name: str, save_loc: str, ind: list, model, 
 
     it = iter(ind)
 
-    for file in train_file_loader:
+    print("Loading files for pipeline")
 
+    for file in train_file_loader:
         nr = next(it) # get the file number
+        print("File nr:", nr)
 
         result = torch.zeros(file[0].shape[1], file[0].shape[2]) # make target data
 
@@ -60,7 +62,9 @@ def pipeline(input_path: str, input_name: str, save_loc: str, ind: list, model, 
             with torch.no_grad():
                 pred = model(ind)
 
-            y_pred = (pred[:, 1] >= 0.5).view(-1)
+
+            y_pred = torch.argmax(pred, dim=1).view(-1)
+            # the same as (pred[:, 1] >= 0.5).view(-1)
 
             cut_end = min(cut + 60 * 5 * 200, result.shape[1])
             result[int(chan)][cut:cut_end] = y_pred[:cut_end-cut]

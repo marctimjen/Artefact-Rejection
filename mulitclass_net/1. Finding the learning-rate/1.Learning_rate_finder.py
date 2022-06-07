@@ -473,6 +473,7 @@ def net_ADAM1(device, fl, it, train_path, val_path):
                 first_loss_save = False
 
             loss.backward()
+            nn.utils.clip_grad_value_(model.parameters(), clip_value=1.0)
             optimizer.step()
             train_loss.append(loss.item())
 
@@ -731,7 +732,7 @@ if __name__ == '__main__':
 
     #core = 1
 
-    networks = [net_SGD2] # net_SGD1, net_ADAM1, , net_ADAM2
+    networks = [net_ADAM1] # net_SGD1, , net_SGD2, net_ADAM2
 
     cuda_dict = dict()
     # cuda_dict[core] = networks

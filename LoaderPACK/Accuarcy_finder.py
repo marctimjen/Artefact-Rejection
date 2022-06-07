@@ -137,11 +137,56 @@ def single_mclass_acc_recal_finder(pred, tar, classes=5):
 
     for i in range(0, classes):
         if i == 0:
-            fp = torch.sum(art_pred[tar == i] == 1)  # false positive, tar = 0 and pred = 1
-            fn = torch.sum(art_pred[tar != i] == 0)  # false negative, tar = 1 and pred = 0
+            fp = torch.sum(art_pred[tar != i] == 0)  # false positive, tar = 0 and pred = 1
+            fn = torch.sum(art_pred[tar == i] != 0)  # false negative, tar = 1 and pred = 0
 
             tp = torch.sum(art_pred[tar == i] == 0)  # true positive
             tn = torch.sum(art_pred[tar != i] != 0)  # true negative
+
+            acc = (tp + tn) / (fp + fn + tp + tn)
+
+            tot_p_g = tp + fp  # total postive
+            tot_n_g = tn + fn  # total negative
+        else:
+            fp = torch.sum(art_pred[tar != i] == 1) # false positive, tar = 0 and pred = 1
+            fn = torch.sum(art_pred[tar == i] == 0) # false negative, tar = 1 and pred = 0
+
+            tp = torch.sum(art_pred[tar == i] == 1) # true positive
+            tn = torch.sum(art_pred[tar != i] == 0) # true negative
+
+            acc = (tp + tn)/(fp + fn + tp + tn)
+
+            tot_p_g = tp + fp # total postive
+            tot_n_g = tn + fn # total negative
+
+        yield (acc, torch.tensor([[tp, fp], [fn, tn]]), tot_p_g, tot_n_g, art_pred, i)
+
+
+def elec_mclass_acc_recal_finder(pred, tar, classes=5):
+    """
+    This function calculates the the accuarcy and confussion matrix
+    """
+    tar = tar.reshape(-1)
+    art_pred = pred.reshape(-1)
+
+    for i in range(0, classes):
+        if i == 0:
+            fp = torch.sum(art_pred[tar != i] == 0)  # false positive, tar = 1 and pred = 0
+            fn = torch.sum(art_pred[tar == i] != 0)  # false negative, tar = 0 and pred = 1
+
+            tp = torch.sum(art_pred[tar == i] == 0)  # true positive
+            tn = torch.sum(art_pred[tar != i] != 0)  # true negative
+
+            acc = (tp + tn) / (fp + fn + tp + tn)
+
+            tot_p_g = tp + fp  # total postive
+            tot_n_g = tn + fn  # total negative
+        elif i == 4: # elec class
+            fp = torch.sum(art_pred[tar != 4] == 2)  # false positive, tar = 1 and pred = 0
+            fn = torch.sum(art_pred[tar == 4] != 2)  # false negative, tar = 0 and pred = 1
+
+            tp = torch.sum(art_pred[tar == 4] == 2)  # true positive
+            tn = torch.sum(art_pred[tar != 4] != 2)  # true negative
 
             acc = (tp + tn) / (fp + fn + tp + tn)
 
