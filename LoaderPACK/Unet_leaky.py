@@ -5,10 +5,10 @@ import torch.nn.functional as F
 
 # https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html
 
-class Double_Convolution(nn.Module): # Blue arrow
+class Double_Convolution(nn.Module): # two orange arrows (or two light green arrows)
     """
-    This class constitute two dark blue arrows in the U-net figure. So it does
-    a double convolution.
+    This class consistute two orange arrows (or two light green arrows) in the U-net figure (3.6).
+    The job of this function is to do a double convolutions.
     """
     def __init__(self, in_channels, out_channels, up_conv = False):
         """
@@ -45,7 +45,7 @@ class Double_Convolution(nn.Module): # Blue arrow
 
 class Down_Scale(nn.Module): # red arrow + double_conv
     """
-    This class constitute one red and two dark blue arrows in the U-net figure.
+    This class constitute one red and two orange arrows in the U-net figure.
     So this is the function that does the down-sampling of the net.
     """
     def __init__(self, in_channels, out_channels):
@@ -63,9 +63,9 @@ class Down_Scale(nn.Module): # red arrow + double_conv
         return x
 
 
-class Up_Scale(nn.Module): # green arrow + double_conv
+class Up_Scale(nn.Module): # yellow arrow + green arrow + double_conv
     """
-    This class constitute one green and two dark blue arrows in the U-net
+    This class constitute one yellow, a green and two orange arrows in the U-net
     figure. So this is the function that does the up-sampling of the net.
     """
     def __init__(self, in_channels, out_channels, up_conv = False):
@@ -87,7 +87,6 @@ class Up_Scale(nn.Module): # green arrow + double_conv
         x = self.up_conv1(x)
 
         diffY = y.size()[2] - x.size()[2]
-        #diffX = y.size()[3] - x.size()[3], diffX // 2, diffX - diffX // 2
 
         x = F.pad(x, [diffY // 2, diffY - diffY // 2]) # make the dimentions fit
 
@@ -95,9 +94,9 @@ class Up_Scale(nn.Module): # green arrow + double_conv
         x = self.doub(x)
         return x
 
-class OutConv_lstm(nn.Module): # light-blue arrow
+class OutConv_lstm(nn.Module): # magenta arrow
     """
-    This class constitute light-blue arrows in the U-net figure. So this is the
+    This class constitute the megenta arrows in the U-net figure. So this is the
     function that does the 1x1 convolution and makes the channels fit to the
     desired output.
     """
@@ -217,11 +216,13 @@ class OutConv_lstm_elec(nn.Module): # light-blue arrow
 
         return self.soft(out)
 
-class OutConv(nn.Module): # light-blue arrow
+class OutConv(nn.Module): # magenta arrow
     """
     This class constitute light-blue arrows in the U-net figure. So this is the
     function that does the 1x1 convolution and makes the channels fit to the
-    desired output.
+    desired output. Usually this is the last step of the unet architecture.
+    In the version created for this report additionally an LSTM network is added to
+    this building block.
     """
     def __init__(self, in_channels, n_classes):
         """
@@ -232,16 +233,7 @@ class OutConv(nn.Module): # light-blue arrow
         super(OutConv, self).__init__()
         self.conv = nn.Conv1d(in_channels, n_classes, kernel_size=1)
 
-
-        # implementer LSTM eller GRU HER!! <- før pseudo!!
-        # Bidirectional lag - så den kører begge veje.
-        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
-        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
-
-        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
-
-        self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
-        #self.sig = nn.Sigmoid()
+        self.soft = nn.Softmax(dim=1)
 
     def forward(self, x):
         out = self.conv(x)
