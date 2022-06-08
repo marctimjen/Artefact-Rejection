@@ -518,6 +518,7 @@ def net_train_combo(device,
 
             if clip:
                 # Gradient Value Clipping
+                print("clipping")
                 nn.utils.clip_grad_value_(model.parameters(), clip_value=1.0)
 
             optimizer.step()
