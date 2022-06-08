@@ -97,7 +97,7 @@ def net_LSTM_combo(device, fl, it, train_path, val_path):
 
 
     nEpoch = 100
-    base_lr = 0.075 # The base lr
+    base_lr = 0.07 # The base lr
 
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 
@@ -319,13 +319,13 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     # core = torch.cuda.device_count()
-    core = 2
-    networks = [net_LSTM] #
+    core = 3
+    networks = [net_LSTM_combo] #net_LSTM
 
     cuda_dict = dict()
     # cuda_dict[core] = networks
 
-    cuda_dict[1] = networks
+    cuda_dict[2] = networks
 
     # for i in range(core):
     #     cuda_dict[i] = []
@@ -342,7 +342,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data_new\val_model_data"
 
     pres = []
-    for i in range(1, core):
+    for i in range(2, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
