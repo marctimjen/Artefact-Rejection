@@ -182,10 +182,10 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 
     optimizer = Adam(model.parameters(), lr=base_lr)
-    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
-                                  reduction = "mean")
+    # lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+    #                               reduction = "mean")
 
-    # lossFunc = ComboLoss()
+    lossFunc = ComboLoss()
 
     lam = lambda x: math.exp(x*math.log(max_lr / base_lr) \
                                 / (nEpoch*n_samples / batch_size))
@@ -203,7 +203,7 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
 
     run[f"{net_name}/parameters"] = params
 
-    net_train(device = device,
+    net_train_combo(device = device,
                     fl = fl, it = it,
                     net_name = net_name,
                     model = model,
@@ -242,13 +242,13 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     # core = torch.cuda.device_count()
-    core = 2
+    core = 3
     networks = [net_LSTM_lr] #
 
     cuda_dict = dict()
     # cuda_dict[core] = networks
 
-    cuda_dict[1] = networks
+    cuda_dict[2] = networks
 
     # for i in range(core):
     #     cuda_dict[i] = []
@@ -265,7 +265,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data_new\val_model_data"
 
     pres = []
-    for i in range(1, core):
+    for i in range(2, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
