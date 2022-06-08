@@ -50,7 +50,7 @@ class ComboLoss(nn.Module):
         inputs = torch.clamp(inputs, eps, 1.0 - eps)
         out = - (beta * ((targets * torch.log(inputs)) + ((1 - beta) * (1.0 - targets) * torch.log(1.0 - inputs))))
         weighted_ce = out.mean(-1)
-        combo = (cd_ratio * weighted_ce) - ((1 - cd_ratio) * dice)
+        combo = (cd_ratio * weighted_ce) - ((1 - cd_ratio) * dice) + 0.5
 
         return combo
 
@@ -253,7 +253,7 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
     nEpoch = 100
     base_lr = 0.025 # where we start the learning rate
 
-    base_lr = 0.01 # where we start the learning rate
+    base_lr = 0.001 # where we start the learning rate
     max_lr = 2 # where the learning rate is supposed to end
 
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
