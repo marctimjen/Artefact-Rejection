@@ -141,14 +141,14 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                  series_dict = 'val_series_length.pickle',
                                  size = (28, 22, 549200),
                                  device = device,
-                                 seed = 42)
+                                 seed = 42,
+                                 length=1500)
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                              batch_size=batch_size,
                                              shuffle=False,
                                              num_workers=0,
-                                             drop_last=True,
-                                             length=1500)
+                                             drop_last=True)
 
     nEpoch = 50
     base_lr = 0.00083 # where we start the learning rate
