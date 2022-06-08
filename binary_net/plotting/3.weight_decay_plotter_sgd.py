@@ -19,6 +19,10 @@ sgd1_tp = run1['network_SGD/matrix/val_tp_pr_file'].fetch_values()
 sgd1_fp = run1['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd1_tn = run1['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd1_fn = run1['network_SGD/matrix/val_fn_pr_file'].fetch_values()
+try:
+    sgd1_weight = run1['network_SGD/parameters/optimizor_weight_decay'].fetch()
+except:
+    sgd1_weight = 0
 
 sgd1_acc = run1['network_SGD/val_acc_pr_file'].fetch_values()
 sgd1_loss = run1['network_SGD/validation_loss_pr_file'].fetch_values()
@@ -38,6 +42,7 @@ sgd2_tp = run2['network_SGD/matrix/val_tp_pr_file'].fetch_values()
 sgd2_fp = run2['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd2_tn = run2['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd2_fn = run2['network_SGD/matrix/val_fn_pr_file'].fetch_values()
+sgd2_weight = run2['network_SGD/parameters/optimizor_weight_decay'].fetch()
 
 sgd2_acc = run2['network_SGD/val_acc_pr_file'].fetch_values()
 sgd2_loss = run2['network_SGD/validation_loss_pr_file'].fetch_values()
@@ -59,6 +64,7 @@ sgd3_tp = run3['network_SGD/matrix/val_tp_pr_file'].fetch_values()
 sgd3_fp = run3['network_SGD/matrix/val_fp_pr_file'].fetch_values()
 sgd3_tn = run3['network_SGD/matrix/val_tn_pr_file'].fetch_values()
 sgd3_fn = run3['network_SGD/matrix/val_fn_pr_file'].fetch_values()
+sgd3_weight = run3['network_SGD/parameters/optimizor_weight_decay'].fetch()
 
 sgd3_acc = run3['network_SGD/val_acc_pr_file'].fetch_values()
 sgd3_loss = run3['network_SGD/validation_loss_pr_file'].fetch_values()
@@ -76,7 +82,7 @@ lr_range = [0, 0.2]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
 
-
+ax1.set_title(f'SGD optimizor with weight_decay of {sgd1_weight}')
 l1, = ax1.plot(sgd1_rate["value"])
 ax1.set_ylim(lr_range)
 t1 = ax1.twinx()
@@ -94,7 +100,7 @@ ax7.plot(sgd1_loss["value"])
 ax7.plot(sgd1_smloss["value"])
 ax7.set_ylim(loss_y_range)
 
-
+ax2.set_title(f'SGD optimizor with weight_decay of {sgd2_weight}')
 l3, = ax2.plot(sgd2_rate["value"])
 ax2.set_ylim(lr_range)
 t2 = ax2.twinx()
@@ -114,6 +120,7 @@ ax8.plot(sgd2_loss["value"])
 ax8.plot(sgd2_smloss["value"])
 ax8.set_ylim(loss_y_range)
 
+ax3.set_title(f'SGD optimizor with weight_decay of {sgd3_weight}')
 l5, = ax3.plot(sgd3_rate["value"])
 ax3.set_ylim(lr_range)
 t3 = ax3.twinx()

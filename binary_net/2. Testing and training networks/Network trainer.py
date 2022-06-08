@@ -38,12 +38,13 @@ def net_SGD(device, fl, it, train_path, val_path):
     net_name = "network_SGD"
 
     batch_size = 10
-    n_samples = 11141 - 1 # the defualt amount of samples minus 1
+    n_samples = 8000
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
                                    size = (195, 22, 2060000),
-                                   device = device)
+                                   device = device,
+                                   length=n_samples)
 
 
     train_loader = torch.utils.data.DataLoader(train_load_file,
@@ -56,7 +57,8 @@ def net_SGD(device, fl, it, train_path, val_path):
                                  series_dict = 'val_series_length.pickle',
                                  size = (28, 22, 549200),
                                  device = device,
-                                 seed = 42)
+                                 seed = 42,
+                                 length=1500)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -66,11 +68,11 @@ def net_SGD(device, fl, it, train_path, val_path):
                                              drop_last=True)
 
 
-    nEpoch = 100
+    nEpoch = 50
     base_lr = 0.07 # where we start the learning rate
     max_lr = 0.103 # where the learning rate is supposed to end
     weight_decay = 0
-    step_size_up = (n_samples/batch_size)*5
+    step_size_up = (n_samples/batch_size)*5 + 1
 
     model = Unet_leaky_lstm(n_channels=1, batch_size=batch_size, \
                             device=device).to(device)
@@ -218,7 +220,7 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
 
-    if device == "cpu":
+    if str(device) == "cpu":
         fl = torch.FloatTensor
         it = torch.LongTensor
     else:
@@ -226,18 +228,18 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     core = torch.cuda.device_count()
-    # core = 1
+    core = 4
 
     networks = [net_SGD] # net_ADAM
 
     cuda_dict = dict()
-    # cuda_dict[core] = networks
+    cuda_dict[3] = networks
 
-    for i in range(core):
-        cuda_dict[i] = []
-
-    for i in range(len(networks)):
-        cuda_dict[i % core].append(networks[i]) # i % core
+    # for i in range(core):
+    #     cuda_dict[i] = []
+    #
+    # for i in range(len(networks)):
+    #     cuda_dict[i % core].append(networks[i]) # i % core
 
         #"/home/tyson/model_data/train_model_data"
         # "C:/Users/Marc/Desktop/model_data/train_model_data"
@@ -248,7 +250,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(core):
+    for i in range(3, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,

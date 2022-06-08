@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-exp_mode = False
+exp_mode = True
 
 if exp_mode:
 

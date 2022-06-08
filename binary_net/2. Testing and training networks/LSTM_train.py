@@ -55,6 +55,83 @@ class ComboLoss(nn.Module):
         return combo
 
 
+def net_LSTM_combo(device, fl, it, train_path, val_path):
+
+    token = os.getenv('Neptune_api')
+    run = neptune.init(
+        project="NTLAB/artifact-rej-scalp",
+        api_token=token,
+    )
+
+    net_name = "network_LSTM_combo"
+
+    batch_size = 50
+    n_samples =  3500 # the defualt amount of samples minus 1
+
+    train_load_file = shuffle_5min(path = train_path,
+                                   series_dict = 'train_series_length.pickle',
+                                   size = (195, 22, 2060000),
+                                   device = device,
+                                   length = n_samples)
+
+
+    train_loader = torch.utils.data.DataLoader(train_load_file,
+                                               batch_size=batch_size,
+                                               shuffle=True,
+                                               num_workers=0,
+                                               drop_last=True)
+
+    val_load_file = shuffle_5min(path = val_path,
+                                 series_dict = 'val_series_length.pickle',
+                                 size = (28, 22, 549200),
+                                 device = device,
+                                 seed = 42,
+                                 length = 500)
+
+
+    val_loader = torch.utils.data.DataLoader(val_load_file,
+                                             batch_size=batch_size,
+                                             shuffle=False,
+                                             num_workers=0,
+                                             drop_last=True)
+
+
+    nEpoch = 100
+    base_lr = 0.075 # The base lr
+
+    model = LSTM_net(batch_size=batch_size, device=device).to(device)
+
+    optimizer = Adam(model.parameters(), lr=base_lr)
+    # lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+    #                               reduction = "mean")
+
+    lossFunc = ComboLoss()
+
+    smooth = 0.05
+
+    params = {"optimizer":"Adam", "batch_size":batch_size,
+              "optimizer_learning_rate": base_lr,
+              "loss_function":"combo",
+              "model":"LSTM_net", "smooting_loss":smooth}
+
+    run[f"{net_name}/parameters"] = params
+
+    net_train_combo(device = device,
+                    fl = fl, it = it,
+                    net_name = net_name,
+                    model = model,
+                    optimizer = optimizer,
+                    lossFunc = lossFunc,
+                    nEpoch = nEpoch,
+                    smooth = smooth,
+                    train_loader = train_loader,
+                    val_loader = val_loader,
+                    run = run,
+                    path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                    clip = True,
+                    scheduler = None)
+
+
 def net_LSTM(device, fl, it, train_path, val_path):
 
     token = os.getenv('Neptune_api')
@@ -97,7 +174,7 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
 
     nEpoch = 100
-    base_lr = 0.075 # The base lr
+    base_lr = 0.064 # The base lr
 
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 
@@ -116,20 +193,20 @@ def net_LSTM(device, fl, it, train_path, val_path):
 
     run[f"{net_name}/parameters"] = params
 
-    net_train_combo(device = device,
-                    fl = fl, it = it,
-                    net_name = net_name,
-                    model = model,
-                    optimizer = optimizer,
-                    lossFunc = lossFunc,
-                    nEpoch = nEpoch,
-                    smooth = smooth,
-                    train_loader = train_loader,
-                    val_loader = val_loader,
-                    run = run,
-                    path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
-                    clip = True,
-                    scheduler = None)
+    net_train(device = device,
+                fl = fl, it = it,
+                net_name = net_name,
+                model = model,
+                optimizer = optimizer,
+                lossFunc = lossFunc,
+                nEpoch = nEpoch,
+                smooth = smooth,
+                train_loader = train_loader,
+                val_loader = val_loader,
+                run = run,
+                path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
+                clip = True,
+                scheduler = None)
 
 
 def net_LSTM_lr(device, fl, it, train_path, val_path):
