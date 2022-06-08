@@ -142,8 +142,8 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
 
     net_name = "network_LSTM"
 
-    batch_size = 30
-    n_samples = 30 # the defualt amount of samples minus 1
+    batch_size = 50
+    n_samples = 50 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -163,7 +163,7 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
                                  size = (28, 22, 549200),
                                  device = device,
                                  seed = 42,
-                                 length = 30)
+                                 length = 50)
 
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
@@ -242,7 +242,7 @@ if __name__ == '__main__':
 
     # core = torch.cuda.device_count()
     core = 2
-    networks = [net_LSTM]
+    networks = [net_LSTM_lr] #
 
     cuda_dict = dict()
     # cuda_dict[core] = networks
