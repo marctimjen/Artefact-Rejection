@@ -215,6 +215,7 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
                     val_loader = val_loader,
                     run = run,
                     path = "C:/Users/Marc/Desktop/network/", #"/home/tyson/network/",
+                    clip = True,
                     scheduler = scheduler)
 
 
