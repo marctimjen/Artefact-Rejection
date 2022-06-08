@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-exp_mode = True
+exp_mode = False
 
 if exp_mode:
 
@@ -44,6 +44,8 @@ if exp_mode:
 
     log_x_scale = True
     pos_pf_label_cont = 'upper right'
+
+    title = 'Exponential increasing learning rates'
 else:
 
     adam_model_run = "AR1-576"
@@ -64,6 +66,7 @@ else:
 
     log_x_scale = False
     pos_pf_label_cont = 'upper right'
+    title = 'Linear increasing learning rates'
 
 
 token = os.getenv('Neptune_api')
@@ -110,7 +113,7 @@ print(len(adam_rate["value"]))
 
 
 fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
-fig.suptitle('Linear increasing learning rates')
+fig.suptitle(title)
 ax1.set_title('ADAM optimizor with lr range: 0.0001 to 0.5')
 
 ax1.axvline(x = adam_base, color = 'r', linestyle = "--", label = f'base_rl = {adam_base}')

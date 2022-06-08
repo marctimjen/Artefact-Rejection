@@ -10,7 +10,7 @@ token = os.getenv('Neptune_api')
 run1 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-602"
+    run="AR1-645" # 602
 )
 
 adam1_rate = run1['network_ADAM/learning_rate'].fetch_values()
@@ -26,7 +26,7 @@ token = os.getenv('Neptune_api')
 run2 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-601"
+    run="AR1-643" # 601
 )
 
 
@@ -43,7 +43,7 @@ token = os.getenv('Neptune_api')
 run3 = neptune.init(
     project="NTLAB/artifact-rej-scalp",
     api_token=token,
-    run="AR1-600"
+    run="AR1-642" # 600
 )
 
 
@@ -66,10 +66,10 @@ run2.stop()
 run3.stop()
 
 
-loss_y_range = [1, 1.5]
+loss_y_range = [1.1, 1.4]
 momentum_y_range = [0.55, 1]
 acc_y_range = [-0.1, 1.1]
-lr_range = [0, 0.015]
+lr_range = [0, 0.0075]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
 
@@ -82,9 +82,9 @@ ax1.set_ylim(lr_range)
 ax4.plot(adam1_tp["value"], label = "tp", color = "blue")
 ax4.plot(adam1_tn["value"], label = "tn", color = "green")
 ax4.plot(adam1_acc["value"], label = "acc", color = "orange")
-ax4.set_ylabel('Pct.')
+ax4.set_ylabel('Accuarcy')
 ax4.set_ylim(acc_y_range)
-ax4.legend()
+ax4.legend(loc = "lower left")
 
 ax7.plot(adam1_loss["value"], label = "loss")
 ax7.plot(adam1_smloss["value"], label = "sm_loss")
@@ -101,9 +101,9 @@ ax2.set_ylim(lr_range)
 ax5.plot(adam2_tp["value"], label = "tp", color = "blue")
 ax5.plot(adam2_tn["value"], label = "tn", color = "green")
 ax5.plot(adam2_acc["value"], label = "acc", color = "orange")
-ax5.set_ylabel('Pct.')
+ax5.set_ylabel('Accuarcy')
 ax5.set_ylim(acc_y_range)
-ax5.legend()
+ax5.legend(loc = "lower left")
 
 
 ax8.plot(adam2_loss["value"], label = "loss")
@@ -120,9 +120,9 @@ ax3.set_ylim(lr_range)
 ax6.plot(adam3_tp["value"], label = "tp", color = "blue")
 ax6.plot(adam3_tn["value"], label = "tn", color = "green")
 ax6.plot(adam3_acc["value"], label = "acc", color = "orange")
-ax6.set_ylabel('Pct.')
+ax6.set_ylabel('Accuarcy')
 ax6.set_ylim(acc_y_range)
-ax6.legend()
+ax6.legend(loc = "lower left")
 
 ax9.plot(adam3_loss["value"], label = "loss")
 ax9.plot(adam3_smloss["value"], label = "sm_loss")

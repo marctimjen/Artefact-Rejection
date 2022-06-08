@@ -123,7 +123,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
     net_name = "network_ADAM"
 
     batch_size = 10
-    n_samples = 11141 - 1 # the defualt amount of samples minus 1
+    n_samples = 8000
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -147,11 +147,12 @@ def net_ADAM(device, fl, it, train_path, val_path):
                                              batch_size=batch_size,
                                              shuffle=False,
                                              num_workers=0,
-                                             drop_last=True)
+                                             drop_last=True,
+                                             length=1500)
 
     nEpoch = 50
-    base_lr = 0.133 # where we start the learning rate
-    max_lr = 0.8 # where the learning rate is supposed to end
+    base_lr = 0.00083 # where we start the learning rate
+    max_lr = 0.005 # where the learning rate is supposed to end
     weight_decay = 0.00001
     step_size_up = (n_samples/batch_size)*5 + 1
 
@@ -169,7 +170,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
     smooth = 0.05
 
     params = {"optimizer":"ADAM", "batch_size":batch_size,
-              "optimizer_learning_rate": base_lr,
+              "optimizer_learning_rate": base_lr, "net_name": net_name,
               "optimizor_weight_decay":weight_decay,
               "loss_function":"CrossEntropyLoss",
               "loss_function_weights":[1.25, 6.67, 16.67, 100.],
@@ -194,7 +195,7 @@ def net_ADAM(device, fl, it, train_path, val_path):
                     val_loader = val_loader,
                     run = run,
                     path = "/home/tyson/network/", #"C:/Users/Marc/Desktop/network/",
-                    clip = True,
+                    clip = False,
                     scheduler = scheduler)
 
 
@@ -219,12 +220,12 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     # core = torch.cuda.device_count()
-    core = 4
+    core = 2
 
     networks = [net_ADAM] #, net_SGD
 
     cuda_dict = dict()
-    cuda_dict[3] = networks
+    cuda_dict[1] = networks
 
     # for i in range(core):
     #     cuda_dict[i] = []
@@ -241,7 +242,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(3, core):
+    for i in range(1, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,

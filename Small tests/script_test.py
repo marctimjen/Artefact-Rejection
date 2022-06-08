@@ -6,7 +6,7 @@ import torchvision.models as models
 
 resnet18 = models.resnet18()
 
-samples = 11141 - 1
+samples = 8000 # 11141 - 1
 b_size = 10
 epochs = 50
 
@@ -52,4 +52,8 @@ print(len(ls))
 print(len(sch))
 
 plt.plot(ls)
+plt.show()
+
+
+plt.plot(sch)
 plt.show()
