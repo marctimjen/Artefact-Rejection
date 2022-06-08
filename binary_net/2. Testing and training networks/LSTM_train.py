@@ -16,7 +16,7 @@ sys.path.append("../..") # adds higher directory to python modules path
 
 from LoaderPACK.LSTM_net import LSTM_net
 from LoaderPACK.Loader import shuffle_5min
-from LoaderPACK.trainer import net_train_combo
+from LoaderPACK.trainer import net_train_combo, net_train
 from LoaderPACK.Accuarcy_finder import Accuarcy_find
 from LoaderPACK.Accuarcy_upload import Accuarcy_upload
 from multiprocessing import Process
@@ -102,10 +102,10 @@ def net_LSTM(device, fl, it, train_path, val_path):
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 
     optimizer = Adam(model.parameters(), lr=base_lr)
-    #lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
-    #                               reduction = "mean")
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+                                  reduction = "mean")
 
-    lossFunc = ComboLoss()
+    # lossFunc = ComboLoss()
 
     smooth = 0.05
 
@@ -182,10 +182,10 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
     model = LSTM_net(batch_size=batch_size, device=device).to(device)
 
     optimizer = Adam(model.parameters(), lr=base_lr)
-    #lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
-    #                               reduction = "mean")
+    lossFunc = nn.CrossEntropyLoss(weight = torch.tensor([1., 5.]).to(device),
+                                  reduction = "mean")
 
-    lossFunc = ComboLoss()
+    # lossFunc = ComboLoss()
 
     lam = lambda x: math.exp(x*math.log(max_lr / base_lr) \
                                 / (nEpoch*n_samples / batch_size))
@@ -203,7 +203,7 @@ def net_LSTM_lr(device, fl, it, train_path, val_path):
 
     run[f"{net_name}/parameters"] = params
 
-    net_train_combo(device = device,
+    net_train(device = device,
                     fl = fl, it = it,
                     net_name = net_name,
                     model = model,
