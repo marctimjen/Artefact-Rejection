@@ -28,7 +28,7 @@ batch_size = 1
 # model.to(device)
 
 model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, device=device).to(device)
-x = torch.load(r"C:\Users\Marc\Desktop\val_elec_sgd_res\network_SGD-loss-epk-10.pt", map_location='cpu')
+x = torch.load(r"C:\Users\Marc\Desktop\val_elec_sgd_res\network_SGD-loss-epk-30.pt", map_location='cpu')
 
 model.load_state_dict(x)
 model.to(device)

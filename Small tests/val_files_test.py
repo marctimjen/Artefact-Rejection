@@ -14,13 +14,13 @@ ind = [i for i in range(1, 28+1)]
 #                lab_enc=labels,
 #                elec=True)
 
-# val_files_test(ind=ind,
-#                input_path=r"C:\Users\Marc\Desktop\val_elec_sgd_res", # sgd 634
-#                input_name='model_annotation ',
-#                target_path=r"C:\Users\Marc\Desktop\model_data_mclass\val_model_data",
-#                target_name='model_target ',
-#                lab_enc=labels,
-#                elec=True)
+val_files_test(ind=ind,
+               input_path=r"C:\Users\Marc\Desktop\val_elec_sgd_res", # sgd 634 as epoch 30
+               input_name='model_annotation ',
+               target_path=r"C:\Users\Marc\Desktop\model_data_mclass\val_model_data",
+               target_name='model_target ',
+               lab_enc=labels,
+               elec=True)
 
 # val_files_test(ind=ind,
 #                input_path=r"C:\Users\Marc\Desktop\val_res_sgd_final",
@@ -29,9 +29,9 @@ ind = [i for i in range(1, 28+1)]
 #                target_name='model_target ',
 #                lab_enc=labels)
 
-val_files_test(ind=ind,
-               input_path=r"C:\Users\Marc\Desktop\val_res_adam",
-               input_name='model_annotation ',
-               target_path=r"C:\Users\Marc\Desktop\model_data_mclass\val_model_data",
-               target_name='model_target ',
-               lab_enc=labels)
+# val_files_test(ind=ind,
+#                input_path=r"C:\Users\Marc\Desktop\val_res_adam",
+#                input_name='model_annotation ',
+#                target_path=r"C:\Users\Marc\Desktop\model_data_mclass\val_model_data",
+#                target_name='model_target ',
+#                lab_enc=labels)

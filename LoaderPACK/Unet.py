@@ -301,8 +301,7 @@ class OutConv_lstm_elec(nn.Module): # light-blue arrow
 
         # Kig på batch_first - den kørrer anden konvention, bidirectional = True
 
-        self.soft = nn.Softmax(dim=2) # Using sigmoid instead of softmax
-        #self.sig = nn.Sigmoid()
+        self.soft = nn.Softmax(dim=2)
 
     def forward(self, x, inp):
         x = self.conv(x)

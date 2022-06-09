@@ -90,11 +90,11 @@ def read_and_export_files(file_list: list, montage: dict, save_loc: str):
                 elec_flag = re.search("elec", rows[3].lower()) or re.search("elpp", rows[3].lower())
 
                 if elec_flag: # test if string is in the elec class
-                    tar_anno = 2 # normally = 4
-                # elif rows[3].lower() == "musc":
-                #     tar_anno = 3
-                # elif rows[3].lower() == "eyem":
-                #     tar_anno = 4 # was 2
+                    tar_anno = 2 # was = 4 earlier
+                elif rows[3].lower() == "musc":
+                    tar_anno = 3
+                elif rows[3].lower() == "eyem":
+                    tar_anno = 4 # was 2
                 else:
                     tar_anno = 1
 
