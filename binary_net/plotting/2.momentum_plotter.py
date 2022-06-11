@@ -69,10 +69,10 @@ run3.stop()
 loss_y_range = [0.54, 0.85]
 momentum_y_range = [0.55, 1]
 acc_y_range = [-0.1, 1.1]
-lr_range = [0.01, 0.3]
+lr_range = [0.01, 0.2]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
-
+fig.suptitle("Different momentum tests")
 
 l1, = ax1.plot(sgd1_rate["value"])
 ax1.set_ylim(lr_range)

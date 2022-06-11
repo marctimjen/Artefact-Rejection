@@ -86,14 +86,20 @@ def confusion_mat(ind: list, input_path: str, input_name:str, target_path: str,
     disp.plot()
     plt.show()
 
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+
     # confusion matrix for recall:
-    disp = ConfusionMatrixDisplay(recall_mat, display_labels=labels)
-    disp.plot()
-    plt.show()
+    re_mat = ConfusionMatrixDisplay(recall_mat,
+                                    display_labels=labels)
+    re_mat.plot(ax=ax1)
+    ax1.set_title("Confusion recall matrix")
 
     # confusion matrix for precision:
-    disp = ConfusionMatrixDisplay(pre_mat, display_labels=labels)
-    disp.plot()
+    pre_mat = ConfusionMatrixDisplay(pre_mat,
+                                     display_labels=labels)
+    pre_mat.plot(ax=ax2)
+    ax2.set_title("Confusion precision matrix")
+
     plt.show()
 
     return res_mat

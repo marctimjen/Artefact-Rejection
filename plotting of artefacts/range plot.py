@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 target = np.memmap("C:/Users/Marc/Desktop/data_mclass/val_model_data" + "/model_target.dat", dtype='float32', mode='r', shape=(28, 22, 549200))
 
-file_dir = r"C:\Users\Marc\Desktop\data_series\v2.1.0\edf\01_tcp_ar\002\00000254\s007_2013_03_25\00000254_s007_t000.edf"
+file_dir = r"D:\data_series\v2.1.0\edf\01_tcp_ar\002\00000254\s007_2013_03_25\00000254_s007_t000.edf"
 
 
 file = mne.io.read_raw_edf(file_dir, preload=True)

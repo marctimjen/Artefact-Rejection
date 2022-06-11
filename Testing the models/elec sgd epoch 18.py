@@ -21,10 +21,10 @@ ind = [i for i in range(1, 56+1)]
 
 
 # get the predictions from the sgd
-pipeline(input_path=r"C:\Users\Marc\Desktop\model_data\test_model_data",
-         input_name="model_input ",
-         save_loc=r"C:\Users\Marc\Desktop\test_sgd_epoch18",
-         ind=ind, model=model)
+# pipeline(input_path=r"C:\Users\Marc\Desktop\model_data\test_model_data",
+#          input_name="model_input ",
+#          save_loc=r"C:\Users\Marc\Desktop\test_sgd_epoch18",
+#          ind=ind, model=model)
 
 
 labels = {0: "no_artifact", 1: "all_artifact", 2: "elec", 3: "musc", 4: "eyem"}

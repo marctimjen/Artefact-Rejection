@@ -72,13 +72,14 @@ run3.stop()
 loss_y_range = [0.55, 0.85]
 momentum_y_range = [0.55, 1]
 acc_y_range = [-0.1, 1.1]
-lr_range = [-0.0001, 0.02]
+lr_range = [0.005, 0.015]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
+fig.suptitle("Different weight_decay tests")
 
 ax1.set_title(f'ADAM optimizor with weight_decay of {adam1_weight}')
 ax1.plot(adam1_rate["value"])
-ax1.set_ylabel('Learning rate')
+ax1.set_ylabel('learning rate')
 ax1.set_ylim(lr_range)
 
 
@@ -87,18 +88,21 @@ ax4.plot(adam1_fp["value"], label = "fp", color = "gray")
 ax4.plot(adam1_tn["value"], label = "tn", color = "green")
 ax4.plot(adam1_fn["value"], label = "fn", color = "black")
 ax4.plot(adam1_acc["value"], label = "acc", color = "orange")
-ax4.set_ylabel('Pct.')
+ax4.set_ylabel('accuracy')
 ax4.set_ylim(acc_y_range)
+ax4.legend()
 
-ax7.plot(adam1_loss["value"])
-ax7.plot(adam1_smloss["value"])
-ax7.set_ylabel('Loss')
+ax7.plot(adam1_loss["value"], label = "loss")
+ax7.plot(adam1_smloss["value"], label = "sm_loss")
+ax7.set_ylabel('loss')
 ax7.set_ylim(loss_y_range)
+ax7.legend()
 
 ax2.set_title(f'ADAM optimizor with weight_decay of {adam2_weight}')
 ax2.plot(adam2_rate["value"])
-ax2.set_ylabel('Learning rate')
+ax2.set_ylabel('learning rate')
 ax2.set_ylim(lr_range)
+
 
 
 ax5.plot(adam2_tp["value"], label = "tp", color = "blue")
@@ -106,17 +110,19 @@ ax5.plot(adam2_fp["value"], label = "fp", color = "gray")
 ax5.plot(adam2_tn["value"], label = "tn", color = "green")
 ax5.plot(adam2_fn["value"], label = "fn", color = "black")
 ax5.plot(adam2_acc["value"], label = "acc", color = "orange")
-ax5.set_ylabel('Pct.')
+ax5.set_ylabel('accuracy')
 ax5.set_ylim(acc_y_range)
+ax5.legend()
 
-ax8.plot(adam2_loss["value"])
-ax8.plot(adam2_smloss["value"])
-ax8.set_ylabel('Loss')
+ax8.plot(adam2_loss["value"], label = "loss")
+ax8.plot(adam2_smloss["value"], label = "sm_loss")
+ax8.set_ylabel('loss')
 ax8.set_ylim(loss_y_range)
+ax8.legend()
 
 ax3.set_title(f'ADAM optimizor with weight_decay of {adam3_weight}')
 ax3.plot(adam3_rate["value"])
-ax3.set_ylabel('Learning rate')
+ax3.set_ylabel('learning rate')
 ax3.set_ylim(lr_range)
 
 
@@ -126,13 +132,15 @@ ax6.plot(adam3_fp["value"], label = "fp", color = "gray")
 ax6.plot(adam3_tn["value"], label = "tn", color = "green")
 ax6.plot(adam3_fn["value"], label = "fn", color = "black")
 ax6.plot(adam3_acc["value"], label = "acc", color = "orange")
-ax6.set_ylabel('Pct.')
+ax6.set_ylabel('accuracy')
 ax6.set_ylim(acc_y_range)
+ax6.legend()
 
-ax9.plot(adam3_loss["value"])
-ax9.plot(adam3_smloss["value"])
-ax9.set_ylabel('Loss')
+ax9.plot(adam3_loss["value"], label = "loss")
+ax9.plot(adam3_smloss["value"], label = "sm_loss")
+ax9.set_ylabel('loss')
 ax9.set_ylim(loss_y_range)
+ax9.legend()
 
 fig.tight_layout(pad=2.0)
 plt.show()

@@ -39,8 +39,21 @@ val_files_test(ind=ind,
                elec=False)
 
 
+# for the validation set:
+
+# ind = [i for i in range(1, 28+1)]
+# val_files_test(ind=ind,
+#                input_path=r"C:\Users\Marc\Desktop\val_res_adam",
+#                input_name='model_annotation ',
+#                target_path=r"C:\Users\Marc\Desktop\model_data_mclass\val_model_data",
+#                target_name='model_target ',
+#                lab_enc=labels,
+#                elec=False)
+
+ind = [i for i in range(1, 56+1)]
+
 # finally get the confusion matrix:
-labels = {0: "no_art", 1: "all_art"} # only binary input
+labels = {0: "clean", 1: "artifact"} # only binary input
 
 confusion_mat(ind=ind,
                 input_path=r"C:\Users\Marc\Desktop\test_adam_binary",
