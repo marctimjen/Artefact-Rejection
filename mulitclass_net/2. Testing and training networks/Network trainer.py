@@ -37,8 +37,8 @@ def net_SGD(device, fl, it, train_path, val_path):
 
     net_name = "network_SGD"
 
-    batch_size = 10
-    n_samples = 11141 - 1 # the defualt amount of samples minus 1
+    batch_size = 20
+    n_samples = 7200 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
                                    series_dict = 'train_series_length.pickle',
@@ -56,7 +56,8 @@ def net_SGD(device, fl, it, train_path, val_path):
                                  series_dict = 'val_series_length.pickle',
                                  size = (28, 22, 549200),
                                  device = device,
-                                 seed = 42)
+                                 seed = 42,
+                                 length=800)
 
     val_loader = torch.utils.data.DataLoader(val_load_file,
                                              batch_size=batch_size,
@@ -65,8 +66,8 @@ def net_SGD(device, fl, it, train_path, val_path):
                                              drop_last=True)
 
     nEpoch = 50
-    base_lr = 0.007 # where we start the learning rate
-    max_lr = 0.013 # where the learning rate is supposed to end
+    base_lr = 0.1333 # where we start the learning rate
+    max_lr = 0.8 # where the learning rate is supposed to end
     weight_decay = 0.00001
     step_size_up = (n_samples/batch_size)*5 + 1
 
@@ -222,7 +223,7 @@ if __name__ == '__main__':
     # core = torch.cuda.device_count()
     core = 2
 
-    networks = [net_ADAM] #, net_SGD
+    networks = [net_SGD] #, net_SGD net_ADAM
 
     cuda_dict = dict()
     cuda_dict[1] = networks

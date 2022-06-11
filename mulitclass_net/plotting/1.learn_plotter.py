@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-exp_mode = False
+exp_mode = True
 
 if exp_mode:
 
@@ -46,6 +46,8 @@ if exp_mode:
     pos_pf_label_cont = 'upper right'
 
     title = 'Exponential increasing learning rates'
+    sgd_title = 'SGD optimizer with lr range: 0.1 to 9'
+    adam_title = 'ADAM optimizer with lr range: 0.0001 to 0.7'
 else:
 
     adam_model_run = "AR1-576"
@@ -67,7 +69,8 @@ else:
     log_x_scale = False
     pos_pf_label_cont = 'upper right'
     title = 'Linear increasing learning rates'
-
+    sgd_title = 'SGD optimizer with lr range: 0.2 to 5'
+    adam_title = 'ADAM optimizer with lr range: 0.01e-8 to 0.1'
 
 token = os.getenv('Neptune_api')
 run = neptune.init(
@@ -114,7 +117,7 @@ print(len(adam_rate["value"]))
 
 fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
 fig.suptitle(title)
-ax1.set_title('ADAM optimizor with lr range: 0.0001 to 0.5')
+ax1.set_title(adam_title)
 
 ax1.axvline(x = adam_base, color = 'r', linestyle = "--", label = f'base_rl = {adam_base}')
 ax1.axvline(x = adam_max, color = 'r', linestyle = "--", label = f'max_lr = {adam_max}')
@@ -134,19 +137,19 @@ if magenta_adam:
 if log_x_scale:
     ax1.set_xscale('log')
 
-ax1.set_xlabel('learning_rate')
+ax1.set_xlabel('learning rate')
 ax1.set_ylabel('accuarcy')
 ax1.legend(loc = pos_pf_label_cont)
 
 
 
-ax2.set_title('ADAM optimizor loss duing training')
+ax2.set_title('ADAM optimizer loss duing training')
 ax2.axvline(x = adam_base, color = 'r', linestyle = "--", label = f'base_rl = {adam_base}')
 ax2.axvline(x = adam_max, color = 'r', linestyle = "--", label = f'max_lr = {adam_max}')
 
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_loss["value"], label = "loss")
 ax2.plot([0]+ [i for i in adam_rate["value"]], adam_smloss["value"], label = "sm_loss")
-ax2.set_xlabel('learning_rate')
+ax2.set_xlabel('learning rate')
 ax2.set_ylabel('loss')
 
 if log_x_scale:
@@ -161,7 +164,7 @@ ax2.legend(loc = pos_pf_label_cont)
 
 
 
-ax3.set_title('SGD optimizor with lr range: 0.001 to 9')
+ax3.set_title(sgd_title)
 
 ax3.axvline(x = SGD_base, color = 'r', linestyle = "--", label = f'base_rl = {SGD_base}')
 ax3.axvline(x = SGD_max, color = 'r', linestyle = "--", label = f'max_lr = {SGD_max}')
@@ -180,13 +183,13 @@ ax3.plot(sgd_rate["value"], sgd_tn["value"], label = "tn", color = "green")
 if log_x_scale:
     ax3.set_xscale('log')
 
-ax3.set_xlabel('learning_rate')
+ax3.set_xlabel('learning rate')
 ax3.set_ylabel('accuarcy')
 ax3.legend(loc = pos_pf_label_cont)
 
 
 
-ax4.set_title('SGD optimizor loss duing training')
+ax4.set_title('SGD optimizer loss duing training')
 
 ax4.axvline(x = SGD_base, color = 'r', linestyle = "--", label = f'base_rl = {SGD_base}')
 ax4.axvline(x = SGD_max, color = 'r', linestyle = "--", label = f'max_lr = {SGD_max}')
@@ -198,7 +201,7 @@ if magenta:
 
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_loss["value"], label = "loss")
 ax4.plot([0]+ [i for i in sgd_rate["value"]], sgd_smloss["value"], label = "sm_loss")
-ax4.set_xlabel('learning_rate')
+ax4.set_xlabel('learning rate')
 ax4.set_ylabel('loss')
 
 if log_x_scale:

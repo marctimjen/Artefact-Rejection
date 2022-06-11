@@ -8,7 +8,7 @@ from LoaderPACK.Loader import load_whole_data, load_5_min_intervals
 
 load_file = load_whole_data(
             ind=range(1, 195 + 1),
-            input_path="C:/Users/Marc/Desktop/model_data/train_model_data",
+            input_path="C:/Users/Marc/Desktop/model_data_elec/train_model_data",
             input_name="model_target ",
             input_only=True) # only loads target picuters
 
@@ -33,13 +33,14 @@ for file in load_file:
 
 
 print("Total number of observations:", total_obs)
-
+print("Duration in hours:", total_obs/(200*60*60))
 print()
 
 print("Total number of electrode artefacts:", total_elec)
 print("Percentage of observations being an electrode artefact", total_elec/total_obs)
-
+print("Duration in hours:", total_elec/(200*60*60))
 print()
 
 print("Total number of other artefacts:", total_art)
 print("Percentage of observations being an other artefact", total_art/total_obs)
+print("Duration in hours:", total_art/(200*60*60))

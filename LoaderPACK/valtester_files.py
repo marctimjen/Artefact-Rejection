@@ -43,6 +43,8 @@ def val_files_test(ind: list, input_path: str, input_name:str, target_path: str,
             in_dict["mat"] += mat
 
 
+    global_precision = 0
+    global_recall = 0
 
     for i in lab_enc.keys():
         mat = class_dict[i]["mat"]
@@ -50,8 +52,17 @@ def val_files_test(ind: list, input_path: str, input_name:str, target_path: str,
         print("Artifact type:", lab_enc[i])
         print()
         print("mean accuarcy:", (mat[0][0]+mat[1][1])/mat.sum())
-        print("mean true positive precision:", mat[0][0]/(mat[0][0]+mat[0][1]))
+        pr_tp = mat[0][0]/(mat[0][0]+mat[0][1])
+        print("mean true positive precision:", pr_tp)
         print("mean true negative precision:", mat[1][1]/(mat[1][0]+mat[1][1]))
         print("mean true positive recall:", r_tp)
         print("mean true negative recall:", r_tn)
+        # print("F1 score for class:", 2*pr_tp*r_tp/(pr_tp + r_tp))
+        # global_recall += r_tp
+        # global_precision += pr_tp
         print("------------------------------------")
+
+    # global_recall /= len(lab_enc.keys())
+    # global_precision /= len(lab_enc.keys())
+    #
+    # print("Macro-Average F1 score:", 2 * global_precision * global_recall / (global_precision + global_recall))

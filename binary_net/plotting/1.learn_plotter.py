@@ -34,16 +34,21 @@ if exp_mode:
 
 
 
-    magenta = True
+    magenta = False
     SGD_base_m = 0.07  # magenta values
     SGD_max_m = 0.103  # magenta values
 
-    magenta_adam = True
+    magenta_adam = False
     adam_max_m = 0.003
     adam_base_m = 0.0048
 
     log_x_scale = True
     pos_pf_label_cont = 'upper right'
+
+    sgd_title = 'SGD optimizer with lr range: 0.01 to 1'
+    adam_title = 'ADAM optimizer with lr range: 0.0001 to 0.7'
+    title = 'Exponential increasing learning rates'
+
 else:
 
     adam_model_run = "AR1-426"
@@ -56,7 +61,7 @@ else:
     SGD_base = 0.216
     SGD_max = 0.268
 
-    magenta = True
+    magenta = False
     SGD_base_m = 0.07  # magenta values
     SGD_max_m = 0.103  # magenta values
 
@@ -64,6 +69,10 @@ else:
 
     log_x_scale = False
     pos_pf_label_cont = 'upper right'
+    adam_title = 'ADAM optimizer with lr range: 0.01e-8 to 0.1'
+    sgd_title = 'SGD optimizer with lr range: 0.01 to 1'
+    title = 'Linear increasing learning rates'
+
 
 
 token = os.getenv('Neptune_api')
@@ -110,8 +119,8 @@ print(len(adam_rate["value"]))
 
 
 fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(2, 2)
-fig.suptitle('Linear increasing learning rates')
-ax1.set_title('ADAM optimizor with lr range: 0.0001 to 0.5')
+fig.suptitle(title)
+ax1.set_title(adam_title)
 
 ax1.axvline(x = adam_base, color = 'r', linestyle = "--", label = f'base_rl = {adam_base}')
 ax1.axvline(x = adam_max, color = 'r', linestyle = "--", label = f'max_lr = {adam_max}')
@@ -137,7 +146,7 @@ ax1.legend(loc = pos_pf_label_cont)
 
 
 
-ax2.set_title('ADAM optimizor loss duing training')
+ax2.set_title('ADAM optimizer loss duing training')
 ax2.axvline(x = adam_base, color = 'r', linestyle = "--", label = f'base_rl = {adam_base}')
 ax2.axvline(x = adam_max, color = 'r', linestyle = "--", label = f'max_lr = {adam_max}')
 
@@ -158,7 +167,7 @@ ax2.legend(loc = pos_pf_label_cont)
 
 
 
-ax3.set_title('SGD optimizor with lr range: 0.001 to 9')
+ax3.set_title(sgd_title)
 
 ax3.axvline(x = SGD_base, color = 'r', linestyle = "--", label = f'base_rl = {SGD_base}')
 ax3.axvline(x = SGD_max, color = 'r', linestyle = "--", label = f'max_lr = {SGD_max}')
@@ -183,7 +192,7 @@ ax3.legend(loc = pos_pf_label_cont)
 
 
 
-ax4.set_title('SGD optimizor loss duing training')
+ax4.set_title('SGD optimizer loss duing training')
 
 ax4.axvline(x = SGD_base, color = 'r', linestyle = "--", label = f'base_rl = {SGD_base}')
 ax4.axvline(x = SGD_max, color = 'r', linestyle = "--", label = f'max_lr = {SGD_max}')

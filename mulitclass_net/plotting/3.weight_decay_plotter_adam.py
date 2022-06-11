@@ -66,12 +66,13 @@ run2.stop()
 run3.stop()
 
 
-loss_y_range = [1.1, 1.4]
+loss_y_range = [1.1, 1.45]
 momentum_y_range = [0.55, 1]
 acc_y_range = [-0.1, 1.1]
 lr_range = [0, 0.0075]
 
 fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(3, 3)
+fig.suptitle("Different weight_decay tests")
 
 ax1.set_title(f'ADAM optimizor with weight_decay of {adam1_weight}')
 ax1.plot(adam1_rate["value"])
