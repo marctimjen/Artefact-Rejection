@@ -37,7 +37,7 @@ def net_SGD(device, fl, it, train_path, val_path):
 
     net_name = "network_SGD"
 
-    batch_size = 20
+    batch_size = 10
     n_samples = 7200 # the defualt amount of samples minus 1
 
     train_load_file = shuffle_5min(path = train_path,
@@ -221,12 +221,12 @@ if __name__ == '__main__':
         it = torch.cuda.LongTensor
 
     # core = torch.cuda.device_count()
-    core = 2
+    core = 3
 
     networks = [net_SGD] #, net_SGD net_ADAM
 
     cuda_dict = dict()
-    cuda_dict[1] = networks
+    cuda_dict[2] = networks
 
     # for i in range(core):
     #     cuda_dict[i] = []
@@ -243,7 +243,7 @@ if __name__ == '__main__':
     # val_path = r"C:\Users\Marc\Desktop\data\val_model_data"
 
     pres = []
-    for i in range(1, core):
+    for i in range(2, core):
         pres.append(mp.Process(target=net_starter, args = (cuda_dict.get(i),
                                                            f"cuda:{i}",
                                                            fl, it,
