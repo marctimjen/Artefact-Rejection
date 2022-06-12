@@ -1,6 +1,6 @@
 # Artifact-Annotaion
 
-This repository contain material for the bachelor proejct about artifact annotaion.
+This repository contain material for the bachelor project about artifact annotaion.
 The usage of the different files/folders are:
 
 /binary_net: This folder contain material to hyper optimize and train the binary networks.
