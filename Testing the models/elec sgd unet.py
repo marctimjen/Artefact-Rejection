@@ -1,4 +1,4 @@
-# this script is for running the binary unet of adam
+# this script is for running the multi-class unet using SGD
 
 import sys
 sys.path.append("..") # adds higher directory to python modules path
