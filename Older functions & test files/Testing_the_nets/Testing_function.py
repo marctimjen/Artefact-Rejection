@@ -11,7 +11,7 @@ import numpy as np
 import random
 
 import sys
-sys.path.append("..") # adds higher directory to python modules path
+sys.path.append("../..") # adds higher directory to python modules path
 
 from LoaderPACK.Unet import Unet
 from LoaderPACK.Loader import load_whole_data, load_5_min_intervals, load_shuffle_5_min

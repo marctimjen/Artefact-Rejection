@@ -1,5 +1,5 @@
 import sys
-sys.path.append("..") # adds higher directory to python modules path
+sys.path.append("../..") # adds higher directory to python modules path
 from LoaderPACK.confusion_mat import confusion_mat
 
 

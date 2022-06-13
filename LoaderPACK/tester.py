@@ -125,8 +125,7 @@ def val_tester(run, network, model, lossFunc, path, device):
 
             hist_n_guess += first
 
-
-        if acc < -0.05: # or acc > 0.95:
+        if acc > -0.05: # or acc > 0.95:
             figure, axis = plt.subplots(2, 1)
 
             # The artifacts on channel: FP1-F7

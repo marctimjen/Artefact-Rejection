@@ -11,7 +11,7 @@ import numpy as np
 import random
 
 import sys
-sys.path.append("..") # adds higher directory to python modules path
+sys.path.append("../..") # adds higher directory to python modules path
 
 from LoaderPACK.Unet_leaky import Unet_leaky, Unet_leaky_lstm
 from LoaderPACK.Loader import shuffle_5min

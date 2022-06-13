@@ -24,16 +24,25 @@ The usage of the different files/folders are:
 - /valtester_files: Function to evaluate the models predictions. This is used to find which artifacts the model is good 
 at predicting.
 
-/plotting of artefacts:
+/multiclass_net: This folder contain material to hyper optimize and train the multi-class networks.
+- /1. hyperoptimize: To optimize the hyper parameters.
+- /2. training networks: Used to train the final hyper-optimized network.
+- /plotting: Create the plots to find the hyper-parameters. 
+
+/Older functions & test files: Contain old files, that has been used test/make the files in this repo. 
+
+/plotting of artifacts: To make plots of the artifacts.
 - artiplot: Used to create plots of artifacts.
 - range plot: Used to plot the EEG data with the signal above 199.8 µV.
 
-/Preprocess
+/Preprocess: Used to make the preprocessing of the data.
 - /0 Transform... : Script for turning the .edf and .csv file into input and target data.
 - /1 train-test-split: Script to split the data into train/validation and test sets.
 - /2 series_dict: Script to create series dictionary about the data.
 - /3 memmap_creator: Script to make numpy memory map containing the input and target data.
 - /4 memmap_copy: Move the numpy memory maps.
+
+/Small tests: Directory of files for testing networks/functions.
 
 /Testing the models: Used to find accuarcy and confusion matrices for the models
 - /binary adam unet: Used to test the binary model utilizing the Adam optimizer.

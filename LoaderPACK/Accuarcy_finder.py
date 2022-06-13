@@ -194,10 +194,10 @@ def elec_mclass_acc_recal_finder(pred, tar, classes=5):
             tot_n_g = tn + fn  # total negative
         else:
             fp = torch.sum(art_pred[tar != i] == 1) # false positive, tar = 0 and pred = 1
-            fn = torch.sum(art_pred[tar == i] == 0) # false negative, tar = 1 and pred = 0
+            fn = torch.sum(art_pred[tar == i] != 1) # false negative, tar = 1 and pred = 0
 
             tp = torch.sum(art_pred[tar == i] == 1) # true positive
-            tn = torch.sum(art_pred[tar != i] == 0) # true negative
+            tn = torch.sum(art_pred[tar != i] != 1) # true negative
 
             acc = (tp + tn)/(fp + fn + tp + tn)
 
