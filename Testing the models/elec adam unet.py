@@ -12,7 +12,7 @@ device = "cpu"
 batch_size = 1
 
 model = Unet_leaky_lstm_elec(n_channels=1, batch_size=batch_size, device=device).to(device)
-x = torch.load(f"C:/Users/Marc/Desktop/adam elec 647/", map_location='cpu')
+x = torch.load(f"C:/Users/Marc/Desktop/adam elec 647/network_ADAM-loss-epk-22.pt", map_location='cpu')
 
 model.load_state_dict(x)
 model.to(device)
