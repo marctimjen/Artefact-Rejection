@@ -125,20 +125,30 @@ def val_tester(run, network, model, lossFunc, path, device):
 
             hist_n_guess += first
 
-        if acc > -0.05: # or acc > 0.95:
+        if acc > -0.05: #np.random.choice([0, 1], p = [0.99, 0.01]): # # or acc > 0.95:
             figure, axis = plt.subplots(2, 1)
 
             # The artifacts on channel: FP1-F7
             axis[0].plot(ind[0][0].cpu())
+            axis[0].set_title(f"Input EEG data")
             axis[0].axes.xaxis.set_visible(False) # remove digits on x-axis
 
-            # The artifacts on channel: F7-T3
-            axis[1].plot(1*art_pred[0].cpu(), "b") # prediction is blue
-            axis[1].plot(tar[0][0].cpu(), "r", markersize=1) # true target = red
-            axis[1].set_title(f"Nr:{meta[0]} with channel: {meta[1]} at {meta[2]}")
-            axis[1].axes.xaxis.set_visible(False) # remove digits on x-axis
+            start_point = meta[2].numpy()[0]
 
-            plt.savefig(f"C:/Users/Marc/Desktop/model_plots/graf ({tot_sr_nr}).jpg")
+            min_t1 = int((start_point/200)//60)
+            sec_t1 = int(start_point/200 % 60)
+            min_t2 = int(min_t1 + 5)
+            # The artifacts on channel: F7-T3
+            axis[1].plot(1*art_pred[0].cpu(), "b", label = "annotations") # prediction is blue
+            axis[1].plot(tar[0][0].cpu(), "r", markersize=1, label = "targets") # true target = red
+            axis[1].set_title(f"Annotations")
+            #axis[1].axes.xaxis.set_visible(False) # remove digits on x-axis
+            axis[1].set_xticks(ticks=[0, 60000], labels=[f"{min_t1}:{sec_t1}", f"{min_t2}:{sec_t1}"])
+            axis[1].legend()
+
+
+
+            plt.savefig(f"C:/Users/Marc/Desktop/model_plots/graf {tot_sr_nr} (Nr {int(meta[0])} with channel {int(meta[1])}).jpg")
             plt.close()
             tot_sr_nr += 1
 
@@ -193,7 +203,6 @@ def val_tester(run, network, model, lossFunc, path, device):
                        facecolor="gray",
                        alpha=0.3))
     plt.show()
-
 
 
     # print("mean loss:",  np.mean(valid_loss))

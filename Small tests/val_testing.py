@@ -29,4 +29,4 @@ lossFunc = nn.CrossEntropyLoss(weight=torch.tensor([1., 5.]).to(device),
 #            path="C:/Users/Marc/Desktop/data_mclass/val_model_data", device=device)
 
 val_tester(run="1", network="2", model=model, lossFunc=lossFunc,
-           path="C:/Users/Marc/Desktop/data_mclass/val_model_data", device=device)
+           path="C:/Users/Marc/Desktop/data/val_model_data", device=device)
