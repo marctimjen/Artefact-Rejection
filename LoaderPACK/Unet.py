@@ -131,9 +131,11 @@ class OutConv(nn.Module): # magenta arrow
     """
     This class constitute light-blue arrows in the U-net figure. So this is the
     function that does the 1x1 convolution and makes the channels fit to the
-    desired output. Usually this is the last step of the unet architecture.
-    In the version created for this report additionally an LSTM network is added to
-    this building block.
+    desired output.
+
+    Doctesting the results:
+    >>> OutConv.forward(OutConv(20, 1), torch.zeros(1, 20, 60000)).shape
+    torch.Size([1, 1, 60000])
     """
     def __init__(self, in_channels, n_classes):
         """
@@ -189,127 +191,6 @@ class Unet(nn.Module):
         x = self.up3(x, x1)
         output = self.outc(x)
         return output
-
-class OutConv_lstm(nn.Module): # magenta arrow
-    """
-    This class constitute the megenta arrows in the U-net figure. So this is the
-    function that does the 1x1 convolution and makes the channels fit to the
-    desired output.
-    """
-    def __init__(self, in_channels, batch_size, device):
-        """
-        Args:
-            in_channels (int): The amount of channels of the input.
-            out_channels (int): The amount of channels the output tensor gets.
-        """
-        super(OutConv_lstm, self).__init__()
-        self.conv = nn.Conv1d(in_channels, 1, kernel_size=1)
-
-        input_size = 2 # the number of series
-        hidden_size = 5 # hyper para
-
-        D = 2 # bc. bi = True
-        num_layers = 1 # default
-
-
-        proj_size = 1 # This allows us to rechive two values
-        hout = proj_size # since proj_size > 0
-
-
-        seq_len = 200*5*60 # length of the sequence
-
-
-        self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True, \
-                            bidirectional=True, proj_size = proj_size)
-                            # (input_size, hidden)
-
-        self.h = torch.zeros(D*num_layers, batch_size, hout).to(device)
-        # (D * num_layers, batch_size, hidden)
-
-        self.c = torch.zeros(D*num_layers, batch_size, hidden_size).to(device)
-        # (D * num_layers, batch_size, hidden)
-
-
-        # implementer LSTM eller GRU HER!! <- før pseudo!!
-        # Bidirectional lag - så den kører begge veje.
-        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
-        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
-
-        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
-
-        self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
-        #self.sig = nn.Sigmoid()
-
-    def forward(self, x, inp):
-        x = self.conv(x)
-        stack_att = torch.stack((x, inp), dim = 3)
-        stack_att = torch.squeeze(stack_att, 1)
-        out, _ = self.lstm(stack_att, (self.h, self.c))
-
-        ss = torch.sum(out, 2)
-        minusss = 1 - ss
-
-        out = torch.stack((ss, minusss), dim = 1)
-
-        return self.soft(out)
-
-
-class OutConv_lstm_elec(nn.Module): # light-blue arrow
-    """
-    This class constitute light-blue arrows in the U-net figure. So this is the
-    function that does the 1x1 convolution and makes the channels fit to the
-    desired output.
-    """
-    def __init__(self, in_channels, batch_size, device):
-        """
-        Args:
-            in_channels (int): The amount of channels of the input.
-            out_channels (int): The amount of channels the output tensor gets.
-        """
-        super(OutConv_lstm_elec, self).__init__()
-        self.conv = nn.Conv1d(in_channels, 1, kernel_size=1)
-
-        input_size = 2 # the number of series
-        hidden_size = 5 # hyper para
-
-        D = 2 # bc. bi = True
-        num_layers = 1 # default
-
-
-        proj_size = 2 # This allows us to rechive two values
-        hout = proj_size # since proj_size > 0
-
-
-        seq_len = 200*5*60 # length of the sequence
-
-
-        self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True, \
-                            bidirectional=True, proj_size = proj_size)
-                            # (input_size, hidden)
-
-        # self.h = torch.zeros(D*num_layers, batch_size, hout).to(device)
-        # (D * num_layers, batch_size, hidden)
-
-        # self.c = torch.zeros(D*num_layers, batch_size, hidden_size).to(device)
-        # (D * num_layers, batch_size, hidden)
-
-
-        # implementer LSTM eller GRU HER!! <- før pseudo!!
-        # Bidirectional lag - så den kører begge veje.
-        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
-        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
-
-        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
-
-        self.soft = nn.Softmax(dim=2)
-
-    def forward(self, x, inp):
-        x = self.conv(x)
-        stack_att = torch.stack((x, inp), dim = 3)
-        stack_att = torch.squeeze(stack_att, 1)
-        out, _ = self.lstm(stack_att)
-
-        return self.soft(out)
 
 
 if __name__ == '__main__':

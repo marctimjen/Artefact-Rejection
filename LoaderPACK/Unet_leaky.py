@@ -9,6 +9,17 @@ class Double_Convolution(nn.Module): # two orange arrows (or two light green arr
     """
     This class consistute two orange arrows (or two light green arrows) in the U-net figure (3.6).
     The job of this function is to do a double convolutions.
+
+    Doctesting the results:
+    >>> Double_Convolution.forward(Double_Convolution(1, 20), torch.zeros(1, 1, 60)).shape
+    torch.Size([1, 20, 56])
+    >>> Double_Convolution.forward(Double_Convolution(1, 20, True), torch.zeros(1, 1, 60)).shape
+    torch.Size([1, 20, 64])
+    >>> Double_Convolution.forward(Double_Convolution(1, 1, True), torch.zeros(1, 1, 6))
+    tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]],
+           grad_fn=<LeakyReluBackward0>)
+    >>> Double_Convolution.forward(Double_Convolution(1, 1), torch.zeros(1, 1, 6))
+    tensor([[[0., 0.]]], grad_fn=<LeakyReluBackward0>)
     """
     def __init__(self, in_channels, out_channels, up_conv = False):
         """
@@ -34,6 +45,7 @@ class Double_Convolution(nn.Module): # two orange arrows (or two light green arr
         self.relu = nn.LeakyReLU(1/5.5)
 
     def forward(self, x):
+
         x = self.conv1(x)
         x = self.norm1(x)
         x = self.relu(x)
@@ -47,6 +59,12 @@ class Down_Scale(nn.Module): # red arrow + double_conv
     """
     This class constitute one red and two orange arrows in the U-net figure.
     So this is the function that does the down-sampling of the net.
+
+    Doctesting the results:
+    >>> Down_Scale.forward(Down_Scale(1, 20), torch.zeros(1, 1, 60)).shape
+    torch.Size([1, 20, 26])
+    >>> Down_Scale.forward(Down_Scale(1, 1), torch.zeros(1, 1, 12))
+    tensor([[[0., 0.]]], grad_fn=<LeakyReluBackward0>)
     """
     def __init__(self, in_channels, out_channels):
         """
@@ -67,6 +85,20 @@ class Up_Scale(nn.Module): # yellow arrow + green arrow + double_conv
     """
     This class constitute one yellow, a green and two orange arrows in the U-net
     figure. So this is the function that does the up-sampling of the net.
+
+    Doctesting the results:
+    >>> Up_Scale.forward(Up_Scale(4, 2), torch.zeros(1, 4, 110), torch.zeros(1, 2, 221)).shape
+    torch.Size([1, 2, 217])
+    >>> Up_Scale.forward(Up_Scale(160, 80), torch.zeros(1, 160, 7492), torch.zeros(1, 80, 14993)).shape
+    torch.Size([1, 80, 14989])
+    >>> Up_Scale.forward(Up_Scale(2, 1), torch.zeros(1, 2, 3), torch.zeros(1, 1, 9)).abs()*0
+    tensor([[[0., 0., 0., 0., 0.]]], grad_fn=<MulBackward0>)
+    >>> Up_Scale.forward(Up_Scale(40, 20, True), torch.zeros(1, 40, 29990), torch.zeros(1, 20, 59996)).shape
+    torch.Size([1, 20, 60000])
+    >>> Up_Scale.forward(Up_Scale(4, 2, True), torch.zeros(1, 4, 3), torch.zeros(1, 2, 10)).shape
+    torch.Size([1, 2, 14])
+    >>> Up_Scale.forward(Up_Scale(2, 1, True), torch.zeros(1, 2, 1), torch.zeros(1, 1, 3)).abs()*0
+    tensor([[[0., 0., 0., 0., 0., 0., 0.]]], grad_fn=<MulBackward0>)
     """
     def __init__(self, in_channels, out_channels, up_conv = False):
         """
@@ -85,20 +117,27 @@ class Up_Scale(nn.Module): # yellow arrow + green arrow + double_conv
     def forward(self, x, y):
         x = self.up(x)
         x = self.up_conv1(x)
+        diffy = y.size()[2] - x.size()[2]
 
-        diffY = y.size()[2] - x.size()[2]
-
-        x = F.pad(x, [diffY // 2, diffY - diffY // 2]) # make the dimentions fit
+        x = F.pad(x, [diffy // 2, diffy - diffy // 2])
+        # make the dimentions fit
 
         x = torch.cat([y, x], dim=1)
         x = self.doub(x)
         return x
 
+
 class OutConv_lstm(nn.Module): # magenta arrow
     """
-    This class constitute the megenta arrows in the U-net figure. So this is the
+    This class constitute light-blue arrows in the U-net figure. So this is the
     function that does the 1x1 convolution and makes the channels fit to the
-    desired output.
+    desired output. Usually this is the last step of the unet architecture.
+    In the version created for this report additionally an LSTM network is added to
+    this building block. This outconvolution perform binary classification.
+
+    Doctesting the results:
+    >>> OutConv_lstm.forward(OutConv_lstm(20, 1, "cpu"), torch.zeros(1, 20, 60000), torch.zeros(1, 1, 60000)).shape
+    torch.Size([1, 2, 60000])
     """
     def __init__(self, in_channels, batch_size, device):
         """
@@ -115,10 +154,8 @@ class OutConv_lstm(nn.Module): # magenta arrow
         D = 2 # bc. bi = True
         num_layers = 1 # default
 
-
         proj_size = 1 # This allows us to rechive two values
         hout = proj_size # since proj_size > 0
-
 
         seq_len = 200*5*60 # length of the sequence
 
@@ -132,14 +169,6 @@ class OutConv_lstm(nn.Module): # magenta arrow
 
         self.c = torch.zeros(D*num_layers, batch_size, hidden_size).to(device)
         # (D * num_layers, batch_size, hidden)
-
-
-        # implementer LSTM eller GRU HER!! <- før pseudo!!
-        # Bidirectional lag - så den kører begge veje.
-        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
-        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
-
-        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
 
         self.soft = nn.Softmax(dim=1) # Using sigmoid instead of softmax
         #self.sig = nn.Sigmoid()
@@ -158,11 +187,17 @@ class OutConv_lstm(nn.Module): # magenta arrow
         return self.soft(out)
 
 
-class OutConv_lstm_elec(nn.Module): # light-blue arrow
+class OutConv_lstm_elec(nn.Module): # magenta arrow
     """
     This class constitute light-blue arrows in the U-net figure. So this is the
     function that does the 1x1 convolution and makes the channels fit to the
-    desired output.
+    desired output. Usually this is the last step of the unet architecture.
+    In the version created for this report additionally an LSTM network is added to
+    this building block. This class return 4 classification values.
+
+    Doctesting the results:
+    >>> OutConv_lstm_elec.forward(OutConv_lstm_elec(20, 1, "cpu"), torch.zeros(1, 20, 60000), torch.zeros(1, 1, 60000)).shape
+    torch.Size([1, 60000, 4])
     """
     def __init__(self, in_channels, batch_size, device):
         """
@@ -179,13 +214,10 @@ class OutConv_lstm_elec(nn.Module): # light-blue arrow
         D = 2 # bc. bi = True
         num_layers = 1 # default
 
-
         proj_size = 2 # This allows us to rechive two values
         hout = proj_size # since proj_size > 0
 
-
         seq_len = 200*5*60 # length of the sequence
-
 
         self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True, \
                             bidirectional=True, proj_size = proj_size)
@@ -197,16 +229,7 @@ class OutConv_lstm_elec(nn.Module): # light-blue arrow
         # self.c = torch.zeros(D*num_layers, batch_size, hidden_size).to(device)
         # (D * num_layers, batch_size, hidden)
 
-
-        # implementer LSTM eller GRU HER!! <- før pseudo!!
-        # Bidirectional lag - så den kører begge veje.
-        # LSTM bestemme outpu dimmentionen - ellers brug en conv eller fully connected.
-        # Måske maxpool er fint nok. Kogt de fire outputs ned i en.
-
-        # Kig på batch_first - den kørrer anden konvention, bidirectional = True
-
-        self.soft = nn.Softmax(dim=2) # Using sigmoid instead of softmax
-        #self.sig = nn.Sigmoid()
+        self.soft = nn.Softmax(dim=2) # the classification is now on format (60000, 4)
 
     def forward(self, x, inp):
         x = self.conv(x)
@@ -216,68 +239,118 @@ class OutConv_lstm_elec(nn.Module): # light-blue arrow
 
         return self.soft(out)
 
-class OutConv(nn.Module): # magenta arrow
+
+class Unet_leaky_lstm_elec(nn.Module):
     """
-    This class constitute light-blue arrows in the U-net figure. So this is the
-    function that does the 1x1 convolution and makes the channels fit to the
-    desired output. Usually this is the last step of the unet architecture.
-    In the version created for this report additionally an LSTM network is added to
-    this building block.
+    This is the network used for multi classification.
+
+    Doctesting the results:
+    >>> Unet_leaky_lstm_elec.forward(Unet_leaky_lstm_elec(1, 1, "cpu"), torch.zeros(1, 1, 60000)).shape
+    torch.Size([60000, 4])
     """
-    def __init__(self, in_channels, n_classes):
+    def __init__(self, n_channels, batch_size, device):
         """
         Args:
-            in_channels (int): The amount of channels of the input.
-            out_channels (int): The amount of channels the output tensor gets.
+            n_channels (int): The amount of channels of the input.
+            n_classes (int): The amount of channels the output tensor gets.
         """
-        super(OutConv, self).__init__()
-        self.conv = nn.Conv1d(in_channels, n_classes, kernel_size=1)
+        super(Unet_leaky_lstm_elec, self).__init__()
 
-        self.soft = nn.Softmax(dim=1)
+        self.inc = Double_Convolution(n_channels, 20)
+        self.down1 = Down_Scale(20, 40)
+        self.down2 = Down_Scale(40, 80)
+        self.down3 = Down_Scale(80, 160)
+        self.up1 = Up_Scale(160, 80)
+        self.up2 = Up_Scale(80, 40)
+        self.up3 = Up_Scale(40, 20, up_conv = True)
+        self.outc = OutConv_lstm_elec(20, batch_size, device)
 
-    def forward(self, x):
-        out = self.conv(x)
-        return self.soft(out)
+    def forward(self, inp):
+        x1 = self.inc(inp)
+        x2 = self.down1(x1)
+        x3 = self.down2(x2)
+        x4 = self.down3(x3)
 
-#class Unet(nn.Module):
-#    """
-#    This class is the network. So it combines the subparts listed above.
-#    """
-#    def __init__(self, n_channels, n_classes):
-#        """
-#        Args:
-#            n_channels (int): The amount of channels of the input.
-#            n_classes (int): The amount of channels the output tensor gets.
-#        """
-#        super(Unet, self).__init__()
+        x = self.up1(x4, x3)
+        x = self.up2(x, x2)
+        x = self.up3(x, x1)
+        output = self.outc(x, inp).view(-1, 4)
+
+        return output
+
+
+class Unet_leaky_lstm(nn.Module):
+    """
+    This is the network used for binary classification.
+
+    Doctesting the results:
+    >>> Unet_leaky_lstm.forward(Unet_leaky_lstm(1, 1, "cpu"), torch.zeros(1, 1, 60000)).shape
+    torch.Size([1, 2, 60000])
+    """
+    def __init__(self, n_channels, batch_size, device):
+        """
+        Args:
+            n_channels (int): The amount of channels of the input.
+            n_classes (int): The amount of channels the output tensor gets.
+        """
+        super(Unet_leaky_lstm, self).__init__()
+
+        self.inc = Double_Convolution(n_channels, 20)
+        self.down1 = Down_Scale(20, 40)
+        self.down2 = Down_Scale(40, 80)
+        self.down3 = Down_Scale(80, 160)
+        self.up1 = Up_Scale(160, 80)
+        self.up2 = Up_Scale(80, 40)
+        self.up3 = Up_Scale(40, 20, up_conv = True)
+        self.outc = OutConv_lstm(20, batch_size, device)
+
+    def forward(self, inp):
+        x1 = self.inc(inp)
+        x2 = self.down1(x1)
+        x3 = self.down2(x2)
+        x4 = self.down3(x3)
+        x = self.up1(x4, x3)
+        x = self.up2(x, x2)
+        x = self.up3(x, x1)
+        output = self.outc(x, inp)
+        return output
+
+if __name__ == '__main__':
+
+    import doctest
+    doctest.testmod()
+
+# class Unet_leaky(nn.Module):
+#     """
+#     This class is the network. So it combines the subparts listed above.
+#     """
+#     def __init__(self, n_channels, n_classes):
+#         """
+#         Args:
+#             n_channels (int): The amount of channels of the input.
+#             n_classes (int): The amount of channels the output tensor gets.
+#         """
+#         super(Unet_leaky, self).__init__()
 #
-#        self.n_channels = n_channels
-#        self.n_classes = n_classes
+#         self.inc = Double_Convolution(n_channels, 20)
+#         self.down1 = Down_Scale(20, 40)
+#         self.down2 = Down_Scale(40, 80)
+#         self.down3 = Down_Scale(80, 160)
+#         self.up1 = Up_Scale(160, 80)
+#         self.up2 = Up_Scale(80, 40)
+#         self.up3 = Up_Scale(40, 20, up_conv = True)
+#         self.outc = OutConv(20, n_classes)
 #
-#        self.inc = Double_Convolution(n_channels, 64)
-#        self.down1 = Down_Scale(64, 128)
-#        self.down2 = Down_Scale(128, 256)
-#        self.down3 = Down_Scale(256, 512)
-#        self.down4 = Down_Scale(512, 1024)
-#        self.up1 = Up_Scale(1024, 512)
-#        self.up2 = Up_Scale(512, 256)
-#        self.up3 = Up_Scale(256, 128)
-#        self.up4 = Up_Scale(128, 64, up_conv = True)
-#        self.outc = OutConv(64, n_classes)
-#
-#    def forward(self, x):
-#        x1 = self.inc(x)
-#        x2 = self.down1(x1)
-#        x3 = self.down2(x2)
-#        x4 = self.down3(x3)
-#        x5 = self.down4(x4)
-#        x = self.up1(x5, x4)
-#        x = self.up2(x, x3)
-#        x = self.up3(x, x2)
-#        x = self.up4(x, x1)
-#        output = self.outc(x)
-#        return output
-
+#     def forward(self, x):
+#         x1 = self.inc(x)
+#         x2 = self.down1(x1)
+#         x3 = self.down2(x2)
+#         x4 = self.down3(x3)
+#         x = self.up1(x4, x3)
+#         x = self.up2(x, x2)
+#         x = self.up3(x, x1)
+#         output = self.outc(x)
+#         return output
 
 # class Unet_leaky(nn.Module):
 #     """
@@ -313,103 +386,3 @@ class OutConv(nn.Module): # magenta arrow
 #         x = self.up3(x, x1)
 #         output = self.outc(x)
 #         return output
-
-
-class Unet_leaky_lstm_elec(nn.Module):
-    """
-    This class is the network. So it combines the subparts listed above.
-    """
-    def __init__(self, n_channels, batch_size, device):
-        """
-        Args:
-            n_channels (int): The amount of channels of the input.
-            n_classes (int): The amount of channels the output tensor gets.
-        """
-        super(Unet_leaky_lstm_elec, self).__init__()
-
-        self.inc = Double_Convolution(n_channels, 20)
-        self.down1 = Down_Scale(20, 40)
-        self.down2 = Down_Scale(40, 80)
-        self.down3 = Down_Scale(80, 160)
-        self.up1 = Up_Scale(160, 80)
-        self.up2 = Up_Scale(80, 40)
-        self.up3 = Up_Scale(40, 20, up_conv = True)
-        self.outc = OutConv_lstm_elec(20, batch_size, device)
-
-    def forward(self, inp):
-        x1 = self.inc(inp)
-        x2 = self.down1(x1)
-        x3 = self.down2(x2)
-        x4 = self.down3(x3)
-
-        x = self.up1(x4, x3)
-        x = self.up2(x, x2)
-        x = self.up3(x, x1)
-        output = self.outc(x, inp).view(-1, 4)
-
-        return output
-
-class Unet_leaky_lstm(nn.Module):
-    """
-    This class is the network. So it combines the subparts listed above.
-    """
-    def __init__(self, n_channels, batch_size, device):
-        """
-        Args:
-            n_channels (int): The amount of channels of the input.
-            n_classes (int): The amount of channels the output tensor gets.
-        """
-        super(Unet_leaky_lstm, self).__init__()
-
-        self.inc = Double_Convolution(n_channels, 20)
-        self.down1 = Down_Scale(20, 40)
-        self.down2 = Down_Scale(40, 80)
-        self.down3 = Down_Scale(80, 160)
-        self.up1 = Up_Scale(160, 80)
-        self.up2 = Up_Scale(80, 40)
-        self.up3 = Up_Scale(40, 20, up_conv = True)
-        self.outc = OutConv_lstm(20, batch_size, device)
-
-    def forward(self, inp):
-        x1 = self.inc(inp)
-        x2 = self.down1(x1)
-        x3 = self.down2(x2)
-        x4 = self.down3(x3)
-        x = self.up1(x4, x3)
-        x = self.up2(x, x2)
-        x = self.up3(x, x1)
-        output = self.outc(x, inp)
-        return output
-
-
-class Unet_leaky(nn.Module):
-    """
-    This class is the network. So it combines the subparts listed above.
-    """
-    def __init__(self, n_channels, n_classes):
-        """
-        Args:
-            n_channels (int): The amount of channels of the input.
-            n_classes (int): The amount of channels the output tensor gets.
-        """
-        super(Unet_leaky, self).__init__()
-
-        self.inc = Double_Convolution(n_channels, 20)
-        self.down1 = Down_Scale(20, 40)
-        self.down2 = Down_Scale(40, 80)
-        self.down3 = Down_Scale(80, 160)
-        self.up1 = Up_Scale(160, 80)
-        self.up2 = Up_Scale(80, 40)
-        self.up3 = Up_Scale(40, 20, up_conv = True)
-        self.outc = OutConv(20, n_classes)
-
-    def forward(self, x):
-        x1 = self.inc(x)
-        x2 = self.down1(x1)
-        x3 = self.down2(x2)
-        x4 = self.down3(x3)
-        x = self.up1(x4, x3)
-        x = self.up2(x, x2)
-        x = self.up3(x, x1)
-        output = self.outc(x)
-        return output
